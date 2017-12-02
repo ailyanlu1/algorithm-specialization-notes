@@ -1,0 +1,286 @@
+WEBVTT
+
+1
+00:00:00.025 --> 00:00:03.403
+Hi, my name's Tim Roughgarden. 
+I'm a professor here at Stanford 
+
+2
+00:00:03.403 --> 00:00:06.283
+University. 
+And I'd like to welcome you to this first 
+
+3
+00:00:06.283 --> 00:00:09.860
+course on the Design and Analysis of 
+Algorithms. 
+
+4
+00:00:09.860 --> 00:00:12.960
+Now, I imagine many of you are already 
+clear on your reasons for taking this 
+
+5
+00:00:12.960 --> 00:00:16.090
+course. 
+But let me begin by justifying this 
+
+6
+00:00:16.090 --> 00:00:19.527
+course's existence. 
+And giving you some reasons why you 
+
+7
+00:00:19.527 --> 00:00:24.330
+should be highly motivated to learn about 
+algorithms. 
+
+8
+00:00:24.330 --> 00:00:28.775
+So what is an algorithm anyways? 
+Basically it's a set of well defined 
+
+9
+00:00:28.775 --> 00:00:34.380
+rules, a recipe in effect for solving 
+some computational problem. 
+
+10
+00:00:34.380 --> 00:00:37.746
+Maybe you have a bunch of numbers and you 
+want to rearrange them so that they're in 
+
+11
+00:00:37.746 --> 00:00:41.587
+sorted order. 
+Maybe you have a roadmap and an origin 
+
+12
+00:00:41.587 --> 00:00:45.292
+and a destination And you want to compute 
+the shortest path from that origin to 
+
+13
+00:00:45.292 --> 00:00:49.450
+that destination. 
+May be you face a number of different 
+
+14
+00:00:49.450 --> 00:00:53.232
+tasks that need to be completed by 
+certain deadlines and you ant to know in 
+
+15
+00:00:53.232 --> 00:00:57.310
+what order you should accomplish the 
+task. 
+
+16
+00:00:57.310 --> 00:01:00.420
+So that you complete them all by their 
+respective deadlines. 
+
+17
+00:01:01.850 --> 00:01:05.192
+So why study algorithms? 
+Well first of all, understanding the 
+
+18
+00:01:05.192 --> 00:01:09.284
+basics of algorithms and the related 
+field of data structures is essential for 
+
+19
+00:01:09.284 --> 00:01:14.570
+doing serious work in pretty much any 
+branch of computer science. 
+
+20
+00:01:14.570 --> 00:01:18.523
+This is the reason why here at Stanford, 
+this course is required for every single 
+
+21
+00:01:18.523 --> 00:01:23.436
+degree that the department offers. 
+The bachelors degree the masters degree 
+
+22
+00:01:23.436 --> 00:01:27.102
+and also the PHD. 
+To give you a few examples routing and 
+
+23
+00:01:27.102 --> 00:01:32.935
+communication networks piggybacks on 
+classical shortest path algorithms. 
+
+24
+00:01:32.935 --> 00:01:36.751
+The effectiveness of public key 
+cryptography relies on that of 
+
+25
+00:01:36.751 --> 00:01:41.746
+number-theoretic algorithms. 
+Computer graphics needs the computational 
+
+26
+00:01:41.746 --> 00:01:45.330
+primitives supplied by geometric 
+algorithms. 
+
+27
+00:01:45.330 --> 00:01:49.890
+Database indices rely on balanced search 
+tree data structures. 
+
+28
+00:01:49.890 --> 00:01:53.508
+Computational biology uses dynamic 
+programming algorithms to measure genome 
+
+29
+00:01:53.508 --> 00:01:56.570
+similarity. 
+And the list goes on. 
+
+30
+00:01:59.600 --> 00:02:04.420
+Second, algorithms play a key role in 
+modern technological innovation. 
+
+31
+00:02:04.420 --> 00:02:08.574
+To give just one obvious example, search 
+engines use a tapestry of algorithms to 
+
+32
+00:02:08.574 --> 00:02:12.542
+efficiently compute the relevance of 
+various webpages to it's given search 
+
+33
+00:02:12.542 --> 00:02:16.573
+query. 
+The most famous such algorithm is the 
+
+34
+00:02:16.573 --> 00:02:20.030
+page rank algorithm currently in use by 
+Google. 
+
+35
+00:02:21.250 --> 00:02:25.368
+Indeed in a December 2010 report to the 
+United States White House, the 
+
+36
+00:02:25.368 --> 00:02:29.770
+President's counsel of advisers on 
+science and technology argued that in 
+
+37
+00:02:29.770 --> 00:02:34.314
+many areas performance gains due to 
+improvements in algorithms have vastly 
+
+38
+00:02:34.314 --> 00:02:42.520
+exceeded event he dramatic performance 
+gains due to increased processor speeds. 
+
+39
+00:02:44.470 --> 00:02:48.710
+Third, although this is outside of the 
+score, the scope of this course. 
+
+40
+00:02:48.710 --> 00:02:53.254
+Algorithms are increasingly being used to 
+provide a novel lens on processes outside 
+
+41
+00:02:53.254 --> 00:02:58.353
+of computer science and technology. 
+For example, the study of quantum 
+
+42
+00:02:58.353 --> 00:03:02.400
+computation has provided a new 
+Computational viewpoint on quantum 
+
+43
+00:03:02.400 --> 00:03:07.346
+mechanics. 
+Price fluctuations in economic markets 
+
+44
+00:03:07.346 --> 00:03:12.008
+can be fruitfully viewed as an algorthmic 
+process and even evolution can be 
+
+45
+00:03:12.008 --> 00:03:18.050
+usefully thought of as a surprisingly 
+effect search algorthim. 
+
+46
+00:03:18.050 --> 00:03:21.326
+The last two reasons for studying 
+algorthims might sound flippant but both 
+
+47
+00:03:21.326 --> 00:03:26.678
+have more than a grain of truth to them. 
+I don't know about you, but back when I 
+
+48
+00:03:26.678 --> 00:03:30.622
+was a student, my favorite classes were 
+always the challenging ones that, after I 
+
+49
+00:03:30.622 --> 00:03:34.218
+struggled through them, left me feeling a 
+few IQ points smarter than when I 
+
+50
+00:03:34.218 --> 00:03:39.246
+started. 
+I hope this course provides a similar 
+
+51
+00:03:39.246 --> 00:03:43.115
+experience for many of you. 
+Finally, I hope that by the end of the 
+
+52
+00:03:43.115 --> 00:03:46.958
+course I'll have converted some of you to 
+agree with me that the design and 
+
+53
+00:03:46.958 --> 00:03:53.089
+analysis of algorithms is simply fun. 
+It's an endeavor that requires a rare 
+
+54
+00:03:53.089 --> 00:03:58.180
+blend of precision and creativity. 
+It can certainly be frustrating at times, 
+
+55
+00:03:58.180 --> 00:04:03.112
+but it's also highly addictive. 
+So let's descend from these lofty 
+
+56
+00:04:03.112 --> 00:04:07.897
+generalities and get much more concrete. 
+And let's remember that we've all been 
+
+57
+00:04:07.897 --> 00:04:12.950
+learning about and using algorithims 
+since we were little kids. 

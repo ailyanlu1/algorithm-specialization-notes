@@ -8,11 +8,21 @@ tag: [Algorithm, Coursera]
 
 ---
 
-大概介绍一下算法，其重要性；演示两个整数相乘的例子；具体介绍Merge Sort归并排序，这是一个经典实用的算法，是在接触更复杂的算法之前一个比较好的热身，也是分治类算法中的典型；指导原则：如何分析算法
+> 对于一个优秀的算法设计者而言，最重要的原则就是拒绝满足。
+>
+> Perhaps the most important principle for the good algorithm designer is to refuse to be content.
 
-介绍大O表示法
+# Big-oh notation / 大O表示法
 
-Mathematics for computer science
+
+
+# Sorting and searching / 排序与检索
+
+# Divide and conquer / 分治
+
+# Randomized algorithms / 随机算法
+
+
 
 
 
