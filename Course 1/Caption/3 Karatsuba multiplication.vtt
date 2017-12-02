@@ -1,0 +1,855 @@
+WEBVTT
+
+1
+00:00:02.360 --> 00:00:06.203
+If you want to multiply two integers, is 
+there a better method than the one we 
+
+2
+00:00:06.203 --> 00:00:10.595
+learned back in third grade? 
+To give you the final answer to this 
+
+3
+00:00:10.595 --> 00:00:14.170
+question, you'll have to wait until I 
+provide you with a toolbox for analyzing 
+
+4
+00:00:14.170 --> 00:00:18.250
+Divide and Conquer algorithm a few 
+lectures hence. 
+
+5
+00:00:18.250 --> 00:00:22.150
+What I want to do in this lecture is 
+convince you that the algorithm design 
+
+6
+00:00:22.150 --> 00:00:26.873
+space is surprisingly rich. 
+There are certainly other interesting 
+
+7
+00:00:26.873 --> 00:00:31.760
+methods of multiplying two integers 
+beyond what we learned in third grade. 
+
+8
+00:00:31.760 --> 00:00:34.660
+And the highlight of this lecture will be 
+something called Karatsuba 
+
+9
+00:00:34.660 --> 00:00:38.422
+multiplication. 
+Let me introduce you to Karatsuba 
+
+10
+00:00:38.422 --> 00:00:41.020
+multiplication through a concrete 
+example. 
+
+11
+00:00:41.020 --> 00:00:43.600
+I am going to take the same pair of 
+integers we studied last lecture, 1, 2, 
+
+12
+00:00:43.600 --> 00:00:48.014
+3, 4, 5, 6, 7, 8. 
+I am going to execute a sequence of steps 
+
+13
+00:00:48.014 --> 00:00:53.563
+resulting in their products. 
+But, that sequence of steps is going to 
+
+14
+00:00:53.563 --> 00:00:57.565
+look very different than the one we 
+undertook during the grade school 
+
+15
+00:00:57.565 --> 00:01:02.870
+algorithm, yet we'll arrive at exactly 
+the same answer. 
+
+16
+00:01:04.690 --> 00:01:08.210
+The sequence of steps will strike you as 
+very mysterious. 
+
+17
+00:01:08.210 --> 00:01:11.801
+It'll seem like I'm pulling a rabbit out 
+of the hat, and the rest of this video 
+
+18
+00:01:11.801 --> 00:01:15.620
+will develop more systematically what 
+exactly this Karatsuba multiplication 
+
+19
+00:01:15.620 --> 00:01:20.834
+method is, and why it works. 
+But what I want you to appreciate already 
+
+20
+00:01:20.834 --> 00:01:24.677
+on this slide is that the algorithm 
+design space is far richer than you might 
+
+21
+00:01:24.677 --> 00:01:28.540
+expect. 
+There's this dazzling array of options 
+
+22
+00:01:28.540 --> 00:01:32.700
+for how to actually solve problems like 
+integer multiplication. 
+
+23
+00:01:34.060 --> 00:01:38.152
+Let me begin by introducing some notation 
+for the first and second halves of the 
+
+24
+00:01:38.152 --> 00:01:42.434
+input numbers x and y. 
+So the first half of x, that is 56- we're 
+
+25
+00:01:42.434 --> 00:01:46.920
+going to regard as a number in its own 
+right called a. 
+
+26
+00:01:46.920 --> 00:01:51.973
+Similarly b will be 78, c will be 12, and 
+d will be 34. 
+
+27
+00:01:53.470 --> 00:01:57.748
+I'm going to do a sequence of operations 
+involving only these double digit numbers 
+
+28
+00:01:57.748 --> 00:02:01.796
+a b c and d. 
+And then after a few such operations I 
+
+29
+00:02:01.796 --> 00:02:06.284
+will collect all of the terms together in 
+a magical way resulting in the product of 
+
+30
+00:02:06.284 --> 00:02:11.970
+x and y. 
+First let me compute the product of a 
+
+31
+00:02:11.970 --> 00:02:15.890
+times c and also the product of b times 
+d. 
+
+32
+00:02:15.890 --> 00:02:18.970
+I'm going to skip the elementary 
+calculations, and just tell you the 
+
+33
+00:02:18.970 --> 00:02:24.435
+answer. 
+So you can verify that a times c is 672, 
+
+34
+00:02:24.435 --> 00:02:30.225
+where as b times d is 2652. 
+Next I'm going to do something even still 
+
+35
+00:02:30.225 --> 00:02:33.632
+more inscrutable. 
+I'm going to take the sum of a and b. 
+
+36
+00:02:33.632 --> 00:02:37.660
+I'm going to take the sum of c and d. 
+And then I'm going to compute the product 
+
+37
+00:02:37.660 --> 00:02:43.636
+of those two sums. 
+That boils down to computing the product 
+
+38
+00:02:43.636 --> 00:02:48.440
+of 134 and 46. 
+Mainly at 6164. 
+
+39
+00:02:48.440 --> 00:02:52.832
+Now, I'm going to subtract our first two 
+products from the results of this 
+
+40
+00:02:52.832 --> 00:02:56.368
+computation. 
+That is, I'm going to take 6164. 
+
+41
+00:02:56.368 --> 00:03:02.678
+Subtract 2652, and subtract 672. 
+You should check that if you subtract the 
+
+42
+00:03:02.678 --> 00:03:07.900
+results of the first 2 steps from the 
+result of the 3rd step, you get 2840. 
+
+43
+00:03:07.900 --> 00:03:13.822
+Now, I claim that I can take the results 
+of step 1, 2 and 4 and combine them into 
+
+44
+00:03:13.822 --> 00:03:20.485
+super simple way to produce the product 
+of X and Y. 
+
+45
+00:03:20.485 --> 00:03:25.340
+Here's how I do it. 
+I start with the first product, ac. 
+
+46
+00:03:25.340 --> 00:03:30.616
+And I pad it with four zeros. 
+I take the results of the second step, 
+
+47
+00:03:30.616 --> 00:03:35.576
+and I don't pad it with any zeros at all. 
+And I take the result of the fourth step, 
+
+48
+00:03:35.576 --> 00:03:39.940
+and I pad it with two zeros. 
+If we add up these three quantities, from 
+
+49
+00:03:39.940 --> 00:03:43.575
+right to left. 
+We get two, five, six. 
+
+50
+00:03:43.575 --> 00:03:50.336
+Six, zero, zero, seven. 
+If you go back to the previous lecture 
+
+51
+00:03:50.336 --> 00:03:54.692
+you'll note that this is exactly the same 
+output as the great school algorithm, 
+
+52
+00:03:54.692 --> 00:03:58.784
+that this is in fact the product of one, 
+two, the, three, four and five, six, 
+
+53
+00:03:58.784 --> 00:04:04.174
+seven, eight. 
+So let me reiterate that you should not 
+
+54
+00:04:04.174 --> 00:04:07.936
+have any intuitions for the computations 
+I just did, you should not understand 
+
+55
+00:04:07.936 --> 00:04:13.424
+what just went down on this slide. 
+Rather I hope you feel some mixture of 
+
+56
+00:04:13.424 --> 00:04:16.772
+bafflement and intrigue but, more the 
+point I hope you appreciate that the 
+
+57
+00:04:16.772 --> 00:04:20.680
+third grade algorithm is not the only 
+game in town. 
+
+58
+00:04:20.680 --> 00:04:23.800
+There's fundamentally different 
+algorithms for multiplying integers than 
+
+59
+00:04:23.800 --> 00:04:27.529
+what you learned as a kid. 
+Once you realize that, once you realize 
+
+60
+00:04:27.529 --> 00:04:31.621
+how rich the space of algorithms is, you 
+have to wonder Can we do better than that 
+
+61
+00:04:31.621 --> 00:04:37.469
+third grade algorithm? 
+In fact, does this algorithm already do 
+
+62
+00:04:37.469 --> 00:04:43.237
+better that the third grade algorithm? 
+Before I explain full-blown Karatsuba 
+
+63
+00:04:43.237 --> 00:04:46.887
+multiplication, let me begin by 
+explaining a simpler, more 
+
+64
+00:04:46.887 --> 00:04:52.559
+straightforward recursive approach. 
+To integer multiplication. 
+
+65
+00:04:52.559 --> 00:04:54.960
+Now, I am assuming you have a bit of 
+programming background. 
+
+66
+00:04:54.960 --> 00:04:57.660
+In particular, that you know what 
+recursive algorithms are. 
+
+67
+00:04:57.660 --> 00:05:02.133
+That is, algorithms which invoke 
+themselves as a subroutine with a smaller 
+
+68
+00:05:02.133 --> 00:05:05.400
+input. 
+So, how might you approach the integer 
+
+69
+00:05:05.400 --> 00:05:09.550
+multiplication problem recursively? 
+Well the input are two digits. 
+
+70
+00:05:09.550 --> 00:05:12.370
+Each two numbers. 
+Each has two digits. 
+
+71
+00:05:12.370 --> 00:05:16.926
+So to call the algorithm recursively you 
+need to perform inputs that have smaller 
+
+72
+00:05:16.926 --> 00:05:20.550
+size, less digits. 
+Well, we already were doing that in the 
+
+73
+00:05:20.550 --> 00:05:25.172
+computations on the previous slide. 
+For example the number 5678 we treated 
+
+74
+00:05:25.172 --> 00:05:31.161
+the first half of digits as 56 as a 
+number in its own right and similarly 78. 
+
+75
+00:05:33.160 --> 00:05:36.210
+In general, given a number x with n 
+digits. 
+
+76
+00:05:36.210 --> 00:05:41.560
+In can be expressed decomposed, in terms 
+of two, n over two digit numbers. 
+
+77
+00:05:41.560 --> 00:05:45.530
+Namely as A, the first half of the digits 
+shifted appropriately. 
+
+78
+00:05:45.530 --> 00:05:49.670
+That is multiplied by ten raised to the 
+power, n over two. 
+
+79
+00:05:49.670 --> 00:05:55.069
+Plus the second half of the digits b. 
+In our example, we had a equal to 56, 78 
+
+80
+00:05:55.069 --> 00:05:59.088
+was b. 
+N was 4, so 10 to the n over 2 was 100, 
+
+81
+00:05:59.088 --> 00:06:04.852
+and then c and d were 12 and 34. 
+What I want to do next is illuminate the 
+
+82
+00:06:04.852 --> 00:06:08.994
+relevant recursive calls. 
+To do that, let's look at the product, x 
+
+83
+00:06:08.994 --> 00:06:11.935
+times y. 
+Express it in terms of these smaller 
+
+84
+00:06:11.935 --> 00:06:16.110
+numbers, a, b, c, and d, and do an 
+elementary computation. 
+
+85
+00:06:17.750 --> 00:06:21.398
+Multiplying the expanded versions of x 
+and y, we get an expression with three 
+
+86
+00:06:21.398 --> 00:06:25.130
+terms. 
+One shifted by n, 10 raised to the power 
+
+87
+00:06:25.130 --> 00:06:30.270
+n, and the coefficient there is a times 
+c. 
+
+88
+00:06:30.270 --> 00:06:34.796
+We have a term that's shifted by 10 to 
+the n over 2, and that has a coefficient 
+
+89
+00:06:34.796 --> 00:06:40.700
+of ad and also plus bc. 
+And bringing up the rear, we have the 
+
+90
+00:06:40.700 --> 00:06:43.924
+term b times d. 
+We're going to be referring to this 
+
+91
+00:06:43.924 --> 00:06:46.360
+expression a number of times, so let me 
+both circle it and just give it a 
+
+92
+00:06:46.360 --> 00:06:49.990
+shorthand. 
+We're going to call this expression star. 
+
+93
+00:06:52.370 --> 00:06:56.150
+One detail I'm glossing over for 
+simplicity, is that I've assumed that n 
+
+94
+00:06:56.150 --> 00:06:59.768
+is an even integer. 
+Now, if n is an odd integer, you can 
+
+95
+00:06:59.768 --> 00:07:04.135
+apply this exact same recursive approach 
+to integer multiplication. 
+
+96
+00:07:04.135 --> 00:07:07.591
+In the straightforward way, so if n was 9 
+then you would decompose one of these 
+
+97
+00:07:07.591 --> 00:07:11.047
+input numbers into say the first five 
+digits and the later four digits and you 
+
+98
+00:07:11.047 --> 00:07:18.082
+would proceed in exactly the same way. 
+Now the point of the expression star is 
+
+99
+00:07:18.082 --> 00:07:22.042
+if we look at it despite being the 
+product of just elementary algebra, it 
+
+100
+00:07:22.042 --> 00:07:27.370
+suggests a recursive approach to 
+multiplying two numbers. 
+
+101
+00:07:27.370 --> 00:07:32.663
+If we care about the product Of X and Y, 
+why not, instead, compute this expression 
+
+102
+00:07:32.663 --> 00:07:40.390
+star, which involves only the products of 
+smaller numbers, A, B, C and D. 
+
+103
+00:07:40.390 --> 00:07:44.870
+You'll notice, staring at the expression 
+star, there are 4 relevant products, each 
+
+104
+00:07:44.870 --> 00:07:48.450
+involving a pair of these smaller 
+numbers. 
+
+105
+00:07:48.450 --> 00:07:54.160
+Namely AC, AD, BC, and BD . 
+So why not compute each of those four 
+
+106
+00:07:54.160 --> 00:07:59.400
+products recursively. 
+After all, the inputs will be smaller. 
+
+107
+00:07:59.400 --> 00:08:02.928
+And then once our four recursive calls 
+come back to us with the answer, we can 
+
+108
+00:08:02.928 --> 00:08:07.110
+formulate the rest of expression star in 
+the obvious way. 
+
+109
+00:08:07.110 --> 00:08:10.605
+We just pad a times c with n zeros at the 
+end. 
+
+110
+00:08:10.605 --> 00:08:14.700
+We add up a, d, and bc, using the grade 
+school algorithm, and pad the result with 
+
+111
+00:08:14.700 --> 00:08:18.669
+n over two zeros, and then we just sum up 
+these returns, again using the grade 
+
+112
+00:08:18.669 --> 00:08:24.210
+school addition, and algorithm. 
+So the one detail missing, that I've 
+
+113
+00:08:24.210 --> 00:08:27.444
+glossed over, required to turn this idea 
+into a bonafide recursive algorithm, 
+
+114
+00:08:27.444 --> 00:08:31.673
+would be to specify a base case. 
+As I hope you all know, recursive 
+
+115
+00:08:31.673 --> 00:08:35.124
+algorithms need a base case. 
+If the input is sufficiently small, then 
+
+116
+00:08:35.124 --> 00:08:39.420
+you just immediately compute the answer 
+rather than recursing further. 
+
+117
+00:08:39.420 --> 00:08:42.255
+Of course, recursive algorithms need a 
+base case so they don't keep calling 
+
+118
+00:08:42.255 --> 00:08:45.995
+themselves til the rest of time. 
+So for integer multiplication, which the 
+
+119
+00:08:45.995 --> 00:08:48.815
+base case, well, if you're given two 
+numbers that have the just one digit 
+
+120
+00:08:48.815 --> 00:08:51.690
+each. 
+Then you just multiply them in one basic 
+
+121
+00:08:51.690 --> 00:08:57.168
+operation and return the result. 
+So, what I hope is clear at the moment is 
+
+122
+00:08:57.168 --> 00:09:00.500
+that there is indeed a recursive approach 
+to solving the integer multiplication 
+
+123
+00:09:00.500 --> 00:09:03.832
+algorithm resulting in an algorithm which 
+looks quite different than the one you 
+
+124
+00:09:03.832 --> 00:09:06.723
+learned in third grade, but which 
+nevertheless you could code up quite 
+
+125
+00:09:06.723 --> 00:09:11.420
+easily in your favorite programming 
+language. 
+
+126
+00:09:11.420 --> 00:09:14.470
+Now, what you shouldn't have any 
+intuition about is whether or not this is 
+
+127
+00:09:14.470 --> 00:09:17.369
+a good idea or a completely crackpot 
+idea. 
+
+128
+00:09:17.369 --> 00:09:21.250
+Is this algorithm faster or slower than 
+the grade school algorithm? 
+
+129
+00:09:21.250 --> 00:09:24.230
+You'll just have to wait to find out the 
+answer to that question. 
+
+130
+00:09:24.230 --> 00:09:28.073
+Let's now refine this recursive 
+algorithm, resulting in the full-blown 
+
+131
+00:09:28.073 --> 00:09:33.810
+Karatsuba multiplication algorithm. 
+To explain the optimization behind 
+
+132
+00:09:33.810 --> 00:09:37.495
+Karatsuba multiplication, let's recall 
+the expression we were calling star on 
+
+133
+00:09:37.495 --> 00:09:41.922
+the previous slide. 
+So, this just expressed the product of x 
+
+134
+00:09:41.922 --> 00:09:46.560
+and y in terms of the smaller numbers a, 
+b, c, and d. 
+
+135
+00:09:46.560 --> 00:09:50.525
+In this straight forward recursive 
+algorithm we made four recursive calls to 
+
+136
+00:09:50.525 --> 00:09:54.307
+compute the four products which seemed 
+necessary to value, to compute the 
+
+137
+00:09:54.307 --> 00:09:59.622
+expression star. 
+But if you think about it, there's really 
+
+138
+00:09:59.622 --> 00:10:03.213
+only three quantities in star that we 
+care about, the three relevant 
+
+139
+00:10:03.213 --> 00:10:08.780
+coefficients. 
+We care about the numbers ad and bc. 
+
+140
+00:10:08.780 --> 00:10:16.300
+Not per se, but only in as much as we 
+care about their sum, AD plus BC. 
+
+141
+00:10:16.300 --> 00:10:20.875
+So this motivates the question, if 
+there's only 3 quantities that we care 
+
+142
+00:10:20.875 --> 00:10:26.840
+about, can we get away with only 3 rather 
+than 4 recursive calls. 
+
+143
+00:10:26.840 --> 00:10:29.609
+It turns out that we can and here's how 
+we do it. 
+
+144
+00:10:31.810 --> 00:10:36.674
+The first coefficient a c and the third 
+coefficient b d, we compute exactly as 
+
+145
+00:10:36.674 --> 00:10:42.162
+before, recursively. 
+Next, rather than recursively computing a 
+
+146
+00:10:42.162 --> 00:10:46.628
+d or b c, we're going to recursively 
+compute the product of a plus b and c 
+
+147
+00:10:46.628 --> 00:10:54.051
+plus d. 
+If we expand this out, this is the same 
+
+148
+00:10:54.051 --> 00:10:58.530
+thing as computing ac plus ad plus bc 
+plus bd. 
+
+149
+00:10:58.530 --> 00:11:02.358
+Now, here is the key observation in 
+Karatsuba Multiplication, and it's really 
+
+150
+00:11:02.358 --> 00:11:07.230
+a trick that goes back to the early 19th 
+Century mathematician, Gauss. 
+
+151
+00:11:07.230 --> 00:11:12.280
+Let's look at the quantity we computed in 
+step 3 and subtract from it. 
+
+152
+00:11:12.280 --> 00:11:16.060
+The two quantities that we already 
+computed in steps one and two. 
+
+153
+00:11:17.730 --> 00:11:21.050
+Subtracting out the result of step one 
+cancels the a c term. 
+
+154
+00:11:21.050 --> 00:11:26.198
+Subtracting out the result of step two, 
+cancels out the bd term, leaving us with 
+
+155
+00:11:26.198 --> 00:11:33.830
+exactly what we wanted all along, the 
+middle coefficient a d plus b c. 
+
+156
+00:11:33.830 --> 00:11:37.094
+And now in the same that on the previous 
+slide we have a straightforward recursive 
+
+157
+00:11:37.094 --> 00:11:40.262
+algorithm making four recursive calls, 
+and then combining them in the obvious 
+
+158
+00:11:40.262 --> 00:11:44.300
+way. 
+Here we have a straightforward recursive 
+
+159
+00:11:44.300 --> 00:11:47.500
+algorithm that makes only three recursive 
+calls. 
+
+160
+00:11:47.500 --> 00:11:50.578
+And on top of the recursive calls does 
+just great school addition and 
+
+161
+00:11:50.578 --> 00:11:54.300
+subtraction. 
+So you do this particular difference 
+
+162
+00:11:54.300 --> 00:11:58.320
+between the three recursively computed 
+products and then you do the shifts, the 
+
+163
+00:11:58.320 --> 00:12:02.340
+padding by zeros, and the final sum as 
+before. 
+
+164
+00:12:04.360 --> 00:12:08.712
+So that's pretty cool, and this kind of 
+showcases the ingenuity which bears fruit 
+
+165
+00:12:08.712 --> 00:12:13.200
+even in the simplest imageable 
+computational problems. 
+
+166
+00:12:13.200 --> 00:12:16.300
+Now you should still be asking the 
+question Yeah is crazy algorthim really 
+
+167
+00:12:16.300 --> 00:12:20.550
+faster than the grade school algorithm we 
+learn in 3rd grade? 
+
+168
+00:12:20.550 --> 00:12:25.104
+Totally not obvious, we will answer that 
+question a few lecture hense and we'll 
+
+169
+00:12:25.104 --> 00:12:29.658
+answer it in a special case of an entire 
+toolbox I'll provide you with to analyze 
+
+170
+00:12:29.658 --> 00:12:34.005
+the running time of so called divide and 
+conquer algorithms like Karatsuba 
+
+171
+00:12:34.005 --> 00:12:39.087
+multiplication, so stay tuned. 
