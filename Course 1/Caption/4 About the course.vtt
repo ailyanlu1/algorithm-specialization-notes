@@ -1,0 +1,1304 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.635
+In this video I'll talk about various
+aspects of the course, the topics that
+
+2
+00:00:03.635 --> 00:00:07.509
+we'll cover, the kinds of skills you can
+expect to acquire, the kind of background
+
+3
+00:00:07.509 --> 00:00:10.953
+that I expect, the supporting materials
+and the available tools for self
+
+4
+00:00:10.953 --> 00:00:17.593
+assessment. Let's start with the specific
+topics that this course is going to cover.
+
+5
+00:00:17.593 --> 00:00:21.420
+The course material corresponds to the
+first half of the ten week Stanford
+
+6
+00:00:21.420 --> 00:00:25.501
+course. It's taken by all computer science
+undergraduates, as well as many of our
+
+7
+00:00:25.501 --> 00:00:29.532
+graduate students. There will be five high
+level topics, and at times these will
+
+8
+00:00:29.532 --> 00:00:33.410
+overlap. The five topics are first of all,
+the vocabulary for reasoning about
+
+9
+00:00:33.410 --> 00:00:36.981
+algorithm performance, the design and
+conquer algorithm design paradigm,
+
+10
+00:00:36.981 --> 00:00:40.910
+randomization and algorithm design,
+primitives for reasoning about graphs, and
+
+11
+00:00:40.910 --> 00:00:44.889
+the use and implementation of basic data
+structures. The goal is to provide an
+
+12
+00:00:44.889 --> 00:00:49.130
+introduction to and basic literacy in each
+of these topics. Much, much more could be
+
+13
+00:00:49.130 --> 00:00:53.703
+said about each of them, than we'll have
+time for here. The first topic is the
+
+14
+00:00:53.703 --> 00:00:57.626
+shortest, and probably also the driest.
+But it's a prerequisite for thinking
+
+15
+00:00:57.626 --> 00:01:02.020
+seriously about the design and analysis of
+algorithms. The key concept here is big-O
+
+16
+00:01:02.020 --> 00:01:05.996
+notation, which, conceptually, is a
+modeling choice about the granularity with
+
+17
+00:01:05.996 --> 00:01:10.443
+which we measure a performance metric like
+the running time of an algorithm. It turns
+
+18
+00:01:10.443 --> 00:01:14.628
+out that the sweet spot for clear high
+level thinking about algorithm design, is
+
+19
+00:01:14.628 --> 00:01:18.813
+to ignore constant factors and lower-order
+terms. And to concentrate on how well
+
+20
+00:01:18.813 --> 00:01:23.050
+algorithm performance scales with large
+input sizes. Big O notation is the way to
+
+21
+00:01:23.050 --> 00:01:28.110
+mathematize this sweet spot. Now, there's
+no one silver bullet in algorithm design.
+
+22
+00:01:28.110 --> 00:01:31.630
+No single problem solving method that's
+guaranteed to unlock all of the
+
+23
+00:01:31.630 --> 00:01:35.345
+computational problems that you're likely
+to face. That said, there are a few
+
+24
+00:01:35.345 --> 00:01:39.402
+general algorithm design techniques. High
+level approaches to algorithm design that
+
+25
+00:01:39.402 --> 00:01:43.361
+find successful application across a range
+of different domains. These relatively
+
+26
+00:01:43.361 --> 00:01:47.125
+widely applicable techniques are the
+backbone of a general algorithms course
+
+27
+00:01:47.125 --> 00:01:50.890
+like this one. In this course, we'll only
+have time to deeply explore one such
+
+28
+00:01:50.890 --> 00:01:54.899
+algorithm design paradigm, namely that of
+the divide and conquer algorithms. In the
+
+29
+00:01:54.899 --> 00:01:58.908
+sequel course as we'll discuss, there's
+two other major algorithms on paradigms to
+
+30
+00:01:58.908 --> 00:02:02.526
+get covered. But for now, divide and
+conquer algorithm, the idea is to first
+
+31
+00:02:02.526 --> 00:02:06.388
+break the problem into smaller problems
+which then gets solved recursively, and
+
+32
+00:02:06.388 --> 00:02:10.202
+then to somehow quickly combine the
+solutions to the sub problems into one for
+
+33
+00:02:10.202 --> 00:02:13.966
+the original problem that you actually
+care about. So for example, in the last
+
+34
+00:02:13.966 --> 00:02:17.792
+video. We saw two algorithms of this sort,
+two divide and conquer algorithms from
+
+35
+00:02:17.792 --> 00:02:21.660
+multiplying two large integers. In later
+videos we will see a number of different
+
+36
+00:02:21.660 --> 00:02:25.718
+applications. We'll see how to design fast
+divide and conquer algorithms for problems
+
+37
+00:02:25.718 --> 00:02:29.060
+ranging from sorting to matrix
+multiplication to nearest neighbor-type
+
+38
+00:02:29.060 --> 00:02:32.640
+problems and computation of geometry. In
+addition, we'll cover some powerful
+
+39
+00:02:32.640 --> 00:02:36.460
+methods for reasoning about the running
+time of recursive algorithms like these.
+
+40
+00:02:37.900 --> 00:02:42.247
+As for the third topic. A randomized
+algorithm is one that, in some sense,
+
+41
+00:02:42.247 --> 00:02:46.406
+flips coins while it executes. That is, a
+randomized algorithm will actually have
+
+42
+00:02:46.406 --> 00:02:50.617
+different executions if you run it over
+and over again on a fixed input. It turns
+
+43
+00:02:50.617 --> 00:02:54.984
+out, and this is definitely not intuitive,
+that allowing randomization internal to an
+
+44
+00:02:54.984 --> 00:02:58.831
+algorithm, often leads to simple, elegant,
+and practical solution to various
+
+45
+00:02:58.831 --> 00:03:02.938
+computational problems. The canonical
+example is randomized quick sort, and that
+
+46
+00:03:02.938 --> 00:03:07.045
+algorithm and analysis we will cover in
+detail in a few lectures. Randomized
+
+47
+00:03:07.045 --> 00:03:11.100
+primality testing is another killer
+application that we'll touch on. And we'll
+
+48
+00:03:11.100 --> 00:03:15.026
+also discuss a randomized approach to
+graph partitioning. And finally
+
+49
+00:03:15.026 --> 00:03:20.460
+we'll discuss how randomization is used to
+reason about hash functions and hash maps.
+
+50
+00:03:20.920 --> 00:03:25.000
+One of the themes of this course, and one
+of the concrete skills that I hope you
+
+51
+00:03:25.000 --> 00:03:29.081
+take away from the course, is, literacy
+with a number of computational primitives
+
+52
+00:03:29.081 --> 00:03:33.060
+for operating on data, that are so fast,
+that they're, in some sense, essentially
+
+53
+00:03:33.060 --> 00:03:36.988
+free. That is, the amount of time it take
+to invoke one of these computational
+
+54
+00:03:36.988 --> 00:03:41.018
+primitives is barely more than the amount
+of time you're already spending just
+
+55
+00:03:41.018 --> 00:03:45.047
+examining or reading the input. When you
+have a primitive which is so fast, that
+
+56
+00:03:45.047 --> 00:03:49.281
+the running time is barely more than what
+it takes to read the input, you should be
+
+57
+00:03:49.281 --> 00:03:53.430
+ready to apply it. For example, in a
+preprocessing step, whenever it seems like
+
+58
+00:03:53.430 --> 00:03:57.755
+it might be helpful. It should just be
+there on the shelf waiting to be applied
+
+59
+00:03:57.755 --> 00:04:01.971
+at will. Sorting is one canonical
+example of a very fast, almost for-free
+
+60
+00:04:01.971 --> 00:04:06.570
+primitive of this form. But there are ones
+that operate on more complex data as well.
+
+61
+00:04:06.570 --> 00:04:10.895
+So recall that a graph is a data structure
+that has, on the one hand, vertices, and
+
+62
+00:04:10.895 --> 00:04:15.112
+on the other hand, edges. Which connects
+pair of vertices. Graphs model, among any
+
+63
+00:04:15.112 --> 00:04:19.018
+other things, different types of networks.
+So even though graphs are much more
+
+64
+00:04:19.018 --> 00:04:23.292
+complicated than mere arrays, there's
+still a number of blazingly fast primitives
+
+65
+00:04:23.292 --> 00:04:27.356
+for reasoning about their structure. In
+this class we'll focus on primitives for
+
+66
+00:04:27.356 --> 00:04:31.631
+competing connectivity information and also shortest paths. We'll also touch on how some primitives have been
+
+67
+00:04:31.631 --> 00:04:36.227
+used to investigate the structure of
+information in social networks. Finally,
+
+68
+00:04:36.227 --> 00:04:39.572
+data structures are often a crucial
+ingredient in the design of fast
+
+69
+00:04:39.572 --> 00:04:43.692
+algorithms. A data structure's responsible
+for organizing data in a way that supports
+
+70
+00:04:43.692 --> 00:04:47.473
+fast queries. Different data structures
+support different types of queries. I'll
+
+71
+00:04:47.473 --> 00:04:51.350
+assume that you're familiar with the
+structures that you typically encounter in
+
+72
+00:04:51.350 --> 00:04:56.275
+a basic programming class including arrays
+and vectors. Lists, stacks, and queues.
+
+73
+00:04:56.275 --> 00:05:00.502
+Hopefully, you've seen at some point both
+trees and heaps, or you're willing to read
+
+74
+00:05:00.502 --> 00:05:04.577
+a bit about them outside of the course,
+but we'll also include a brief review of
+
+75
+00:05:04.577 --> 00:05:08.600
+each of those data structures as we go
+along. There's two extremely useful data
+
+76
+00:05:08.600 --> 00:05:12.777
+structures that we'll discuss in detail.
+The first is balanced binary search trees.
+
+77
+00:05:12.777 --> 00:05:16.953
+These data structures dynamically maintain
+an ordering on a set of elements, while
+
+78
+00:05:16.953 --> 00:05:21.282
+supporting a large number of queries that
+run in time logarithmic in the size of
+
+79
+00:05:21.282 --> 00:05:25.443
+the set. The second data structure we'll
+talk a fair bit about is hash tables or
+
+80
+00:05:25.443 --> 00:05:29.348
+hash maps, which keep track of a dynamic
+set, while supporting extremely fast
+
+81
+00:05:29.348 --> 00:05:33.203
+insert and lookup queries. We'll talk
+about some canonical uses of such data
+
+82
+00:05:33.203 --> 00:05:37.159
+structures, as well as what's going on
+under the hood in a typical
+
+83
+00:05:37.159 --> 00:05:41.278
+implementation of such a data 
+structure. >> There's a number of
+
+84
+00:05:41.278 --> 00:05:45.070
+important concepts in the design and
+analysis of algorithms that we won't have
+
+85
+00:05:45.070 --> 00:05:48.765
+time to cover in this five week course.
+Some of these will be covered in the
+
+86
+00:05:48.765 --> 00:05:52.411
+sequel course, Design and Analysis of
+Algorithms II, which corresponds to the
+
+87
+00:05:52.411 --> 00:05:56.252
+second half of Stanford's ten week course
+on this topic. The first part of this
+
+88
+00:05:56.252 --> 00:05:59.801
+sequel course focuses on two more
+algorithm design paradigms. First of
+
+89
+00:05:59.801 --> 00:06:03.301
+all, the design analysis of greedy
+algorithms with applications to minimum
+
+90
+00:06:03.301 --> 00:06:06.386
+spanning trees, scheduling, and
+information theoretic coding. And
+
+91
+00:06:06.386 --> 00:06:10.509
+secondly, the design analysis of dynamic
+programming algorithms with example
+
+92
+00:06:10.509 --> 00:06:14.849
+applications being in genome sequence
+alignment and the shortest path protocols
+
+93
+00:06:14.849 --> 00:06:19.252
+in communication networks. The second part
+of the sequel course concerns NP complete
+
+94
+00:06:19.252 --> 00:06:23.276
+problems, and what to do about them. Now,
+NP complete problems are problems that,
+
+95
+00:06:23.276 --> 00:06:27.352
+assuming a famous mathematical conjecture
+you might have heard of, which is called the
+
+96
+00:06:27.352 --> 00:06:31.273
+"P not equal to NP" conjecture, are problems
+that cannot be solved under this
+
+97
+00:06:31.273 --> 00:06:34.988
+conjecture by any computationally
+efficient algorithm. We'll discuss the
+
+98
+00:06:34.988 --> 00:06:38.806
+theory of NP completeness, and, with a
+focus on what it means for you as an
+
+99
+00:06:38.806 --> 00:06:42.830
+algorithm designer. We'll also talk about
+several ways to approach NP complete
+
+100
+00:06:42.830 --> 00:06:46.700
+problems, including: fast algorithms that
+correctly solve special cases; fast
+
+101
+00:06:46.700 --> 00:06:50.260
+heuristics with provable performance
+guarantees; and exponential time
+
+102
+00:06:50.260 --> 00:06:54.047
+algorithms that are qualitatively faster
+than brute force search. Of course there
+
+103
+00:06:54.047 --> 00:06:58.280
+are plenty of important topics that can't
+be fit into either of these two five-week
+
+104
+00:06:58.280 --> 00:07:02.575
+courses. Depending on the demand, there
+might well be further courses on more
+
+105
+00:07:02.575 --> 00:07:07.623
+advanced topics. Following this course is
+going to involve a fair amount of time and
+
+106
+00:07:07.623 --> 00:07:11.382
+effort on your part. So it's only
+reasonable to ask: What can you hope to get
+
+107
+00:07:11.382 --> 00:07:14.863
+out of it? What skills will you learn?
+Well. Primarily, you know, even though
+
+108
+00:07:14.863 --> 00:07:18.349
+this isn't a programming class per se, it
+should make you a better programmer.
+
+109
+00:07:18.349 --> 00:07:22.107
+You'll get lots of practice describing and
+reasoning about algorithms, you'll learn
+
+110
+00:07:22.107 --> 00:07:25.910
+algorithm design paradigms, so really high
+level problem-solving strategies that are
+
+111
+00:07:25.910 --> 00:07:29.350
+relevant for many different problems
+across different domains, and tools for
+
+112
+00:07:29.350 --> 00:07:32.836
+predicting the performance of such
+algorithms. You'll learn several extremely
+
+113
+00:07:32.836 --> 00:07:36.277
+fast subroutines for processing data and
+several useful data structures for
+
+114
+00:07:36.277 --> 00:07:39.857
+organizing data that can be deployed
+directly in your own programs. Second,
+
+115
+00:07:39.857 --> 00:07:43.868
+while this is not a math class per se,
+we'll wind up doing a fair amount of
+
+116
+00:07:43.868 --> 00:07:48.147
+mathematical analysis. And this in turn
+will sharpen your mathematical analytical
+
+117
+00:07:48.147 --> 00:07:52.372
+skills. You might ask, why is mathematics
+relevant for a class in the design and
+
+118
+00:07:52.372 --> 00:07:56.757
+analysis of algorithms, seemingly more of
+a programming class. Well let me be clear.
+
+119
+00:07:56.757 --> 00:08:00.822
+I am totally uninterested in merely
+telling you facts or regurgitating code
+
+120
+00:08:00.822 --> 00:08:05.261
+that you can already find on the web or in
+any number of good programming books. My
+
+121
+00:08:05.261 --> 00:08:09.540
+goal here in this class, and the way I
+think I can best supplement the resources
+
+122
+00:08:09.540 --> 00:08:14.484
+that you probably already have access
+to is to explain why things are
+
+123
+00:08:14.484 --> 00:08:18.313
+the way they are. Why we analyze the
+algorithms in the way that we do, why
+
+124
+00:08:18.313 --> 00:08:22.352
+various super fast algorithms are in fact
+super fast, and so on. And it turns out
+
+125
+00:08:22.352 --> 00:08:26.392
+that good algorithmic ideas usually
+require nontrivial mathematical analysis
+
+126
+00:08:26.392 --> 00:08:30.431
+to understand properly. You'll acquire
+fundamental insights into the specific
+
+127
+00:08:30.431 --> 00:08:34.627
+algorithms and data structures that we
+discuss in the course. And hopefully, many
+
+128
+00:08:34.627 --> 00:08:39.912
+of these insights will prove useful, more
+generally, in your other work. Third, and
+
+129
+00:08:39.912 --> 00:08:44.281
+perhaps the most relevant for those of you
+who work in some other discipline: this
+
+130
+00:08:44.281 --> 00:08:48.544
+course should help you learn how to think
+algorithmically. Indeed after studying
+
+131
+00:08:48.544 --> 00:08:52.753
+algorithms it's hard enough not to see
+them pretty much everywhere, whether you
+
+132
+00:08:52.753 --> 00:08:57.122
+are riding an elevator, watching a flock
+of birds, buying and selling stocks out of
+
+133
+00:08:57.122 --> 00:09:01.225
+your portfolio, even watching an infant
+learn. As I said in the previous video
+
+134
+00:09:01.225 --> 00:09:05.061
+algorithm thinking is becoming
+increasingly useful and prevalent if you
+
+135
+00:09:05.061 --> 00:09:09.217
+are outside of computer science and
+technology like in biology, statistics and
+
+136
+00:09:09.217 --> 00:09:13.093
+economics. Fourth, if you're interested in
+feeling like a card carrying computer
+
+137
+00:09:13.093 --> 00:09:16.824
+scientist, in some sense, then you'll
+definitely want basic literacy in all of
+
+138
+00:09:16.824 --> 00:09:20.652
+the topics that we'll be covering. Indeed,
+one of the things that makes studying
+
+139
+00:09:20.652 --> 00:09:24.528
+algorithms so fun, is, it really feels
+like you're studying a lot of the greatest
+
+140
+00:09:24.528 --> 00:09:28.308
+hits from the last 50 years of computer
+science. So, after this class, no longer
+
+141
+00:09:28.308 --> 00:09:32.329
+will you feel excluded at that computer
+science cocktail party when someone cracks
+
+142
+00:09:32.329 --> 00:09:35.770
+a joke about Dijkstra's Algorithm. Now
+you'll know exactly what they mean.
+
+143
+00:09:35.770 --> 00:09:40.161
+Finally, there's no question that studying
+this material is helpful for technical
+
+144
+00:09:40.161 --> 00:09:44.553
+interview questions. To be clear, my sole
+goal here is to teach you algorithms, not
+
+145
+00:09:44.553 --> 00:09:49.054
+to prepare you for interviews, per se. But
+over the years, countless students of mine
+
+146
+00:09:49.054 --> 00:09:53.175
+have regaled me with stories about how
+mastering the concepts in this class
+
+147
+00:09:53.175 --> 00:09:57.350
+enabled them to ace every technical
+question they were ever asked. I told you,
+
+148
+00:09:57.350 --> 00:10:03.994
+this is fundamental stuff. So, what do I
+expect from you? Well, honestly, the
+
+149
+00:10:03.994 --> 00:10:08.863
+answer is nothing. After all isn't the
+whole point of a free online class like
+
+150
+00:10:08.863 --> 00:10:12.977
+this one that anyone can take it and
+devote as much effort to it as they like.
+
+151
+00:10:12.977 --> 00:10:16.879
+So that said, as a teacher it's still
+useful to have one or more canonical
+
+152
+00:10:16.879 --> 00:10:20.992
+students in mind. And I thought I'd go
+ahead and be transparent with you about
+
+153
+00:10:20.992 --> 00:10:25.263
+how I'm thinking about these lectures. Who
+I have in mind that I'm teaching to. So
+
+154
+00:10:25.263 --> 00:10:29.218
+again, please don't feel discouraged if
+you don't conform to this canonical
+
+155
+00:10:29.218 --> 00:10:33.489
+student template. I'm happy to have the
+opportunity to teach you about algorithms
+
+156
+00:10:33.489 --> 00:10:37.629
+no matter who you are. So first, I have in
+mind someone who knows at least some
+
+157
+00:10:37.629 --> 00:10:41.460
+programming. For example, consider the
+previous lecture. We talked about a
+
+158
+00:10:41.460 --> 00:10:45.663
+recursive approach to multiplying two
+numbers and I mentioned how in certain
+
+159
+00:10:45.663 --> 00:10:49.760
+mathematical expression, back then we
+labeled it star and circled it in green.
+
+160
+00:10:49.760 --> 00:10:53.560
+How that expression naturally translated
+into a recursive algorithm. In particular,
+
+161
+00:10:53.560 --> 00:10:57.407
+I was certainly assuming that you had some
+familiarity with recursive programs.
+
+162
+00:10:57.407 --> 00:11:01.068
+If you feel comfortable with my statement
+in that lecture, if you feel like you
+
+163
+00:11:01.068 --> 00:11:04.637
+could code up a recursive integer
+multiplication algorithm based on the high
+
+164
+00:11:04.637 --> 00:11:08.299
+level outline that I gave you, then you
+should be in good shape for this course.
+
+165
+00:11:08.299 --> 00:11:12.053
+You should be good to go. If you weren't
+comfortable with that statement, well, you
+
+166
+00:11:12.053 --> 00:11:15.576
+might not be comfortable with the
+relatively high conceptual level at which
+
+167
+00:11:15.576 --> 00:11:19.422
+we discuss program in this course. But I
+encourage to watch the next several videos
+
+168
+00:11:19.422 --> 00:11:23.520
+anyway, to see if you get enough out of
+them to make it worth your while. [sound].
+
+169
+00:11:24.180 --> 00:11:28.342
+Now, while I'm aiming these lectures at
+people who know some programming, I'm not
+
+170
+00:11:28.342 --> 00:11:32.505
+making any assumptions whatsoever about
+exactly which programming languages you know. Any
+
+171
+00:11:32.505 --> 00:11:36.459
+standard imperative language you know,
+something like C, Java or Python, is
+
+172
+00:11:36.459 --> 00:11:40.518
+totally fine for this course. Now, to make
+these lectures accessible to as many
+
+173
+00:11:40.518 --> 00:11:44.732
+programmers as possible, and to be honest,
+you know, also to promote thinking about
+
+174
+00:11:44.732 --> 00:11:48.687
+programming at a relatively abstract
+conceptual level, I won't be describing
+
+175
+00:11:48.687 --> 00:11:52.641
+algorithms in any particular programming
+language. Rather, when I discuss the
+
+176
+00:11:52.641 --> 00:11:56.584
+algorithms, I'll use only high-level
+pseudo-code, or often simply English. My
+
+177
+00:11:56.584 --> 00:12:00.377
+inductive hypothesis is that you are
+capable of translating such a high level
+
+178
+00:12:00.377 --> 00:12:04.363
+description into a working program in your
+favorite programming language. In fact, I
+
+179
+00:12:04.363 --> 00:12:08.397
+strongly encourage everyone watching these
+lectures to do such a translation of all
+
+180
+00:12:08.397 --> 00:12:12.047
+of the algorithms that we discussed. This
+will ensure your comprehension, and
+
+181
+00:12:12.047 --> 00:12:15.408
+appreciation of them. Indeed, many
+professional computer scientists and
+
+182
+00:12:15.408 --> 00:12:19.154
+programmers don't feel that they really
+understand an algorithm until they've
+
+183
+00:12:19.154 --> 00:12:22.708
+coded it up. Many of the course's
+assignments will have a problem in which
+
+184
+00:12:22.708 --> 00:12:26.406
+we ask you to do precisely this. Put
+another way, if you're looking for a sort
+
+185
+00:12:26.406 --> 00:12:30.440
+of coding cookbook, code that you can copy
+and paste directly into your own programs.
+
+186
+00:12:30.440 --> 00:12:34.344
+Without necessarily understanding how it
+works, then this is definitely not the
+
+187
+00:12:34.344 --> 00:12:38.050
+course for you. There are several books
+out there that cater to programmers
+
+188
+00:12:38.050 --> 00:12:42.043
+looking for such coding cook books.
+Second, for these lectures I have in mind
+
+189
+00:12:42.043 --> 00:12:46.118
+someone who has at least a modest amount
+of mathematical experience though perhaps
+
+190
+00:12:46.118 --> 00:12:49.750
+with a fair bit of accumulated rust.
+Concretely I expect you to be able to
+
+191
+00:12:49.750 --> 00:12:53.488
+recognize a logical argument that is a
+proof. In addition, two methods of proof
+
+192
+00:12:53.488 --> 00:12:57.331
+that I hope you've seen before are proofs
+by induction and proofs by contradiction.
+
+193
+00:12:57.331 --> 00:13:01.129
+I also need you to be familiar with basic
+mathematical notation, like the standard
+
+194
+00:13:01.129 --> 00:13:04.880
+quantifier and summation symbols. A few
+of the lectures on randomized algorithms
+
+195
+00:13:04.880 --> 00:13:08.770
+and hashing will go down much easier for
+you if you've seen discrete probability
+
+196
+00:13:08.770 --> 00:13:12.336
+at some point in your life. But beyond
+these basics, the lectures will be self
+
+197
+00:13:12.336 --> 00:13:15.809
+contained. You don't even need to know any
+calculus, save for a single simple
+
+198
+00:13:15.809 --> 00:13:19.651
+integral that magically pops up in the 
+analys of the randomized quick sort
+
+199
+00:13:19.651 --> 00:13:23.841
+algorithm. I imagine that many of you have
+studied math in the past, but you could
+
+200
+00:13:23.841 --> 00:13:27.654
+use a refresher, you're a bit rusty. And
+there's plenty of free resources out there
+
+201
+00:13:27.654 --> 00:13:31.514
+on the web, and I encourage you to explore
+and find some that you like. But one that
+
+202
+00:13:31.514 --> 00:13:35.002
+I want to particularly recommend is a
+great set of free lecture notes. It's
+
+203
+00:13:35.002 --> 00:13:38.722
+called Mathematics for Computer Science.
+It's authored by Eric Lehman and Tom
+
+204
+00:13:38.722 --> 00:13:42.767
+Layden, and it's quite easy to find on the
+web if you just do a web search. And those
+
+205
+00:13:42.767 --> 00:13:46.580
+notes cover all of the prerequisites that
+we'll need, in addition to tons of other
+
+206
+00:13:46.580 --> 00:13:51.822
+stuff. In the spirit of keeping this
+course as widely accessible as possible,
+
+207
+00:13:51.822 --> 00:13:55.734
+we're keeping the required supporting
+materials to an absolute minimum. Lectures
+
+208
+00:13:55.734 --> 00:13:59.793
+are meant to be self-contained and we'll
+always provide you with the lecture notes
+
+209
+00:13:59.793 --> 00:14:03.705
+in PowerPoint and PDF format. Once in a
+while, we'll also provide some additional
+
+210
+00:14:03.705 --> 00:14:07.530
+lecture notes. No textbook is required for
+this class. But that said, most of the
+
+211
+00:14:07.530 --> 00:14:11.588
+material that we'll study is well covered
+in a number of excellent algorithms books
+
+212
+00:14:11.588 --> 00:14:15.308
+that are out there. So I'll single out
+four such books here. The first three I
+
+213
+00:14:15.308 --> 00:14:19.270
+mention because they all had a significant
+influence on the way that I both think
+
+214
+00:14:19.270 --> 00:14:23.319
+about and teach algorithms. So it's
+natural to acknowledge that debt here. One
+
+215
+00:14:23.319 --> 00:14:27.668
+very cool thing about the second book, the
+one by Dasgupta, Papadimitriou and Vazirani, is that the authors
+
+216
+00:14:27.668 --> 00:14:32.126
+have made a version of it available online
+for free. And again, if you search on the
+
+217
+00:14:32.126 --> 00:14:36.583
+authors' names and the textbook title, you
+should have no trouble coming up with it
+
+218
+00:14:36.583 --> 00:14:40.933
+with a web search. Similarly, that's the
+reason I've listed the fourth book because
+
+219
+00:14:40.933 --> 00:14:44.799
+those authors have likewise made
+essentially a complete version of that
+
+220
+00:14:44.799 --> 00:14:49.149
+book available online and it's a good
+match for the material that we're going to
+
+221
+00:14:49.149 --> 00:14:52.527
+cover here. If you're looking for more
+details about something covered in this
+
+222
+00:14:52.527 --> 00:14:55.938
+class, or simply a different explanation
+than the one that I give you, all of these
+
+223
+00:14:55.938 --> 00:14:59.225
+books are gonna be good resources for you.
+There are also a number of excellent
+
+224
+00:14:59.225 --> 00:15:02.678
+algorithm textbooks that I haven't
+put on this list. I encourage to explore
+
+225
+00:15:02.678 --> 00:15:06.054
+and find you own favorite. >> In our
+assignments, we'll sometimes ask you to
+
+226
+00:15:06.054 --> 00:15:09.847
+code up an algorithm and use it to solve a
+concrete problem that is too large to
+
+227
+00:15:09.847 --> 00:15:13.313
+solve by hand. Now, we don't care what
+program and language and development
+
+228
+00:15:13.313 --> 00:15:17.153
+environment you use to do this as we're
+only going to be asking you for the final
+
+229
+00:15:17.153 --> 00:15:20.993
+answer. Thus, we're not requiring anything
+specific, just that you are able to write
+
+230
+00:15:20.993 --> 00:15:24.692
+and execute programs. If you need help or
+advice about how to get set up with a
+
+231
+00:15:24.692 --> 00:15:28.438
+suitable coding environment, we suggest
+that you ask other students for help via
+
+232
+00:15:28.438 --> 00:15:32.640
+the course discussion forum. Finally,
+let's talk a bit more about assessment.
+
+233
+00:15:32.640 --> 00:15:36.102
+Now this course doesn't have official
+grades per se, but we will be assigning
+
+234
+00:15:36.102 --> 00:15:39.385
+weekly homeworks. Now we're going to
+assign homeworks for three different
+
+235
+00:15:39.385 --> 00:15:42.398
+reasons. The first is just for
+self-assessment. It's to give you the
+
+236
+00:15:42.398 --> 00:15:46.086
+opportunity to test your understanding of
+the material so that you can figure out
+
+237
+00:15:46.086 --> 00:15:49.735
+which topics you've mastered and which
+ones that you haven't. The second reason
+
+238
+00:15:49.735 --> 00:15:53.458
+we do it is to impose some structure on
+the course, including deadlines, to
+
+239
+00:15:53.458 --> 00:15:57.231
+provide you with some additional
+motivation to work through all the topics.
+
+240
+00:15:57.231 --> 00:16:01.206
+Deadlines also have a very important side
+effect that synchronizes a lot of the
+
+241
+00:16:01.206 --> 00:16:05.281
+students in the class. And this of course
+makes the course discussion forum a far
+
+242
+00:16:05.281 --> 00:16:09.256
+more effective tool for students to seek
+and provide help in understanding the
+
+243
+00:16:09.256 --> 00:16:13.381
+course material. The final reason that we
+give homeworks is to satisfy those of you
+
+244
+00:16:13.381 --> 00:16:16.802
+who, on top of learning the course
+material, are looking to challenge
+
+245
+00:16:16.802 --> 00:16:20.882
+yourself intellectually. [sound]. Now,
+this class has tens of thousands of
+
+246
+00:16:20.882 --> 00:16:24.506
+students. So it's obviously essential that
+the assignments can be graded
+
+247
+00:16:24.506 --> 00:16:28.330
+automatically. Now, we're currently only
+in the 1.0 generation of free online
+
+248
+00:16:28.330 --> 00:16:32.256
+courses such as this one. So the available
+tools for auto graded assessment are
+
+249
+00:16:32.256 --> 00:16:36.231
+currently rather primitive. So, we'll do
+the best we can, but I have to be honest
+
+250
+00:16:36.231 --> 00:16:40.207
+with you. It's difficult, or maybe even
+impossible to test deep understanding of
+
+251
+00:16:40.207 --> 00:16:43.931
+the design and analysis of algorithms,
+using the current set of tools. Thus,
+
+252
+00:16:43.931 --> 00:16:47.928
+while the lecture content in this online
+course is in no way watered down from the
+
+253
+00:16:47.928 --> 00:16:51.700
+original Stanford version. The required
+assignments and exams we'll give you, are
+
+254
+00:16:51.700 --> 00:16:55.614
+not as demanding as those that are given
+in the on campus version of the course. To
+
+255
+00:16:55.614 --> 00:16:59.151
+make up for this fact, we'll occasionally
+propose optional algorithm design
+
+256
+00:16:59.151 --> 00:17:02.594
+problems, either in a video or via
+supplementary assignment. We don't have
+
+257
+00:17:02.594 --> 00:17:06.225
+the ability to grade these, but we hope
+that you'll find them interesting and
+
+258
+00:17:06.225 --> 00:17:09.951
+challenging, and that you'll discuss
+possible solutions with other students via
+
+259
+00:17:09.951 --> 00:17:13.488
+the course discussion forum. So I hope
+this discussion answered most of the
+
+260
+00:17:13.488 --> 00:17:17.402
+questions you have about the course. Lets
+move on to the real reason that we're all
+
+261
+00:17:17.402 --> 00:17:19.100
+here, to learn more about algorithms.
