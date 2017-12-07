@@ -1,0 +1,346 @@
+WEBVTT
+
+1
+00:00:00.554 --> 00:00:04.695
+Okay. So in this video, we'll get our first
+sense of what it's actually like to analyze an algorithm.
+
+2
+00:00:04.711 --> 00:00:09.195
+And we'll do that by first of all reviewing a famous sorting algorithm, namely the Merge Sort algorithm.
+
+3
+00:00:09.803 --> 00:00:15.020
+And then giving a really fairly mathematically precise upper bound on exactly how many operations
+
+4
+00:00:15.020 --> 00:00:21.338
+the Merge Sort algorithm requires to correctly sort an input array.
+
+5
+00:00:21.338 --> 00:00:23.105
+So I feel like I should begin with a bit of an apology.
+
+6
+00:00:23.105 --> 00:00:28.977
+Here we are in 2012, a very futuristic sounding date. And yet I'm beginning with a really quite ancient algorithm.
+
+7
+00:00:28.977 --> 00:00:33.780
+So for example, Merge Sort was certainly known, to John Von Neumann all the way back in 1945.
+
+8
+00:00:33.780 --> 00:00:39.777
+So, what justification do I have for beginning, you know, a modern class in algorithms with such an old example?
+
+9
+00:00:39.777 --> 00:00:41.329
+Well, there's a bunch of reasons.
+
+10
+00:00:41.329 --> 00:00:46.404
+One, I haven't even put down on the slide, which is like a number of the algorithms we'll see, "Merge Sort" as an oldie but a goodie.
+
+11
+00:00:46.404 --> 00:00:54.503
+So it's over 60, or maybe even 70 years old. But it's still used all the time in practice, because this really is one of the methods of choice for sorting.
+
+12
+00:00:54.503 --> 00:00:59.329
+The standard sorting algorithm in the number of programming libraries. So that's the first reason.
+
+13
+00:00:59.329 --> 00:01:02.951
+But there's a number of others as well that I want to be explicit about.
+
+14
+00:01:02.951 --> 00:01:13.459
+So first of all, throughout these online courses, we'll see a number of general algorithm design paradigms ways of solving problems that cut across different application domains.
+
+15
+00:01:13.459 --> 00:01:17.812
+And the first one we're going to focus on is called the Divide-and-Conquer algorithm design paradigm.
+
+16
+00:01:17.812 --> 00:01:23.977
+So in Divide-and-Conquer, the idea is, you take a problem, and break it down into smaller sub problems which you then solve recursively, ...
+
+17
+00:01:23.977 --> 00:01:30.626
+... and then you somehow combine the results of the smaller sub-problem to get a solution to the original problem that you actually care about.
+
+18
+00:01:30.626 --> 00:01:36.882
+And Merge Sort is still today's the, perhaps the, most transparent application of the Divide-and-Conquer paradigm, ...
+
+19
+00:01:36.882 --> 00:01:43.508
+... that will exhibit very clear what the paradigm is, what analysis and challenge it presents, and what kind of benefits you might derive.
+
+20
+00:01:43.508 --> 00:01:47.681
+As for its benefits, so for example, you're probably all aware of the sorting problem.
+
+21
+00:01:47.681 --> 00:01:52.057
+Probably you know some number of sorting algorithms perhaps including Merge Sort itself.
+
+22
+00:01:52.057 --> 00:01:56.963
+And Merge Sort is better than a lot of this sort of simpler, I would say obvious, sorting algorithms, ...
+
+23
+00:01:56.963 --> 00:02:02.803
+... so for example, three other sorting algorithms that you may know about, but that I'm not going to discuss here.
+
+24
+00:02:02.803 --> 00:02:06.784
+If you don't know them, I encourage you to look them up in a text book or look them up on the web.
+
+25
+00:02:06.784 --> 00:02:10.912
+Let's start with three sorting algorithms which are perhaps simpler, first of all is "Selection Sort".
+
+26
+00:02:10.912 --> 00:02:18.439
+So this is where you do a number of passes through the way repeatedly, identifying the minimum of the elements that you haven't looked at yet, ...
+
+27
+00:02:18.439 --> 00:02:22.398
+... so you're basically a linear number of passes each time doing a minimum computation.
+
+28
+00:02:22.398 --> 00:02:29.925
+There's "Insertion Sort", which is still useful in certain cases in practice as we will discuss, but again it's generally not as good as Merge Sort, ...
+
+29
+00:02:29.925 --> 00:02:36.314
+... where you will repeatedly maintain the invariant that prefix view of array, which is sorted version of those elements.
+
+30
+00:02:36.314 --> 00:02:42.761
+So after ten loops of Insertion Sort, you'll have the invariant that whatever the first ten elements of the array are going to be in sorted order, ...
+
+31
+00:02:42.761 --> 00:02:46.765
+... and then when Insertion Sort completes, you'll have an entire sorted array.
+
+32
+00:02:46.765 --> 00:02:52.694
+Finally, some of you may know about "Bubble Sort", which is where you identify adjacent pairs of elements which are out of order, ...
+
+33
+00:02:52.694 --> 00:02:56.395
+and then you do repeated swaps until in the end the array is completely sorted.
+
+34
+00:02:56.395 --> 00:03:00.535
+Again I just say this to jog your memory, these are simpler sorts than Merge Sort, ...
+
+35
+00:03:00.535 --> 00:03:06.902
+... but all of them are worse in the sense that they're lack in performance in general, which scales with N^2, ...
+
+36
+00:03:06.902 --> 00:03:10.592
+...  and the input array has N elements, so they all have, in some sense, quadratic running time.
+
+37
+00:03:10.592 --> 00:03:20.233
+But if we use this non-trivial Divide-and-Conquer approach, or non-obvious approach, we'll get a, as we'll see, a much better running time than this quadratic dependence on the input.
+
+38
+00:03:20.233 --> 00:03:27.143
+Okay? So we'll get a win, first sorting in Divide-and-Conquer, and Merge Sort is the algorithm that realizes that benefit.
+
+39
+00:03:27.143 --> 00:03:33.779
+So the second reason that I wanna start out by talking about the Merge Sort algorithm, is to help you calibrate your preparation.
+
+40
+00:03:33.779 --> 00:03:42.441
+I think the discussion we're about to have will give you a good signal for whether you're background's at about the right level, of the audience that I'm thinking about for this course.
+
+41
+00:03:42.441 --> 00:03:52.059
+So in particular, when I describe the Merge Sort algorithm, you'll notice that I'm not going to describe in a level of detail that you can just translate it line by line into a working program in some programming language.
+
+42
+00:03:52.059 --> 00:03:58.033
+My assumption again is that you're a sort of the programmer, and you can take the high-level idea of the algorithm, how it works, ...
+
+43
+00:03:58.033 --> 00:04:03.951
+... and you're perfectly capable of turning that into a working program in whatever language you see fit.
+
+44
+00:04:03.951 --> 00:04:09.182
+So hopefully, I don't know, it may not be easy the analysis of Merge Sort discussion.
+
+45
+00:04:09.182 --> 00:04:13.165
+But I hope that you find it at least relatively straight forward, ..
+
+46
+00:04:13.165 --> 00:04:20.297
+.. because as the course moves on, we're going to be discussing algorithms and analysis which are a bit more complicated than the one we're about to do with Merge Sort.
+
+47
+00:04:20.297 --> 00:04:24.077
+So in other words, I think that this would be a good warm-up for what's to come.
+
+48
+00:04:24.077 --> 00:04:33.999
+Now another reason I want to discuss Merge Sort is that our analysis of it will naturally segment discussion of how we analyze the algorithms in this course and in general.
+
+49
+00:04:33.999 --> 00:04:38.927
+So we're going to expose a couple of assumptions in our analysis, we're focus on worst case behavior, ...
+
+50
+00:04:38.927 --> 00:04:44.169
+... or we'll look for guarantees on performance on running time that hold for every possible input on a given size, ...
+
+51
+00:04:44.169 --> 00:04:56.938
+and then we'll also expose our focus on so called "Asymptotic Analysis", which meaning will be much more concerned with the rate of growth on an algorithms performance than on things like low-order terms or on small changes in the constant factors.
+
+52
+00:04:56.938 --> 00:05:03.846
+Finally, we'll do the analysis of Merge Sort using what's called as "Recursion-Tree" method.
+
+53
+00:05:03.846 --> 00:05:08.492
+So this is a way of tying up the total number of operations that are executed by an algorithm.
+
+54
+00:05:08.492 --> 00:05:12.260
+And as we'll see a little bit later, this Recursion-Tree method generalizes greatly.
+
+55
+00:05:12.260 --> 00:05:22.430
+And it will allow us to analyze lots of different recursive algorithms, lots of different Divide-and-Conquer algorithms, including the integer multiplication algorithm that we discussed in an earlier segment.
+
+56
+00:05:22.430 --> 00:05:26.165
+So those are the reasons to start out with Merge Sort.
+
+57
+00:05:26.165 --> 00:05:29.879
+So what is the computational problem that Merge Sort is meant to solve?
+
+58
+00:05:29.879 --> 00:05:36.312
+Well, presumably, you all know about the sorting problem. But let me tell you a little bit about it anyways, just so that we're all on the same page.
+
+59
+00:05:36.312 --> 00:05:48.868
+So, we're given as input. An array of N numbers in arbitrary order, and the goal of course is to produce output array where the numbers are in sorted order, let's say, from smallest to largest.
+
+60
+00:05:48.868 --> 00:05:55.560
+Okay so, for example, we could consider the following input array, and then the goal would be to produce the following output array.
+
+61
+00:05:55.560 --> 00:06:02.885
+Now one quick comment. You'll notice that here in input array, it had eight elements, all of them were distinct, it was the different integers, between 1 and 8.
+
+62
+00:06:02.885 --> 00:06:08.094
+Now the sorting problem really isn't any harder if you have duplicates, in fact it can even be easier, ...
+
+63
+00:06:08.094 --> 00:06:15.147
+... but to keep the discussion as simple as possible let's just, among friends, go ahead and assume that they're distinct, for the purpose of this lecture.
+
+64
+00:06:15.147 --> 00:06:25.677
+And I'll leave it as an exercise which I encourage you to do, which is to think about how the Merge Sort algorithm implementation and analysis would be different, if at all, if there were ties, okay?
+
+65
+00:06:25.677 --> 00:06:29.985
+Go ahead and make the distinct assumption for simplicity from here on out.
+
+66
+00:06:29.985 --> 00:06:36.364
+Okay, so before I write down any pseudo code for Merge Sort, let me just show you how the algorithm works using a picture, ...
+
+67
+00:06:36.364 --> 00:06:41.056
+... and I think it'll be pretty clear what the code would be, even just given a single example.
+
+68
+00:06:41.056 --> 00:06:45.544
+So let's go ahead and consider the same unsorted input array that we had on the previous slide.
+
+69
+00:06:45.544 --> 00:06:56.400
+So the Merge Sort algorithm is a recursive algorithm, and again, that means that a program which calls itself and it calls itself on smaller sub problems of the same form, okay?
+
+70
+00:06:56.400 --> 00:07:04.782
+So the Merge Sort is its purpose in life is to sort the given input array. So it's going to spawn, or call itself on smaller arrays.
+
+71
+00:07:04.782 --> 00:07:16.391
+And this is gonna be a canonical Divide-and-Conquer application, where we simply take the input array, we split it in half, we solve the left half recursively, we solve the right half recursively, and then we combine the results.
+
+72
+00:07:16.391 --> 00:07:18.270
+So let's look at that in the picture.
+
+73
+00:07:18.270 --> 00:07:28.316
+So the first recursive call gets the first four elements, the left half of the array, namely 5, 4, 1, 8. And, of course, the other recursive call is gonna get the rest of the elements, 7, 2, 6, 3.
+
+74
+00:07:28.316 --> 00:07:34.054
+You can imagine these has been copied into new arrays before they're given to the recursive calls.
+
+75
+00:07:34.054 --> 00:07:39.937
+Now, by the magic of recursion, or by induction if you like, the recursive calls will do their task.
+
+76
+00:07:39.937 --> 00:07:44.966
+They will correctly sort each of these arrays of four elements, and we'll get back sorted versions of them.
+
+77
+00:07:44.966 --> 00:07:54.641
+So from our first recursive call, we receive the output, 1, 4, 5, 8, and from the second recursive call, we received the sorted output, 2, 3, 6, 7.
+
+78
+00:07:54.641 --> 00:08:08.801
+So now, all the remains to complete the Merge Sort is to take the two results of our recursive calls, these two sorted elements of length-4, and combine them to produce the final output, namely the sorted array of all eight of the input numbers.
+
+79
+00:08:08.801 --> 00:08:10.987
+And this is the step which is called "Merge".
+
+80
+00:08:10.987 --> 00:08:17.996
+And hopefully you are already are thinking about how you might actually implement this merge in a computationally efficient way.
+
+81
+00:08:17.996 --> 00:08:21.866
+But I do owe you some more details. And I will tell you exactly how the merge is done.
+
+82
+00:08:21.866 --> 00:08:29.897
+In effect, you just walk pointers down each of the two sort of sub-arrays, copying over, populating the output array in the sorted order.
+
+83
+00:08:29.897 --> 00:08:32.841
+But I will give you some more details in just a slide or two.
+
+84
+00:08:32.841 --> 00:08:34.858
+So that's Merge Sort in a picture.
+
+85
+00:08:34.858 --> 00:08:38.697
+Split it in half, solve recursively, and then have some slick merging procedure
+
+86
+00:08:38.697 --> 99:59:59.000
+to combine the two results into a sorted output.

@@ -1,4 +1,4 @@
-title: Algorithm专项课程简介
+title: Algorithm专项课程
 description: Coursera上学习“Algorithm专项课程”的第一课程，主要涉及渐近表示法(大O表示法)，排序与搜索算法，分治算法(主项定理、整数与矩阵乘法、最近点对问题)，以及随机算法(快速排序、最小割集收缩算法)。第一篇是课程简介的笔记。
 date: 2017-12-06 08:31
 banner:
@@ -65,8 +65,8 @@ tag: [Algorithm, Coursera]
 后续课程可能会涵盖的话题：
 
 1.  **贪心**算法，涉及最小生成树、调度问题和信息编码理论
-2. **动态规划**算法，涉及基因序列和社交网络中的最短路径
-3. **NP完全**问题，涉及是什么以及解法
+2.  **动态规划**算法，涉及基因序列和社交网络中的最短路径
+3.  **NP完全**问题，涉及是什么以及解法
    - 能够解决特殊问题的快速算法
    - 高效的有可证效率的回溯算法
    - 具有指数时间复杂度的算法，本质上会比暴力搜索优化
@@ -77,6 +77,32 @@ tag: [Algorithm, Coursera]
 2. Shapen mathematica analytical skills.这是实实在在我需要提神的一项技能！不仅老板指出来了，我自己也深有感触，写paper时构造不出定理与证明，实在是一大败笔！
 3. Explain why things are the way the are, why we analyze the algorithms in the way that we do. 除了设计一个高效的算法，更重要的是你需要能够给别人讲懂，为什么是这样设计，为什么用这种方法来分析。这就回到上一点，良好的算法思路需要扎实功底的数学分析，这样才能充分理解！
 
+
+
+
+# Divide and Conquer / 分治
+
+> update: 2017/12/07
+
+## Merge Sort / 归并排序
+
+为什么在这里要讲解Merge Sort？有以下五点原因。
+
+1. Merge sort是一个著名的、古老但是很有用的排序算法，现在已经被列入许多标准库中了
+2. Merge sort完美体现了分治的思想：把一个大问题分解为多个小问题，然后递归地解决小问题，最后合并小问题的求解结果，比Selection / Insetion / Bubble sort算法更直观更有优势
+3. Merge sort可以为学生的未来课程做更好的定位，即calibrate your preparation，后续的算法讲解会越来越复杂，所以这是一个很好的热身，来帮助我们判断是否适合这个课程
+4. Merge sort帮助看清，分析算法与分析其他事物有所不同，需要在分析之前做假设性前提，分析worst-case，然后采用asymptotic analytics渐近分析法来观察算法效率的增长
+5. Merge sort是利用Recusive-tree递归树来分析的，这是一个Master method
+
+然后简要讲解了Merge sort是解决什么问题的？当然是解决乱序数组的排序问题啦。
+
+输入：n个无序数字，假设没有重复数
+
+输出：n个有序排列的数字
+
+处理：把输入的数分成两半，先递归地解决左半部分，再解决右半部分，最后整合出结果，如下图所示，第一步可以想象成在递归调用之前先把左右两部分各自拷贝到新的数组中。
+
+![](http://7xwggp.com1.z0.glb.clouddn.com/merge_sort.png)
 
 
 
