@@ -1,0 +1,870 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.095
+Okay, so let's move on, and actually
+discuss the pseudo-code for the
+
+2
+00:00:03.095 --> 00:00:06.744
+merge sort algorithm. First, let me just
+tell you the pseudo-code, leaving aside
+
+3
+00:00:06.744 --> 00:00:10.347
+exactly how the merging subroutine is
+implemented. And thus, high levels should
+
+4
+00:00:10.347 --> 00:00:14.182
+be very simple and clear at this point. So
+there's gonna be two recursive calls, and
+
+5
+00:00:14.182 --> 00:00:17.970
+then there's gonna be a merging step. Now,
+I owe you a few comments, 'cause I'm being
+
+6
+00:00:17.970 --> 00:00:21.480
+a little sloppy. Again, as I promised,
+this isn't something you would directly
+
+7
+00:00:21.480 --> 00:00:25.222
+translate into code, although it's pretty
+close. But so what are the couple of the
+
+8
+00:00:25.222 --> 00:00:28.779
+ways that I'm being sloppy? Well, first of
+all, there's, [inaudible], you know, in
+
+9
+00:00:28.779 --> 00:00:32.475
+any recursive algorithm, you gotta have
+some base cases. You gotta have this idea
+
+10
+00:00:32.475 --> 00:00:36.261
+that when the input's sufficient. Really
+small you don't do any recursion, you just
+
+11
+00:00:36.261 --> 00:00:39.906
+return some trivial answer. So in the
+sorting problem the base case would be if
+
+12
+00:00:39.906 --> 00:00:43.690
+your handed an array that has either zero
+or an elements, well it's already sorted,
+
+13
+00:00:43.690 --> 00:00:47.381
+there's nothing to do, so you just return
+it without any recursion. Okay, so to be
+
+14
+00:00:47.381 --> 00:00:51.120
+clear, I haven't written down the base cases.
+Although of course you would if you were
+
+15
+00:00:51.120 --> 00:00:54.826
+actually implementing, a merge short. Some
+of you, make a note of that. A couple of
+
+16
+00:00:54.826 --> 00:00:58.603
+other things I'm ignoring. I'm ignoring
+what the, what to do if the array has odd
+
+17
+00:00:58.603 --> 00:01:02.380
+lengths, so if it has say nine elements,
+obviously you have to somehow break that
+
+18
+00:01:02.380 --> 00:01:06.156
+into five and four or four and five, so
+you would do that just in either way and
+
+19
+00:01:06.156 --> 00:01:09.792
+that would fine. And then secondly, I'm
+ignoring the details or what it really
+
+20
+00:01:09.792 --> 00:01:13.569
+means to sort of recursively sort, so for
+example, I'm not discussing exactly how
+
+21
+00:01:13.569 --> 00:01:17.251
+you would pass these subarrays onto the
+recursive calls. That's something that
+
+22
+00:01:17.251 --> 00:01:20.792
+would really depend somewhat on what, on
+the programming language, so that's
+
+23
+00:01:20.792 --> 00:01:24.380
+exactly what I want to avoid. I really
+want to talk about the concepts which
+
+24
+00:01:24.380 --> 00:01:28.350
+transcend any particular programming
+language implementation. So that's why I'm
+
+25
+00:01:28.350 --> 00:01:33.262
+going to describe algorithms at this level
+okay. Alright, so the hard part relatively
+
+26
+00:01:33.262 --> 00:01:37.318
+speaking, that is. How do you implement
+the merge depth? The recursive calls have
+
+27
+00:01:37.318 --> 00:01:41.734
+done their work. We have these two sort of
+separated half the numbers. The left half
+
+28
+00:01:41.734 --> 00:01:45.893
+and the right half. How do we combine them
+into one? And in English, I already told
+
+29
+00:01:45.893 --> 00:01:50.052
+you on the last slide. The idea is you
+just populate the output array in a sorted
+
+30
+00:01:50.052 --> 00:01:53.852
+order, by traversing pointers or just
+traversing through the two, sorted
+
+31
+00:01:53.852 --> 00:01:58.062
+sub-arrays in parallel. So let's look at
+that in some more detail. Okay, so here is
+
+32
+00:01:58.062 --> 00:02:02.760
+the pseudo-code for the merge step.
+[sound] So let me begin by, introducing
+
+33
+00:02:02.760 --> 00:02:07.046
+some names for the, characters in the,
+what we're about to discuss. So let's use
+
+34
+00:02:07.046 --> 00:02:11.280
+C. To denote the output array. So this is
+what we're suppose to spit out with the
+
+35
+00:02:11.280 --> 00:02:15.626
+numbers in sorted order. And then, I'm
+gonna use a and b to denote the results of
+
+36
+00:02:15.626 --> 00:02:19.910
+the two recursive calls, okay? So, the
+first recursive call has given us array a,
+
+37
+00:02:19.910 --> 00:02:24.085
+which contains the left half of the input
+array in sorted order. Similarly, b
+
+38
+00:02:24.085 --> 00:02:28.094
+contains the right half of the input
+array, again, in sorted order. So, as I
+
+39
+00:02:28.094 --> 00:02:32.159
+said, we're gonna need to traverse the
+two, sorted sub-arrays, a and b, in
+
+40
+00:02:32.159 --> 00:02:36.059
+parallel. So, I'm gonna introduce a
+counter, i, to traverse through a, j to
+
+41
+00:02:36.059 --> 00:02:40.563
+traverse through b. I and j will both be
+initialized to one, to be at the beginning
+
+42
+00:02:40.563 --> 00:02:44.934
+of their respective arrays. And now we're
+gonna do. We're going to do a single pass
+
+43
+00:02:44.934 --> 00:02:48.791
+of the output array copying it in an
+increasing order. Always taking the
+
+44
+00:02:48.791 --> 00:02:52.800
+smallest from the union of the two sorted
+sub arrays. And if you, if there's one
+
+45
+00:02:52.800 --> 00:02:56.730
+idea in this merge step it's just the
+realization that. The minimum element that
+
+46
+00:02:56.730 --> 00:03:00.898
+you haven't yet looked at in A and B has
+to be at the front of one or the two lists
+
+47
+00:03:00.898 --> 00:03:04.917
+right so for example at the very beginning
+of the algorithm where is the minimum
+
+48
+00:03:04.917 --> 00:03:08.837
+element over all. Well, which ever of the
+two arrays it lands in -- A or B -- it has to be
+
+49
+00:03:08.837 --> 00:03:12.558
+the smallest one there okay. So the
+smallest element over all is either the
+
+50
+00:03:12.558 --> 00:03:16.528
+smallest element A or it's the smallest
+element B. So you just check both places,
+
+51
+00:03:16.528 --> 00:03:20.520
+the smaller one is the smallest you copy
+it over and you repeat. That's it. So the
+
+52
+00:03:20.520 --> 00:03:24.005
+purpose of K is just to traverse the
+output array from left to right. That's
+
+53
+00:03:24.005 --> 00:03:27.398
+the order we're gonna populate it.
+Currently looking at position I, and the
+
+54
+00:03:27.398 --> 00:03:31.157
+first array of position J and the second
+array. So that's how far we've gotten, how
+
+55
+00:03:31.157 --> 00:03:34.871
+deeply we've probed in the both of those
+two arrays. We look at which one has the
+
+56
+00:03:34.871 --> 00:03:38.981
+current smallest, and we copy the smallest
+one over. Okay? So if the, if, the entry
+
+57
+00:03:38.981 --> 00:03:43.438
+in the i position of A is smaller, we
+copy that one over. Of course, we have to
+
+58
+00:03:43.438 --> 00:03:48.009
+increment i. We probe one deeper into the
+list A, and symmeterically for the case
+
+59
+00:03:48.009 --> 00:03:52.466
+where the current position in B has the
+smaller element. Now again, I'm being a
+
+60
+00:03:52.466 --> 00:03:57.144
+little bit sloppy, so that we can focus on
+the forest, and not sort of, And not get
+
+61
+00:03:57.144 --> 00:04:01.003
+bogged down with the trees. I'm ignoring
+some end cases, so if you really wanted to
+
+62
+00:04:01.003 --> 00:04:04.956
+implement this, you'd have to add a little
+bit, to keep track of when you fall off,
+
+63
+00:04:05.098 --> 00:04:08.863
+either, either A or B. Because you have
+additional checks for when i or j reaches
+
+64
+00:04:08.863 --> 00:04:12.722
+the end of the array, at which point you
+copy over all the remaining elements into
+
+65
+00:04:12.722 --> 00:04:16.298
+C. Alright, so I'm gonna give you a
+cleaned up version, of, that pseudo-code
+
+66
+00:04:16.298 --> 00:04:20.016
+so that you don't have to tolerate my
+questionable handwriting any longer than
+
+67
+00:04:20.016 --> 00:04:23.734
+is absolutely necessary. This again, is
+just the same thing that we wrote on the
+
+68
+00:04:23.734 --> 00:04:27.499
+last slide, okay? The pseudo-code for the
+merge step. Now, so that's the Merge Sort
+
+69
+00:04:27.499 --> 00:04:32.886
+algorithm. Now let's get to the meaty part
+of this lecture, which is, okay, so merge
+
+70
+00:04:32.886 --> 00:04:38.633
+sort produces a sorted array. What makes
+it, if anything, better than much simpler
+
+71
+00:04:38.633 --> 00:04:44.034
+non divide and conquer algorithms, like
+say, insertion sort? Other words, what is
+
+72
+00:04:44.034 --> 00:04:48.413
+the running time of the merge sort
+algorithm? Now I'm not gonna give you a
+
+73
+00:04:48.413 --> 00:04:52.073
+completely precise definition, definition
+of what I mean by running time and there's
+
+74
+00:04:52.073 --> 00:04:55.514
+good reason for that, as we'll discuss
+shortly. But intuitively, you should think
+
+75
+00:04:55.514 --> 00:04:59.000
+of the running time of an algorithm, you
+should imagine that you're just running
+
+76
+00:04:59.000 --> 00:05:02.959
+the algorithm in a debugger. Then, every
+time you press enter, you advance with one
+
+77
+00:05:02.959 --> 00:05:07.095
+line of the program through the debugger.
+And then basically, the running time is
+
+78
+00:05:07.095 --> 00:05:11.283
+just a number of operations executed, the
+number of lines of code executed. So the
+
+79
+00:05:11.283 --> 00:05:15.212
+question is, how many times you have to
+hit enter on the debugger before the,
+
+80
+00:05:15.367 --> 00:05:19.554
+program finally terminates. So we're
+interested in how many such, lines of code
+
+81
+00:05:19.554 --> 00:05:23.172
+get executed for Merge Short when
+an input array has n numbers. Okay, so
+
+82
+00:05:23.172 --> 00:05:27.197
+that's a fairly complicated question. So
+let's start with a more modest school.
+
+83
+00:05:27.197 --> 00:05:31.377
+Rather than thinking about the number of
+operations executed by Merge Sort, which
+
+84
+00:05:31.377 --> 00:05:35.557
+is this crazy recursive algorithm, which
+is calling itself over and over and over
+
+85
+00:05:35.557 --> 00:05:39.685
+again. Let's just think about how many
+operations are gonna get executed when we
+
+86
+00:05:39.685 --> 00:05:43.555
+do a single merge of two sorted sub
+arrays. That seems like it should be an
+
+87
+00:05:43.555 --> 00:05:47.528
+easier place to start. So let me remind
+you, the pseudo code of the merge
+
+88
+00:05:47.528 --> 00:05:51.244
+subroutine, here it is. So let's just go
+and count up how many operations
+
+89
+00:05:51.244 --> 00:05:56.117
+that are gonna get used. So there's
+the initialization step. So let's say that
+
+90
+00:05:56.117 --> 00:06:02.009
+I'm gonna charge us one operation for each
+of these two initializations. So let's
+
+91
+00:06:02.009 --> 00:06:08.075
+call this two operations, just set i equal to one
+and j equal to one then we have this four
+
+92
+00:06:08.075 --> 00:06:13.925
+loop executes a total number of end times
+so each of these in iterations of this
+
+93
+00:06:13.925 --> 00:06:19.485
+four loop how many instructions get
+executed, well we have one here we have a
+
+94
+00:06:19.485 --> 00:06:25.334
+comparison so we compare A(i) to B(j) and
+either way the comparison comes up we then
+
+95
+00:06:25.334 --> 00:06:31.809
+do two more operations, we do an
+assignment. Here or here. And then we do
+
+96
+00:06:31.809 --> 00:06:37.197
+an increment of the relevent variable
+either here or here. So that's gonna be
+
+97
+00:06:37.197 --> 00:06:42.795
+three operations per iteration. And then
+maybe I'll also say that in order to
+
+98
+00:06:42.795 --> 00:06:48.533
+increment K we're gonna call it a fourth
+iteration. Okay? So for each of these N
+
+99
+00:06:48.533 --> 00:06:54.341
+iterations of the four loop we're gonna do
+four operations. All right? So putting it
+
+100
+00:06:54.341 --> 00:06:59.660
+all together, what do we have is the
+running time for merge. So let's see the
+
+101
+00:06:59.660 --> 00:07:04.453
+upshot. So the upshot is that the running
+time of the merge subroutine, given an
+
+102
+00:07:04.453 --> 00:07:09.174
+array of M numbers, is at most four M plus
+two. So a couple of comments. First of
+
+103
+00:07:09.174 --> 00:07:14.135
+all, I've changed a letter on you so don't
+get confused. In the previous slide we
+
+104
+00:07:14.135 --> 00:07:18.832
+were thinking about an input size of N.
+Here I've just made it. See I've changed
+
+105
+00:07:18.832 --> 00:07:22.514
+the name of the variable to M. That's
+gonna be convenient once we think about
+
+106
+00:07:22.514 --> 00:07:26.338
+merge sort, which is recursing on smaller
+sub-problems. But it's exactly the same
+
+107
+00:07:26.338 --> 00:07:30.020
+thing and, and whatever. So an array of M
+entries does as most four M plus two.
+
+108
+00:07:30.020 --> 00:07:34.325
+Lines of code. The second thing is,
+there's some ambiguity in exactly how we
+
+109
+00:07:34.325 --> 00:07:38.975
+counted lines of code on the previous
+slide. So maybe you might argue that, you
+
+110
+00:07:38.975 --> 00:07:42.936
+know, really, each loop iteration should
+count as two operations, not just
+
+111
+00:07:42.936 --> 00:07:47.242
+one.'Cause you don't just have to
+increment K, but you also have to compare
+
+112
+00:07:47.242 --> 00:07:51.547
+it to the, upper bound of N. Eh, maybe.
+Would have been 5M+2 instead of 4M+2. So
+
+113
+00:07:51.547 --> 00:07:56.517
+it turns out these small differences in
+how you count up. The number of lines of
+
+114
+00:07:56.517 --> 00:08:01.217
+code executed are not gonna matter, and
+we'll see why shortly. So, amongst
+
+115
+00:08:01.217 --> 00:08:06.375
+friends, let's just agree, let's call it
+4M plus two operations from merge, to
+
+116
+00:08:06.375 --> 00:08:11.728
+execute on array on exactly M entries. So,
+let me abuse our friendship now a little
+
+117
+00:08:11.728 --> 00:08:17.016
+bit further with an, an inequality which is
+true, but extremely sloppy. But I promise
+
+118
+00:08:17.016 --> 00:08:22.173
+it'll make our lives just easier in some
+future calculations. So rather than 4m+2,
+
+119
+00:08:22.173 --> 00:08:28.250
+'cause 2's sorta getting on my nerves.
+Let's just call this. Utmost six N.
+
+120
+00:08:28.250 --> 00:08:35.256
+Because m is at least one. [sound] Okay,
+you have to admit it's true, 6MO is at
+
+121
+00:08:35.256 --> 00:08:40.108
+least 4M plus two. It's very sloppy, these
+numbers are not anything closer to each
+
+122
+00:08:40.108 --> 00:08:45.021
+other for M large but, let's just go ahead
+and be sloppy in the interest of future
+
+123
+00:08:45.021 --> 00:08:49.456
+simplicity. Okay. Now I don't expect
+anyone to be impressed with this rather
+
+124
+00:08:49.456 --> 00:08:53.789
+crude upper bound, the number of lines of
+code that the merge subroutine needs to
+
+125
+00:08:53.789 --> 00:08:57.961
+finish, to execute. The key question you
+recall was how many lines of code does
+
+126
+00:08:57.961 --> 00:09:02.169
+merge sort require to correctly sort the
+input array, not just this subroutine. And
+
+127
+00:09:02.169 --> 00:09:06.196
+in fact, analyzing Merge Sort seems a lot
+more intimidating, because if it keeps
+
+128
+00:09:06.196 --> 00:09:10.325
+spawning off these recursive versions of
+itself. So the number of recursive calls,
+
+129
+00:09:10.325 --> 00:09:14.403
+the number of things we have to analyze,
+is blowing up exponentially as we think
+
+130
+00:09:14.403 --> 00:09:18.328
+about various levels of the recursion.
+Now, if there's one thing we have going
+
+131
+00:09:18.328 --> 00:09:22.137
+for us, it's that every time we make a
+recursive call. It's on a quite a bit
+
+132
+00:09:22.137 --> 00:09:26.317
+smaller input then what we started with,
+it's on an array only half the size of the
+
+133
+00:09:26.317 --> 00:09:30.396
+input array. So there's some kind of
+tension between on the one hand explosion
+
+134
+00:09:30.396 --> 00:09:34.313
+of sub problems, a proliferation of sub
+problems and the fact that successive
+
+135
+00:09:34.313 --> 00:09:38.412
+subproblems only have to solve smaller and
+smaller subproblems. And resolute
+
+136
+00:09:38.412 --> 00:09:42.888
+resolving these two forces is what's going
+to drive our analysis of Merge Short. So,
+
+137
+00:09:42.888 --> 00:09:47.203
+the good news is, is I'll be able to show
+you a complete analysis of exactly how
+
+138
+00:09:47.203 --> 00:09:51.518
+many lines of code Merge Sort takes. And
+I'll be able to give you, and, in fact, a
+
+139
+00:09:51.518 --> 00:09:55.886
+very precise upper bound. And so here's
+gonna be the claim that we're gonna prove
+
+140
+00:09:55.886 --> 00:10:00.363
+in the remainder of this lecture. So the
+claim is that Merge Short never needs than
+
+141
+00:10:00.363 --> 00:10:05.052
+more than six times N. Times the logarithm
+of N log base two if you're keeping track
+
+142
+00:10:05.052 --> 00:10:08.949
+plus an extra six N operations to
+correctly sort an input array of N
+
+143
+00:10:08.949 --> 00:10:13.581
+numbers, okay so lets discuss for a second
+is this good is this a win, knowing that
+
+144
+00:10:13.751 --> 00:10:18.439
+this is an upper bound of the number of
+lines of code the merger takes well yes it
+
+145
+00:10:18.439 --> 00:10:23.026
+is and it shows the benefits of the divide
+and conquer paradigm. Recall. In the
+
+146
+00:10:23.026 --> 00:10:27.636
+simpler sorting methods that we briefly
+discussed like insertion sort, selection
+
+147
+00:10:27.636 --> 00:10:31.901
+sort, and bubble sort, I claimed that
+their performance was governed by the
+
+148
+00:10:31.901 --> 00:10:36.454
+quadratic function of the input size. That
+is they need a constant times in the
+
+149
+00:10:36.454 --> 00:10:40.834
+squared number of operations to sort an
+input array of length N. Merge sort by
+
+150
+00:10:40.834 --> 00:10:45.445
+contrast needs at most a constant times N
+times log N, not N squared but N times
+
+151
+00:10:45.445 --> 00:10:50.030
+log N lines of code to correctly sort an
+input array. So to get a feel for what
+
+152
+00:10:50.030 --> 00:10:54.796
+kind of win this is let me just remind you
+for those of you who are rusty, or for
+
+153
+00:10:54.796 --> 00:10:59.622
+whatever reason have lived in fear of a
+logarithm, just exactly what the logarithm
+
+154
+00:10:59.622 --> 00:11:05.491
+is. Okay? So. The way to think about the
+logarithm is as follows. So you have the X
+
+155
+00:11:05.491 --> 00:11:12.099
+axis, where you have N, which is going
+from one up to infinity. And for
+
+156
+00:11:12.099 --> 00:11:19.165
+comparison let's think about just the
+identity function, okay? So, the function
+
+157
+00:11:19.165 --> 00:11:27.244
+which is just. F(n)=n. Okay, and
+let's contrast this with a logarithm. So
+
+158
+00:11:27.244 --> 00:11:31.267
+what is the logorithm? Well, for our
+purposes, we can just think of a logorithm
+
+159
+00:11:31.267 --> 00:11:36.041
+as follows, okay? So the log of n, log
+base 2 of n is, you type the number N
+
+160
+00:11:36.041 --> 00:11:40.956
+into your calculator, okay? Then you hit
+divide by two. And then you keep repeating
+
+161
+00:11:40.956 --> 00:11:44.888
+dividing by two and you count how many
+times you divide by two until you get a
+
+162
+00:11:44.888 --> 00:11:50.229
+number that drops below one okay. So if
+you plug in 32 you got to divide five
+
+163
+00:11:50.229 --> 00:11:56.359
+times by two to get down to one. Log base two of
+32 is five. You put in 1024 you have to
+
+164
+00:11:56.359 --> 00:12:01.189
+divide by two, ten times till you get down
+to one. So log base two of 1024 is ten and
+
+165
+00:12:01.189 --> 00:12:06.343
+so on, okay. So the point is you already
+see this if a log of a 1000 roughly is
+
+166
+00:12:06.343 --> 00:12:12.056
+something like ten then the logarithm is
+much, much smaller than the input.
+
+167
+00:12:12.056 --> 00:12:18.186
+So graphically, what the logarithm is going
+to look like is it's going to look like. A
+
+168
+00:12:18.186 --> 00:12:27.317
+curve becomes very flat very quickly, as N
+grows large, okay? So F(n) being log
+
+169
+00:12:27.317 --> 00:12:30.552
+base 2 of n. And I encourage you to
+do this, perhaps a little bit more
+
+170
+00:12:30.552 --> 00:12:34.031
+precisely on the computer or a graphing
+calculator, at home. But log is
+
+171
+00:12:34.031 --> 00:12:38.359
+running much, much, much slower than
+the identity function. And as a result,
+
+172
+00:12:38.359 --> 00:12:42.600
+sorting algorithm which runs in time
+proportional to n times log n is much,
+
+173
+00:12:42.600 --> 00:12:47.419
+much faster, especially as n grows large, than a sorting algorithm with a
+
+174
+00:12:47.419 --> 00:12:51.538
+running time that's a constant times n
+squared.
