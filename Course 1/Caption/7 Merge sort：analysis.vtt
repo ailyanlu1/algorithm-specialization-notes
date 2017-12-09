@@ -1,0 +1,756 @@
+WEBVTT
+
+1
+00:00:00.630 --> 00:00:04.450
+In this video we'll be giving a running
+time analysis of the merge sort algorithm.
+
+2
+00:00:04.450 --> 00:00:08.300
+In particular, we'll be substantiating
+the claim that the recursive divide and
+
+3
+00:00:08.300 --> 00:00:11.010
+conquer merge sort algorithm is better,
+
+4
+00:00:11.010 --> 00:00:14.510
+has better performance than simple
+sorting algorithms that you might know,
+
+5
+00:00:14.510 --> 00:00:18.167
+like insertion sort,
+selection sort and bubble sort.
+
+6
+00:00:18.167 --> 00:00:21.280
+So in particular,
+the goal of this lecture will be to,
+
+7
+00:00:21.280 --> 00:00:24.570
+mathematically argue the following claim,
+from an earlier video.
+
+8
+00:00:24.570 --> 00:00:27.620
+That, in order to sort
+an array of n numbers,
+
+9
+00:00:27.620 --> 00:00:31.860
+the merge sort algorithm needs no more
+than a constant times n log in operations.
+
+10
+00:00:31.860 --> 00:00:35.450
+That's the maximum number of lines
+of code it will ever execute.
+
+11
+00:00:35.450 --> 00:00:40.184
+Specifically 6 times n
+log n + 6n operations.
+
+12
+00:00:40.184 --> 00:00:43.170
+So how are we going to prove this claim?
+
+13
+00:00:43.170 --> 00:00:46.800
+We're going to use what is
+called a recursion tree method.
+
+14
+00:00:46.800 --> 00:00:50.913
+The idea of the recursion tree method is
+to write out all over the work done by
+
+15
+00:00:50.913 --> 00:00:54.900
+the recursive merge sort algorithm in
+a tree structure with the children
+
+16
+00:00:54.900 --> 00:00:59.290
+of a given node corresponding to
+the recursive calls made by that node.
+
+17
+00:00:59.290 --> 00:01:03.570
+The point of this tree structure is it
+will facilitate a interesting way to count
+
+18
+00:01:03.570 --> 00:01:08.780
+up the overall work done by the algorithm
+and will greatly facilitate the analysis.
+
+19
+00:01:08.780 --> 00:01:10.650
+So specifically what is this tree?
+
+20
+00:01:10.650 --> 00:01:12.470
+So at level zero we have a root.
+
+21
+00:01:14.540 --> 00:01:17.663
+And this corresponds to the outer
+call of merge sort, okay so
+
+22
+00:01:17.663 --> 00:01:19.390
+I'm going to call this level zero.
+
+23
+00:01:19.390 --> 00:01:23.006
+Now, this tree is going to be binary
+in recognition of the fact that
+
+24
+00:01:23.006 --> 00:01:26.180
+each invocation of MergeSort
+makes two recursive calls.
+
+25
+00:01:26.180 --> 00:01:30.460
+So the two children will correspond to
+the two recursive calls of MergeSort.
+
+26
+00:01:30.460 --> 00:01:33.614
+So, at the root we operate on the entire
+input array, so let me draw a big
+
+27
+00:01:33.614 --> 00:01:38.560
+array indicating that, and at level one we
+have one sub problem for the left half and
+
+28
+00:01:38.560 --> 00:01:41.410
+another sub problem for
+the right half of the input array.
+
+29
+00:01:41.410 --> 00:01:44.809
+And I'll call these first two
+recursive calls level one.
+
+30
+00:01:44.809 --> 00:01:48.315
+Now, of course, each of these two
+level one recursive calls will
+
+31
+00:01:48.315 --> 00:01:50.710
+themselves make two recursive calls.
+
+32
+00:01:50.710 --> 00:01:55.080
+Each operating on then a quarter
+of the original input array.
+
+33
+00:01:55.080 --> 00:01:58.670
+So those are level two recursive
+calls of which there are four.
+
+34
+00:01:58.670 --> 00:02:02.520
+And this process will continue until
+eventually the recursion bottoms out
+
+35
+00:02:02.520 --> 00:02:06.500
+in base cases when there's only
+an array of size zero or one.
+
+36
+00:02:06.500 --> 00:02:10.860
+So now I have a question for you which
+I'll give you in the form of a quiz.
+
+37
+00:02:10.860 --> 00:02:14.440
+Which is at the bottom of this recursion
+tree corresponding to the base cases,
+
+38
+00:02:14.440 --> 00:02:16.700
+what is the level number at the bottom?
+
+39
+00:02:16.700 --> 00:02:20.478
+So at what level do the leaves
+in this tree reside?
+
+40
+00:02:22.910 --> 00:02:27.004
+Okay, so hopefully you guessed, correctly
+guessed that the answer is the second one.
+
+41
+00:02:27.004 --> 00:02:31.998
+So namely that the number of levels of the
+recursion tree is essentially logarithmic
+
+42
+00:02:31.998 --> 00:02:34.000
+in the size of the input array.
+
+43
+00:02:34.000 --> 00:02:36.780
+The reason is basically
+that the input size is
+
+44
+00:02:36.780 --> 00:02:40.010
+being decreased by a factor two
+with each level of the recursion.
+
+45
+00:02:40.010 --> 00:02:43.794
+If you have an input size of n at the
+outer level, then each of the first set of
+
+46
+00:02:43.794 --> 00:02:46.514
+recursive calls operates on
+a array of size n over 2.
+
+47
+00:02:46.514 --> 00:02:50.641
+At level two, each array has size n over 4
+and so on, whereas if the recursion bottom
+
+48
+00:02:50.641 --> 00:02:54.189
+out, well, down at the base cases,
+where there's no more recursion,
+
+49
+00:02:54.189 --> 00:02:57.040
+which is where the input
+array has size one or less.
+
+50
+00:02:57.040 --> 00:03:00.070
+So in other words, the number of levels
+of recursion is exactly the number of
+
+51
+00:03:00.070 --> 00:03:05.000
+times you need to divide n by 2, until
+you get down to a number that's most one.
+
+52
+00:03:05.000 --> 00:03:10.070
+And recall, that's exactly the definition
+of a logarithm base 2 of n.
+
+53
+00:03:10.070 --> 00:03:14.021
+So since the first level is level zero and
+the last level is level log base 2 of n.
+
+54
+00:03:14.021 --> 00:03:19.020
+The total number of levels is
+actually log base 2 of n plus 1.
+
+55
+00:03:19.020 --> 00:03:22.915
+And when I write down this expression I'm
+here assuming that n is a power of 2 which
+
+56
+00:03:22.915 --> 00:03:23.774
+is not a big deal.
+
+57
+00:03:23.774 --> 00:03:27.632
+I mean the analysis is usually extended
+to the case where n is not a power of 2.
+
+58
+00:03:27.632 --> 00:03:31.187
+But this way we don't have to think
+about fractions log base 2 of n
+
+59
+00:03:31.187 --> 00:03:32.294
+then is an integer.
+
+60
+00:03:32.294 --> 00:03:34.551
+Okay, so
+let's return to the recursion tree, and
+
+61
+00:03:34.551 --> 00:03:36.138
+let me just redraw it really quick.
+
+62
+00:03:39.220 --> 00:03:42.178
+So again, down here at the bottom
+of the tree, we have the leaves.
+
+63
+00:03:42.178 --> 00:03:44.760
+And i.e., the base cases,
+where there's no more recursion.
+
+64
+00:03:44.760 --> 00:03:49.309
+Which, when n is a power of 2, correspond
+exactly to single element arrays.
+
+65
+00:03:51.470 --> 00:03:54.900
+So that's the recursion tree corresponding
+to an invocation of MergeSort.
+
+66
+00:03:54.900 --> 00:03:59.550
+And the motivation for writing down, for
+organizing the work performed by MergeSort
+
+67
+00:03:59.550 --> 00:04:02.920
+in this way, is it allows us to
+count up the work level by level.
+
+68
+00:04:02.920 --> 00:04:06.370
+And we'll see that's a particularly
+convenient way to account for
+
+69
+00:04:06.370 --> 00:04:08.770
+all of the different lines
+of code that get executed.
+
+70
+00:04:08.770 --> 00:04:12.910
+Now to see that in more detail, I need to
+ask you identify a particular pattern.
+
+71
+00:04:12.910 --> 00:04:17.460
+So first of all, the first question is,
+at a given level j of this recursion,
+
+72
+00:04:17.460 --> 00:04:21.940
+exactly how many distinct sub problems
+are there as a function of the level j.
+
+73
+00:04:21.940 --> 00:04:23.360
+That's the first question.
+
+74
+00:04:23.360 --> 00:04:25.220
+The second question is, for
+
+75
+00:04:25.220 --> 00:04:30.010
+each of those distinct sub problems
+at level j, what is the input size.
+
+76
+00:04:30.010 --> 00:04:34.090
+So what is the size of the array
+which is passed to a subproblem
+
+77
+00:04:34.090 --> 00:04:37.052
+residing at level j of
+this recursion tree?
+
+78
+00:04:39.358 --> 00:04:41.560
+So the correct answer is the third one.
+
+79
+00:04:42.710 --> 00:04:44.660
+So first of all at a given level j,
+
+80
+00:04:44.660 --> 00:04:47.640
+there's precisely 2 to
+the j distinct subproblems.
+
+81
+00:04:47.640 --> 00:04:50.740
+There is one outermost
+subproblem at level zero.
+
+82
+00:04:50.740 --> 00:04:52.220
+It has two recursive calls.
+
+83
+00:04:52.220 --> 00:04:55.550
+Those are the subproblems at level one,
+and so on.
+
+84
+00:04:55.550 --> 00:04:58.300
+In general,
+since MergeSort calls itself twice,
+
+85
+00:04:58.300 --> 00:05:00.880
+the number of subproblems
+is doubling each level, so
+
+86
+00:05:00.880 --> 00:05:04.630
+that gives us the expression 2 to the j
+for the number of subproblems at level j.
+
+87
+00:05:05.930 --> 00:05:09.840
+On the other hand via a similar argument
+the input size is halving each time
+
+88
+00:05:09.840 --> 00:05:13.750
+with each recursive call you pass at
+half of the input that you were given.
+
+89
+00:05:13.750 --> 00:05:16.270
+So at each level of the recursion tree
+
+90
+00:05:16.270 --> 00:05:18.690
+we're seeing half of the input
+size of the previous level.
+
+91
+00:05:18.690 --> 00:05:23.316
+So after j levels since we started
+with an input size n after j levels
+
+92
+00:05:23.316 --> 00:05:28.210
+each subproblem will be operating on
+an array of length n over 2 the j.
+
+93
+00:05:28.210 --> 00:05:30.183
+Okay so
+now let's put this pattern to use, and
+
+94
+00:05:30.183 --> 00:05:33.630
+actually count up all of the lines
+of code, and thenMergeSort executes.
+
+95
+00:05:33.630 --> 00:05:37.850
+And as I said before, the key idea is
+to count up the work level by level.
+
+96
+00:05:37.850 --> 00:05:42.040
+Now to be clear, when I talk about
+the amount of work done at level j.
+
+97
+00:05:42.040 --> 00:05:46.700
+What I'm talking about is the work done by
+those 2 to the j invocations of MergeSort
+
+98
+00:05:46.700 --> 00:05:50.080
+not counting their
+respective recursive calls,
+
+99
+00:05:50.080 --> 00:05:54.120
+not counting work which is going to get
+done in the recursion lower in the tree.
+
+100
+00:05:54.120 --> 00:05:57.540
+Now recall merge sort is a very simple
+algorithm, it just three lines of code,
+
+101
+00:05:57.540 --> 00:05:59.780
+first there's a recursive call so
+
+102
+00:05:59.780 --> 00:06:02.660
+we're not counting that, second,
+there's another recursive call.
+
+103
+00:06:02.660 --> 00:06:03.930
+Again, we're not counting that at level j.
+
+104
+00:06:03.930 --> 00:06:07.800
+And then third,
+we just invoke the merge subroutine.
+
+105
+00:06:07.800 --> 00:06:10.430
+So really outside the recursive
+cause all that MergeSort
+
+106
+00:06:10.430 --> 00:06:13.490
+does is a single indication of merge.
+
+107
+00:06:13.490 --> 00:06:16.910
+Further, recall we already have a good
+understanding of the number of lines of
+
+108
+00:06:16.910 --> 00:06:18.690
+code that merge needs.
+
+109
+00:06:18.690 --> 00:06:23.200
+On an input of size m, it's going to
+use at most 6m lines of code.
+
+110
+00:06:23.200 --> 00:06:26.230
+That's an analysis that we
+did in the previous video.
+
+111
+00:06:26.230 --> 00:06:27.780
+So let's fix a level j.
+
+112
+00:06:27.780 --> 00:06:30.000
+We know how many subproblems there are,
+2 to the j.
+
+113
+00:06:30.000 --> 00:06:33.170
+We know the size of each subproblem,
+n over 2 to the j.
+
+114
+00:06:33.170 --> 00:06:36.490
+And we know how much work
+merge needs on such an input.
+
+115
+00:06:36.490 --> 00:06:37.190
+We just multiply by 6.
+
+116
+00:06:37.190 --> 00:06:39.240
+And then we just multiply it out.
+
+117
+00:06:39.240 --> 00:06:41.730
+And we get the amount of
+work done at a level j.
+
+118
+00:06:41.730 --> 00:06:44.790
+Okay at all of the little j subproblems,
+so here it is in more detail.
+
+119
+00:06:46.030 --> 00:06:50.227
+All right so, we start with just the
+number of different subproblems at level j
+
+120
+00:06:50.227 --> 00:06:52.970
+and we just noticed that
+that was at most 2 to the j.
+
+121
+00:06:54.510 --> 00:06:58.080
+We also observed that each
+level j subproblem is past
+
+122
+00:06:58.080 --> 00:07:01.870
+an array as input which has
+length n over 2 to the j.
+
+123
+00:07:01.870 --> 00:07:06.860
+And we know that the merge subroutine,
+when given an array of size
+
+124
+00:07:06.860 --> 00:07:12.290
+n over 2 to the j, will execute at most 6
+times that many number of lines of code.
+
+125
+00:07:12.290 --> 00:07:14.580
+So to compute the total amount
+of work done at level j,
+
+126
+00:07:14.580 --> 00:07:18.180
+we just multiply the number of problems
+times the work done per subproblem.
+
+127
+00:07:18.180 --> 00:07:21.080
+And then something sort
+of remarkable happens.
+
+128
+00:07:21.080 --> 00:07:26.970
+We get this cancellation of the two 2
+to the j's and we get an upper bound
+
+129
+00:07:26.970 --> 00:07:31.820
+6n which is independent of the level j.
+
+130
+00:07:31.820 --> 00:07:34.600
+So we do at most 6n
+operations at the root.
+
+131
+00:07:34.600 --> 00:07:38.660
+We do at most 6n operations of level one,
+at level two, and so on okay.
+
+132
+00:07:38.660 --> 00:07:40.835
+It's independent of the level.
+
+133
+00:07:40.835 --> 00:07:44.460
+Morally, the reason this is happening
+because of a perfect equilibrium between
+
+134
+00:07:44.460 --> 00:07:45.950
+two competing forces.
+
+135
+00:07:45.950 --> 00:07:46.600
+First of all,
+
+136
+00:07:46.600 --> 00:07:51.130
+the number of subproblems is doubling
+with each level of the recursion tree.
+
+137
+00:07:51.130 --> 00:07:55.590
+But secondly, the amount of work that we
+do per subproblem is halving with each
+
+138
+00:07:55.590 --> 00:07:56.880
+level of the recursion trees.
+
+139
+00:07:56.880 --> 00:07:57.960
+And so those two cancel out.
+
+140
+00:07:57.960 --> 00:08:02.030
+We get an upperbound 6n,
+which is independent of the level j.
+
+141
+00:08:02.030 --> 00:08:02.950
+Now, here's why that's so
+
+142
+00:08:02.950 --> 00:08:06.360
+cool, right, we don't really care about
+the amount of work just at a given level.
+
+143
+00:08:06.360 --> 00:08:10.200
+We care about the amount of work that
+MergeSort does ever at any level.
+
+144
+00:08:10.200 --> 00:08:13.910
+But if we have a bound on the amount of
+work at a level which is independent of
+
+145
+00:08:13.910 --> 00:08:16.220
+the level,
+then our overall bound is really easy.
+
+146
+00:08:16.220 --> 00:08:17.080
+What do we do?
+
+147
+00:08:17.080 --> 00:08:18.690
+We just take the number of levels.
+
+148
+00:08:18.690 --> 00:08:19.650
+And we know what that is.
+
+149
+00:08:19.650 --> 00:08:21.200
+It's exactly log base 2 of n + 1.
+
+150
+00:08:21.200 --> 00:08:25.880
+Remember, the levels are zero
+through log base 2 of n inclusive.
+
+151
+00:08:25.880 --> 00:08:31.940
+And then we have an upper bound 6n for
+each of those log n plus 1 levels.
+
+152
+00:08:31.940 --> 00:08:36.120
+So, if we expand out this quantity, we get
+exactly the upper bound that was claimed
+
+153
+00:08:36.120 --> 00:08:39.380
+earlier, namely that the number
+of operations MergeSort executes
+
+154
+00:08:39.380 --> 00:08:44.420
+is at most 6n times log
+based 2 of n plus 6n.
+
+155
+00:08:44.420 --> 00:08:48.710
+So that my friends, is a running time
+analysis of the merge sort algorithm.
+
+156
+00:08:48.710 --> 00:08:52.669
+That's why its running time is
+bounded by a constant times nlogn,
+
+157
+00:08:52.669 --> 00:08:56.982
+which especially has n grows large,
+it is far superior to the more simple
+
+158
+00:08:56.982 --> 00:09:00.464
+iterative algorithms like insertion or
+selection sort.

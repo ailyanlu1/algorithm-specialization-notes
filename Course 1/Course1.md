@@ -126,8 +126,24 @@ tag: [Algorithm, Coursera]
 
 
 
+## Merge sort：analysis / 归并排序：运行时间分析
+> update：2017/12/09
+>
 
+这节课的视频是分析Merge sort的运行时间，用数学方式证明：递归Merge sort算法对给定的包含n个数字的数组进行排序，输出有序数组总共需要$6\cdot n\cdot log_{2}n + 6\cdot n$次操作。
 
+证明方法是使用recursion tree递归树，在树结构中写下Merge sort所做的全部工作，一个节点每次递归调用就创建两个孩子节点，如下图所示。根节点root是首次对Merge sort的调用，这一层称作level-0。level-1对应root接下来的两次递归调用，输入是原数组的一半。以此类推，直到最后子数组里面数字的个数为0或者1。显然，叶子节点所在的层是level-$log_{2}n+1$。
+
+![](http://7xwggp.com1.z0.glb.clouddn.com/recursion_tree.png)
+
+确定好树的深度，需要计算每层的操作数量。首先回答两个问题：
+
+1. 对于给定的第j层，有多个sub problem？
+2. 对于第j层的每个sub problem，输入子数组的size是多少？
+
+答案也显然，第j层有$2^j$个sub problem，每个sub problem的输入size是$\frac{n}{2^j}$。整个递归树的总操作数量是每层的操作数量之和。由于递归调用本身可以忽略不计，因此只考虑merge操作里的操作数量。分析如下图，第j层的merge次数是$2^{j}\cdot 6\cdot \frac{n}{2^j}$，其中$6$在上一节课的视频中分析过。最后，总共有$log_{2}n+1$层，所以最终结果是$6\cdot (log_2n+1)$，证明结束。
+
+![](http://7xwggp.com1.z0.glb.clouddn.com/operation_time.png)
 
 
 
