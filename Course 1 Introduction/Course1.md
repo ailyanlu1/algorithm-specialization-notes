@@ -1,10 +1,10 @@
-title: Algorithm专项课程
-description: Coursera上学习“Algorithm专项课程”的第一课程，主要涉及渐近表示法(大O表示法)，排序与搜索算法，分治算法(主项定理、整数与矩阵乘法、最近点对问题)，以及随机算法(快速排序、最小割集收缩算法)。第一篇是课程简介的笔记。
+title: Algorithm专项课程—Course 1
+description: Coursera上学习“Algorithm专项课程”的第一课程，主要涉及渐近表示法(大O表示法)，排序与搜索算法，分治算法(主项定理、整数与矩阵乘法、最近点对问题)，以及随机算法(快速排序、最小割集收缩算法)。第一篇是Course 1的笔记。
 date: 2017-12-06 08:31
-banner:
 toc: false
 category: Tech
-tag: [Algorithm, Coursera]
+tag: [Algorithm Specialization]
+banner: http://7xwggp.com1.z0.glb.clouddn.com/course1.jpg
 
 ---
 
@@ -32,10 +32,6 @@ tag: [Algorithm, Coursera]
    - 为了减少一次递归运算，不需要单独计算ad与bc的乘积
 
    ![](http://7xwggp.com1.z0.glb.clouddn.com/karatsuba.jpg)
-
-
-
-
 
 > 对于一个优秀的算法设计者而言，最重要的原则就是拒绝满足。
 >
@@ -76,9 +72,6 @@ tag: [Algorithm, Coursera]
 1. Become a better programmer.虽说读博对代码技巧要求未必很高，但还是希望自己除了学术分析、写作之上，有扎实的代码功底。毕竟还是希望自己毕业之后能去工业界待一段时间的。
 2. Shapen mathematica analytical skills.这是实实在在我需要提神的一项技能！不仅老板指出来了，我自己也深有感触，写paper时构造不出定理与证明，实在是一大败笔！
 3. Explain why things are the way the are, why we analyze the algorithms in the way that we do. 除了设计一个高效的算法，更重要的是你需要能够给别人讲懂，为什么是这样设计，为什么用这种方法来分析。这就回到上一点，良好的算法思路需要扎实功底的数学分析，这样才能充分理解！
-
-
-
 
 # Divide and Conquer / 分治
 
@@ -124,8 +117,6 @@ tag: [Algorithm, Coursera]
 
 ![](http://7xwggp.com1.z0.glb.clouddn.com/runtime.png)
 
-
-
 ## Merge sort：analysis / 归并排序：运行时间分析
 > update：2017/12/09
 >
@@ -145,7 +136,17 @@ tag: [Algorithm, Coursera]
 
 ![](http://7xwggp.com1.z0.glb.clouddn.com/operation_time.png)
 
+## Guiding principles for analysis of algorithms
+> update：2017/12/11
+>
 
+这一节课的视频是回过头来，介绍算法分析的三项指导原则，也可以说是三项假设，从而帮助我们分析推到算法，并给出"fast"算法的定义。
+
+1. 只考虑worst-case。和avarage-case和benchmark analytics相反，最坏情况的分析对输入没有要求，不需要domain knowledge。
+2. 忽略小的常数因子。原因比较简单，第一，简化分析；第二，就这个课程而言，纠结于常数因子对算法的影响没有意义，毕竟常数因子对算法的影响很大程度上还取决于硬件结构、编译器、使用的编程语言、程序员编码习惯等。
+3. 关注大规模输入asymptotic analytics。当输入规模逐渐增大至无限，分析算法的性能。关注小规模输入没有意思，以排序为例，也许只对100个数字排序，Merge sort的对数级运行时间会高于其他平方级算法。但是某个临界点过后，对数级的运行时间优势就越来越明显。
+
+<!-- more -->
 
 
 

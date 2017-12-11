@@ -1,0 +1,1153 @@
+WEBVTT
+
+1
+00:00:02.220 --> 00:00:06.080
+In this sequence of lectures,
+we're going to learn Asymptotic Analysis.
+
+2
+00:00:06.080 --> 00:00:10.380
+This is the language, by which every
+serious computer programmer and
+
+3
+00:00:10.380 --> 00:00:15.390
+computer scientist, discusses, the high
+level performance, of computer algorithms.
+
+4
+00:00:15.390 --> 00:00:18.820
+As such, it's a totally, crucial, topic.
+
+5
+00:00:18.820 --> 00:00:22.560
+In this video, the plan is to segueway
+between the high level discussion that
+
+6
+00:00:22.560 --> 00:00:24.970
+you've already seen in
+the course introduction.
+
+7
+00:00:24.970 --> 00:00:27.980
+And the mathematical formalism
+which we're going to start
+
+8
+00:00:27.980 --> 00:00:29.890
+developing in the next video.
+
+9
+00:00:29.890 --> 00:00:32.030
+Before getting into that
+mathematical formalism,
+
+10
+00:00:32.030 --> 00:00:35.510
+however, I want to make sure that
+the topic is well motivated.
+
+11
+00:00:35.510 --> 00:00:38.620
+That you have solid intuition for
+what it's trying to accomplish, and
+
+12
+00:00:38.620 --> 00:00:42.220
+also that you've seen a couple of simple,
+intuitive examples.
+
+13
+00:00:42.220 --> 00:00:42.930
+Let's get started.
+
+14
+00:00:44.420 --> 00:00:47.500
+Asymptotic analysis provides
+basic vocabulary for
+
+15
+00:00:47.500 --> 00:00:50.370
+discussing the design and
+analysis of algorithms.
+
+16
+00:00:50.370 --> 00:00:54.560
+And while it is a mathematical concept,
+it is by no means math for math's sake.
+
+17
+00:00:54.560 --> 00:00:59.260
+You will very frequently hear serious
+programmers saying that such and such code
+
+18
+00:00:59.260 --> 00:01:03.860
+runs in o of n time where such and such
+other code runs in o of n squared time.
+
+19
+00:01:03.860 --> 00:01:07.300
+It's important you know what programmers
+mean when they make statements like that.
+
+20
+00:01:09.450 --> 00:01:14.000
+The reason this vocabulary is so
+ubiquitous is that it identifies a sweet
+
+21
+00:01:14.000 --> 00:01:18.370
+spot for discussing the high
+level performance of algorithms.
+
+22
+00:01:18.370 --> 00:01:21.030
+What I mean by that,
+is it is on the one hand,
+
+23
+00:01:21.030 --> 00:01:25.070
+coarse enough, to suppress all of
+the details that you want to ignore.
+
+24
+00:01:25.070 --> 00:01:27.590
+Details that depend on
+the choice of architecture,
+
+25
+00:01:27.590 --> 00:01:31.230
+the choice of programming language,
+the choice of compiler, and so on.
+
+26
+00:01:34.060 --> 00:01:37.020
+On the other hand it's
+sharp enough to be useful.
+
+27
+00:01:37.020 --> 00:01:40.140
+In particular,
+to make predictive comparisons
+
+28
+00:01:40.140 --> 00:01:45.035
+between different high level algorithmic
+approaches to solving a common problem.
+
+29
+00:01:45.035 --> 00:01:48.315
+This is going to be especially true for
+large inputs.
+
+30
+00:01:48.315 --> 00:01:52.635
+And remember as we discussed in some
+sense, large inputs are the interesting
+
+31
+00:01:52.635 --> 00:01:56.727
+ones, those are the ones for
+which we need algorithmic ingenuity.
+
+32
+00:01:56.727 --> 00:02:01.627
+For example, asymptotic analysis will
+allow us to differentiate between better
+
+33
+00:02:01.627 --> 00:02:03.947
+and worse approaches to sorting.
+
+34
+00:02:03.947 --> 00:02:07.737
+Better and worse approaches to
+multiplying two integers and so on.
+
+35
+00:02:10.557 --> 00:02:12.847
+Now most serious programmers
+if you ask them,
+
+36
+00:02:12.847 --> 00:02:15.480
+what's the deal with
+asymptotic analysis anyways?
+
+37
+00:02:15.480 --> 00:02:19.740
+They'll tell you reasonably,
+that the main point is to suppress
+
+38
+00:02:19.740 --> 00:02:23.180
+both leading constant factors and
+lower order terms.
+
+39
+00:02:24.790 --> 00:02:29.870
+Now, as we'll see, there's more asymptotic
+analysis than just these seven words here.
+
+40
+00:02:29.870 --> 00:02:30.920
+But long term,
+
+41
+00:02:30.920 --> 00:02:34.940
+ten years from now if you only remember
+seven words about asymptotic analysis,
+
+42
+00:02:34.940 --> 00:02:38.680
+I'll be reasonably happy if these
+are the seven words that you remember.
+
+43
+00:02:38.680 --> 00:02:42.640
+So how do we justify adopting a formalism
+which essentially by definition,
+
+44
+00:02:42.640 --> 00:02:45.720
+suppresses constant factors and
+lower order terms?
+
+45
+00:02:45.720 --> 00:02:47.410
+Well lower order terms basically,
+
+46
+00:02:47.410 --> 00:02:51.970
+by definition, become increasingly
+irrelevant as you focus on large inputs.
+
+47
+00:02:51.970 --> 00:02:53.030
+Which, as we've argued,
+
+48
+00:02:53.030 --> 00:02:57.420
+are the interesting inputs, the ones
+where algorithmic ingenuity is important.
+
+49
+00:02:57.420 --> 00:03:00.890
+As far as constant factors,
+these are going to be highly dependent on
+
+50
+00:03:00.890 --> 00:03:04.690
+the details of the environment,
+the compiler, the language and so on.
+
+51
+00:03:04.690 --> 00:03:08.679
+So if we want to ignore those details,
+it makes sense to have a formalism
+
+52
+00:03:08.679 --> 00:03:12.015
+which doesn't focus unduly
+on leading constant factors.
+
+53
+00:03:14.332 --> 00:03:15.830
+Here's an example.
+
+54
+00:03:15.830 --> 00:03:18.160
+Remember when we analyzed
+the merge sort algorithm,
+
+55
+00:03:18.160 --> 00:03:24.050
+we gave an upper bound on its running
+time that was 6 times n log n plus 6n.
+
+56
+00:03:24.050 --> 00:03:28.480
+Where n was the input length,
+the number of numbers in the input array.
+
+57
+00:03:28.480 --> 00:03:30.850
+So the lower order term here is the 6n.
+
+58
+00:03:30.850 --> 00:03:34.400
+That's growing more slowly than
+than n log n, so we just drop that.
+
+59
+00:03:34.400 --> 00:03:38.690
+And then the leading constant factor
+is the 6 so we suppress that as well.
+
+60
+00:03:38.690 --> 00:03:42.690
+After those two suppressions we're left
+with a much simpler expression, n log n.
+
+61
+00:03:44.970 --> 00:03:49.710
+The terminology would then be to say that
+the running time of merge sort is big O
+
+62
+00:03:49.710 --> 00:03:51.130
+of n log n.
+
+63
+00:03:51.130 --> 00:03:51.770
+So in other words,
+
+64
+00:03:51.770 --> 00:03:55.540
+when you say that an algorithm's
+running time is big O of some function.
+
+65
+00:03:55.540 --> 00:03:59.112
+What you mean is that after you've
+dropped the lower order terms, and
+
+66
+00:03:59.112 --> 00:04:04.380
+suppressed the leading constant factor,
+you're left with the function f of n.
+
+67
+00:04:04.380 --> 00:04:09.550
+Intuitively, that is what
+the big O notation means.
+
+68
+00:04:09.550 --> 00:04:12.520
+So to be clear,
+I'm certainly not asserting thay
+
+69
+00:04:12.520 --> 00:04:17.560
+constant factors never matter when you're
+designing and analyzing algorithms.
+
+70
+00:04:17.560 --> 00:04:20.390
+Rather, I'm just saying that
+when you think about high level
+
+71
+00:04:20.390 --> 00:04:23.300
+algorithmic approaches, when you might
+want to make a comparison between
+
+72
+00:04:23.300 --> 00:04:26.100
+fundamentally different
+ways of solving a problem.
+
+73
+00:04:26.100 --> 00:04:29.110
+Asymptotic analysis is
+often the right tool for
+
+74
+00:04:29.110 --> 00:04:32.320
+giving you guidance about which
+one is going to perform better.
+
+75
+00:04:32.320 --> 00:04:35.500
+Especially on reasonably large inputs.
+
+76
+00:04:35.500 --> 00:04:39.320
+Now, once you've committed to
+a particularly algorithmic solution to
+
+77
+00:04:39.320 --> 00:04:40.290
+a problem.
+
+78
+00:04:40.290 --> 00:04:44.690
+Of course, you might want to then work
+harder to improve the leading constant
+
+79
+00:04:44.690 --> 00:04:48.530
+factor, perhaps even to
+improve the lower order terms.
+
+80
+00:04:48.530 --> 00:04:52.690
+By all means if the future of your
+start up depends on how efficiently you
+
+81
+00:04:52.690 --> 00:04:56.370
+implement some particular set
+of lines of code, have at it.
+
+82
+00:04:56.370 --> 00:04:58.060
+Make it as fast as you can.
+
+83
+00:04:58.060 --> 00:05:02.560
+In the rest of this video I want to
+go through four very simple examples.
+
+84
+00:05:02.560 --> 00:05:06.030
+In fact these examples are so simple,
+if you have any experience with big O
+
+85
+00:05:06.030 --> 00:05:09.030
+notation, you're probably better off
+just skipping the rest of this video.
+
+86
+00:05:09.030 --> 00:05:12.880
+And moving on to the mathematical
+formalism that we begin in the next video.
+
+87
+00:05:12.880 --> 00:05:14.570
+But if you've never seen it before,
+
+88
+00:05:14.570 --> 00:05:16.539
+I hope these simple examples
+will get you oriented.
+
+89
+00:05:17.630 --> 00:05:22.575
+So let's begin with a very basic problem,
+searching an array for a given integer.
+
+90
+00:05:26.591 --> 00:05:29.145
+Let's analyze the straight
+forward algorithm for
+
+91
+00:05:29.145 --> 00:05:32.570
+this problem where we just do
+a linear scan through the array.
+
+92
+00:05:32.570 --> 00:05:35.490
+Checking each entry to see if
+it is the desired integer t.
+
+93
+00:05:37.250 --> 00:05:40.470
+That is the code just checks
+each array entry in turn.
+
+94
+00:05:40.470 --> 00:05:42.600
+If it ever finds the integer
+t it returns TRUE.
+
+95
+00:05:42.600 --> 00:05:46.900
+If it falls off the end of the array
+without finding it, it returns FALSE.
+
+96
+00:05:46.900 --> 00:05:47.560
+So what do you think?
+
+97
+00:05:47.560 --> 00:05:49.790
+We haven't formally defined
+big O notation, but
+
+98
+00:05:49.790 --> 00:05:51.770
+I've given you an intuitive description.
+
+99
+00:05:51.770 --> 00:05:55.220
+What would you say is the running
+time of this algorithm
+
+100
+00:05:55.220 --> 00:05:58.570
+as a function of the length of the array,
+capital A?
+
+101
+00:06:03.270 --> 00:06:06.610
+So the answer I'm looking for
+is C, big O of n.
+
+102
+00:06:06.610 --> 00:06:10.580
+Or equivalently we would say that the
+running time of this algorithm is linear
+
+103
+00:06:10.580 --> 00:06:11.810
+in the input length n.
+
+104
+00:06:12.900 --> 00:06:14.230
+Why is that true?
+
+105
+00:06:14.230 --> 00:06:19.190
+Well let's think about how many operations
+this piece of code is going to execute.
+
+106
+00:06:19.190 --> 00:06:22.350
+Actually the lines of code executed
+is going to depend on the input.
+
+107
+00:06:22.350 --> 00:06:27.010
+It depends on whether or not the target
+t is contained in the array A.
+
+108
+00:06:27.010 --> 00:06:29.370
+And if so, where in the array A it lies.
+
+109
+00:06:29.370 --> 00:06:34.340
+But, in the worst case this code
+will do an unsuccessful search.
+
+110
+00:06:34.340 --> 00:06:38.669
+T will not be in the array and the code
+will scan through the entire array A and
+
+111
+00:06:38.669 --> 00:06:40.260
+return FALSE.
+
+112
+00:06:40.260 --> 00:06:43.250
+The number of operations
+then is a constant.
+
+113
+00:06:43.250 --> 00:06:45.050
+There is some initial setup, perhaps and
+
+114
+00:06:45.050 --> 00:06:48.370
+maybe it's an operation to return
+this final bullying value.
+
+115
+00:06:48.370 --> 00:06:52.370
+But outside of that constant, which will
+get suppressed in the big O notation,
+
+116
+00:06:52.370 --> 00:06:56.290
+it does a constant number of
+operations per entry in the array.
+
+117
+00:06:56.290 --> 00:06:58.020
+And you can argue about
+what the constant is,
+
+118
+00:06:58.020 --> 00:07:01.960
+if it's two, three, four operations
+per entry point in the array.
+
+119
+00:07:01.960 --> 00:07:04.950
+But the point is, whatever that
+constant is two, three, or four,
+
+120
+00:07:04.950 --> 00:07:09.150
+it gets conveniently suppressed
+by the big O notation.
+
+121
+00:07:09.150 --> 00:07:13.306
+So as a result, the total number of
+operations would be linear in n, and
+
+122
+00:07:13.306 --> 00:07:15.613
+so the big O notation will just be o of n.
+
+123
+00:07:17.968 --> 00:07:19.570
+So that was the first example.
+
+124
+00:07:19.570 --> 00:07:20.980
+In the last three examples,
+
+125
+00:07:20.980 --> 00:07:24.090
+I want to look at different ways
+that we could have two loops.
+
+126
+00:07:24.090 --> 00:07:27.980
+And in this example, I want to think
+about one loop followed by another, so
+
+127
+00:07:27.980 --> 00:07:29.758
+two loops in sequence.
+
+128
+00:07:29.758 --> 00:07:32.480
+I want to study almost the same
+problem as the previous one.
+
+129
+00:07:32.480 --> 00:07:35.476
+Where now we are just given two arrays,
+capital A and capital B,
+
+130
+00:07:35.476 --> 00:07:37.208
+let's say both are the same length.
+
+131
+00:07:37.208 --> 00:07:40.987
+And we want to know whether the target
+t is in either one of them.
+
+132
+00:07:40.987 --> 00:07:44.415
+Again, we'll look at the straight forward
+algorithm that we just searched through a.
+
+133
+00:07:44.415 --> 00:07:47.725
+And if we fail to find t and
+a, we search through b.
+
+134
+00:07:47.725 --> 00:07:50.440
+If we don't find t and b either,
+than we have to return return FALSE.
+
+135
+00:07:52.670 --> 00:07:55.660
+So the question then is exactly
+the same as last time given this new,
+
+136
+00:07:55.660 --> 00:07:57.570
+longer piece of code.
+
+137
+00:07:57.570 --> 00:08:00.810
+What in big O notation
+is it's running time?
+
+138
+00:08:05.097 --> 00:08:09.110
+Well, the question was the same and
+in this case the answer was the same.
+
+139
+00:08:09.110 --> 00:08:14.020
+So this algorithm, just like the last one,
+has running time big O of n.
+
+140
+00:08:14.020 --> 00:08:17.040
+If we actually count
+the number of operations
+
+141
+00:08:17.040 --> 00:08:19.376
+of course it won't be exactly
+the same as last time.
+
+142
+00:08:19.376 --> 00:08:23.832
+It'll be roughly twice as many operations
+as the previous piece of code.
+
+143
+00:08:23.832 --> 00:08:27.450
+That's because we have to search two
+different arrays each of link in.
+
+144
+00:08:27.450 --> 00:08:31.030
+So, whatever work we did before
+we now do it twice as many times.
+
+145
+00:08:31.030 --> 00:08:33.880
+Of course that two being a constant.
+
+146
+00:08:33.880 --> 00:08:36.210
+Independent of the input length n,
+
+147
+00:08:36.210 --> 00:08:39.770
+is going to get suppressed once
+we passed a big O notation.
+
+148
+00:08:39.770 --> 00:08:43.990
+So this, like the previous algorithm,
+is a linear time algorithm,
+
+149
+00:08:43.990 --> 00:08:48.110
+it has running time big O of n.
+
+150
+00:08:48.110 --> 00:08:50.940
+Let's look at a more interesting
+example of two loops,
+
+151
+00:08:50.940 --> 00:08:56.920
+where rather than processing each loop
+in sequence, they're going to be nested.
+
+152
+00:08:56.920 --> 00:09:00.950
+In particular, let's look at the problem
+of searching whether two given input
+
+153
+00:09:00.950 --> 00:09:04.890
+arrays each of link n,
+contain a common number.
+
+154
+00:09:06.270 --> 00:09:09.130
+The code that we're going to look at for
+solving this problem is the most
+
+155
+00:09:09.130 --> 00:09:13.220
+straight forward one you can imagine,
+where we just compare all possibilities.
+
+156
+00:09:13.220 --> 00:09:17.810
+So for each index i into the array a,
+each index j into the array b.
+
+157
+00:09:17.810 --> 00:09:21.614
+We just see a if A[i] is
+the the same number as B[j].
+
+158
+00:09:21.614 --> 00:09:23.340
+If it is we return TRUE.
+
+159
+00:09:23.340 --> 00:09:27.060
+If we exhaust all of the possibilities
+without ever finding equal elements,
+
+160
+00:09:27.060 --> 00:09:29.220
+then we're safe in returning a FALSE.
+
+161
+00:09:30.640 --> 00:09:35.717
+The question of course is in terms of
+big O notation asymptotic analysis
+
+162
+00:09:35.717 --> 00:09:41.568
+as a function of the array length n, what
+is the running time of this piece of code?
+
+163
+00:09:45.281 --> 00:09:48.470
+So this time the answer has changed.
+
+164
+00:09:48.470 --> 00:09:53.348
+For this piece of code the running
+time is not big O with n, but
+
+165
+00:09:53.348 --> 00:09:55.680
+it is big O of n squared.
+
+166
+00:09:55.680 --> 00:09:59.660
+So, we might also called this
+a quadratic time algorithm.
+
+167
+00:09:59.660 --> 00:10:03.250
+Because the running time is
+quadratic in the input length n.
+
+168
+00:10:03.250 --> 00:10:05.760
+So, this is one of those kinds of
+algorithms where if you double
+
+169
+00:10:05.760 --> 00:10:06.850
+the input link.
+
+170
+00:10:06.850 --> 00:10:09.610
+Then the running time of the algorithm
+will go up by a factor of four
+
+171
+00:10:09.610 --> 00:10:13.400
+rather than by a factor of two,
+like in the previous two pieces of code.
+
+172
+00:10:13.400 --> 00:10:14.540
+So why is this?
+
+173
+00:10:14.540 --> 00:10:16.730
+Why does it have quadratic
+running time big O of n squared?
+
+174
+00:10:16.730 --> 00:10:17.720
+Well again,
+
+175
+00:10:17.720 --> 00:10:21.400
+there's some constant setup costs which
+gets suppressed in the big O notation.
+
+176
+00:10:21.400 --> 00:10:27.680
+Again, for each fixed choice of an entry i
+into array A and an index j for array B,
+
+177
+00:10:27.680 --> 00:10:32.300
+for each fixed choice of i and j, we
+only do a constant number of operations.
+
+178
+00:10:32.300 --> 00:10:35.170
+The particular constants are relevant
+because it gets suppressed in the big O
+
+179
+00:10:35.170 --> 00:10:36.030
+notation.
+
+180
+00:10:36.030 --> 00:10:39.720
+What's difference is that
+there's a total of n squared
+
+181
+00:10:39.720 --> 00:10:42.600
+iterations of this double four loop.
+
+182
+00:10:42.600 --> 00:10:46.110
+In the first example we only had n
+iterations of a single four loop.
+
+183
+00:10:46.110 --> 00:10:49.850
+In our second example because one four
+loop completed before the second one
+
+184
+00:10:49.850 --> 00:10:52.850
+began we had only 2n iterations overall.
+
+185
+00:10:52.850 --> 00:10:56.730
+Here, for each of the n iterations
+of the outer four loop,
+
+186
+00:10:56.730 --> 00:10:59.790
+we do n iterations of the inner four loop.
+
+187
+00:10:59.790 --> 00:11:05.080
+So that gives us the n times n,
+ie n squared total iterations.
+
+188
+00:11:05.080 --> 00:11:07.480
+So that's going to be the running
+time of this piece of code.
+
+189
+00:11:08.860 --> 00:11:12.870
+Lets wrap up with one final example,
+it will again be nested four loops.
+
+190
+00:11:12.870 --> 00:11:17.180
+But this time we're going to be looking
+for duplicates in a single array A.
+
+191
+00:11:17.180 --> 00:11:20.020
+Rather than needing to compare
+two distinct arrays A and B.
+
+192
+00:11:21.790 --> 00:11:24.700
+So here's the piece of code we're going
+to analyze for solving this problem, for
+
+193
+00:11:24.700 --> 00:11:28.410
+detecting whether or not the input
+array A has duplicate entries.
+
+194
+00:11:28.410 --> 00:11:31.360
+There's only two small differences
+relative to the code that
+
+195
+00:11:31.360 --> 00:11:34.249
+we went through on the previous slide
+when we had two different arrays.
+
+196
+00:11:36.180 --> 00:11:40.045
+The first change won't surprise you at
+all which is instead of referencing
+
+197
+00:11:40.045 --> 00:11:41.899
+the array B, I change that B to an A.
+
+198
+00:11:41.899 --> 00:11:42.507
+All right, so
+
+199
+00:11:42.507 --> 00:11:46.040
+I'm just going to compare the i th
+entry of A with the j th entry of A.
+
+200
+00:11:46.040 --> 00:11:47.650
+The second change is
+a little bit more subtle.
+
+201
+00:11:47.650 --> 00:11:54.056
+Which is I changed the inner for loops so
+that the index j begins at i plus one.
+
+202
+00:11:54.056 --> 00:11:57.553
+Where i is the current value of
+the outer four loop's index,
+
+203
+00:11:57.553 --> 00:11:59.824
+rather than starting at the index one.
+
+204
+00:11:59.824 --> 00:12:03.145
+I could have had it start at the index
+one, that would still be correct, but
+
+205
+00:12:03.145 --> 00:12:05.940
+it would be wasteful and
+you should think about why.
+
+206
+00:12:05.940 --> 00:12:09.700
+If we started the inner four loops index
+at one, then this code would actually
+
+207
+00:12:09.700 --> 00:12:13.350
+compare each distinct pair of
+elements of A to each other twice.
+
+208
+00:12:13.350 --> 00:12:14.470
+Which of course is silly.
+
+209
+00:12:14.470 --> 00:12:17.600
+You only need to compare two different
+elements of A to each other once,
+
+210
+00:12:17.600 --> 00:12:20.220
+to know whether they're equal or not.
+
+211
+00:12:20.220 --> 00:12:24.160
+So this is the piece of code,
+the question is the same as it always is.
+
+212
+00:12:24.160 --> 00:12:26.390
+What in terms of big O notation and
+
+213
+00:12:26.390 --> 00:12:30.223
+the input link n is the running
+time of this piece of code?
+
+214
+00:12:35.458 --> 00:12:39.296
+So the answer to this question,
+same as the last one, big O of n squared.
+
+215
+00:12:39.296 --> 00:12:43.980
+That is this piece of code is
+also has quadratic running time.
+
+216
+00:12:43.980 --> 00:12:47.910
+So what I hope was clear was that whatever
+the running time of this piece of code is.
+
+217
+00:12:47.910 --> 00:12:51.240
+It's proportional to the number of
+iterations of this double four loop.
+
+218
+00:12:51.240 --> 00:12:54.810
+Like in all the examples,
+we do constant work per iteration.
+
+219
+00:12:54.810 --> 00:12:57.950
+We don't care about the constant,
+it gets suppressed by the Big O notation.
+
+220
+00:12:57.950 --> 00:13:00.590
+So all we gotta do is figure
+out how many iterations there
+
+221
+00:13:00.590 --> 00:13:02.970
+are of this double for loop.
+
+222
+00:13:02.970 --> 00:13:06.230
+My claim is that there's
+roughly n squared over two
+
+223
+00:13:06.230 --> 00:13:08.210
+iterations of this double four loop.
+
+224
+00:13:08.210 --> 00:13:09.830
+There's a couple ways to see that.
+
+225
+00:13:09.830 --> 00:13:13.760
+Informally we discussed how the difference
+between this code and the previous one,
+
+226
+00:13:13.760 --> 00:13:16.430
+is that instead of counting something
+twice, we're counting it once.
+
+227
+00:13:16.430 --> 00:13:19.680
+So that saves us a factor of two
+in the number of iterations.
+
+228
+00:13:19.680 --> 00:13:23.900
+Of course, this one half factor gets
+suppressed by the big O notation anyways.
+
+229
+00:13:23.900 --> 00:13:26.580
+So the big O running time doesn't change.
+
+230
+00:13:26.580 --> 00:13:30.410
+A different argument would just say,
+there's one iteration for
+
+231
+00:13:30.410 --> 00:13:34.410
+every distinct choice of i and
+j of indices between one and n.
+
+232
+00:13:34.410 --> 00:13:36.890
+And a simple counting
+argument says that there's
+
+233
+00:13:36.890 --> 00:13:40.170
+n choose two such choices
+of distinct i and j.
+
+234
+00:13:40.170 --> 00:13:44.010
+Where n choose two is the number
+n times n minus one over two.
+
+235
+00:13:44.010 --> 00:13:47.060
+And again suppressing lower order
+terms in the constant factor,
+
+236
+00:13:47.060 --> 00:13:51.100
+we still get a quadratic dependence
+on the length of the input array A.
+
+237
+00:13:52.240 --> 00:13:55.540
+So that wraps up some of the sort
+of just simple basic examples.
+
+238
+00:13:55.540 --> 00:13:59.680
+I hope this gets you oriented, you have
+a strong intuitive sense, for what Big O
+
+239
+00:13:59.680 --> 00:14:03.650
+notation is trying to accomplish,
+and how it's defined mathematically.
+
+240
+00:14:03.650 --> 00:14:07.273
+Let's now move on to both
+the mathematical development and
+
+241
+00:14:07.273 --> 00:14:09.526
+some more interesting algorithms.

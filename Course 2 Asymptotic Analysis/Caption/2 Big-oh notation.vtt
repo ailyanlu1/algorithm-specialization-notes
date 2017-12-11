@@ -1,0 +1,274 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.224
+In the following series of videos, we'll
+give a formal treatment of asymptotic
+
+2
+00:00:04.224 --> 00:00:08.777
+notation, in particular big-Oh notation, as
+well as work through a number of examples.
+
+3
+00:00:08.777 --> 00:00:13.331
+Big-Oh notation concerns functions defined
+on the positive integers, we'll call it T(n)
+
+4
+00:00:13.331 --> 00:00:17.720
+We'll pretty much always have the
+same semantics for T(n). We're gonna be
+
+5
+00:00:17.720 --> 00:00:22.164
+concerned about the worst-case running
+time of an algorithm, as a function of the
+
+6
+00:00:22.164 --> 00:00:26.443
+input size, n. So, the question I wanna
+answer for you in the rest of this video,
+
+7
+00:00:26.443 --> 00:00:30.448
+is, what does it mean when we say a
+function, T(n), is big-Oh of f(n). Or
+
+8
+00:00:30.448 --> 00:00:34.760
+hear f(n) is some basic function, like
+for example n log n. So I'll give you a
+
+9
+00:00:34.760 --> 00:00:39.059
+number of answers, a number of ways of, to
+think about what big-Oh notation really
+
+10
+00:00:39.059 --> 00:00:43.358
+means. For starters let's begin with an
+English definition. What does it mean for
+
+11
+00:00:43.358 --> 00:00:47.656
+a function to be big-Oh of f(n)? It means
+eventually, for all sufficiently large
+
+12
+00:00:47.656 --> 00:00:51.740
+values of n, it's bounded above by a
+constant multiple of f(n). Let's think
+
+13
+00:00:51.740 --> 00:00:55.838
+about it in a couple other ways. So next
+I'm gonna translate this English
+
+14
+00:00:55.838 --> 00:01:00.363
+definition into picture and then I'll
+translate it into formal mathematics. So
+
+15
+00:01:00.363 --> 00:01:05.119
+pictorially you can imagine that perhaps
+we have T(n) denoted by this blue
+
+16
+00:01:05.119 --> 00:01:10.640
+functions here. And perhaps f(n) is
+denoted by this green function here, which
+
+17
+00:01:10.640 --> 00:01:16.309
+lies below T(n). But when we double f(n), we get a function that eventually
+
+18
+00:01:16.309 --> 00:01:21.599
+crosses T(n) and forevermore is larger
+than it. So in this event, we would say
+
+19
+00:01:21.599 --> 00:01:26.384
+that T(n) indeed is a Big-Oh of f(n).
+The reason being that for all sufficiently
+
+20
+00:01:26.384 --> 00:01:30.765
+large n, and once we go far enough out right
+on this graph, indeed, a constant
+
+21
+00:01:30.765 --> 00:01:35.319
+multiple times of f(n), twice f(n), is an upper bound of T(n).
+
+22
+00:01:35.319 --> 00:01:39.873
+So finally, let me give you a actual
+mathematical definition that you could use
+
+23
+00:01:39.873 --> 00:01:44.542
+to do formal proofs. So how do we say, in
+mathematics, that eventually it should be
+
+24
+00:01:44.542 --> 00:01:49.132
+bounded above by a constant multiple of f(n)? We see that there exists two
+
+25
+00:01:49.132 --> 00:01:55.997
+constants, which I'll call c and n0. So
+that T(n) is no more than c times f(n)
+
+26
+00:01:55.997 --> 00:02:02.633
+for all n that exceed or equal n0.
+So, the role of these two constants is to
+
+27
+00:02:02.633 --> 00:02:07.320
+quantify what we mean by a constant
+multiple, and what we mean by sufficiently
+
+28
+00:02:07.320 --> 00:02:11.948
+large, in the English definition. c
+obviously quantifies the constant multiple
+
+29
+00:02:11.948 --> 00:02:16.515
+of f(n), and n0 is quantifying
+sufficiently large, that's the threshold
+
+30
+00:02:16.515 --> 00:02:21.322
+beyond which we insist that, c times f(n) is an upper-bound on T(n). So, going
+
+31
+00:02:21.322 --> 00:02:25.889
+back to the picture, what are c and n0? Well, c, of course, is just going to
+
+32
+00:02:25.889 --> 00:02:30.801
+be two. And n0 is the crossing point.
+So we get to where two f(n). And T(n)
+
+33
+00:02:30.801 --> 00:02:35.696
+cross, and then we drop the acentode.
+This would be the relative value of n0
+
+34
+00:02:35.696 --> 00:02:39.324
+in this picture, so that's the formal
+definition, the way to prove that
+
+35
+00:02:39.324 --> 00:02:43.471
+something's bigger of f(n) you
+exhibit these two constants c and n0
+
+36
+00:02:43.471 --> 00:02:47.617
+and it better be the case that for all n at least
+n0, c times f(n) upper-bounds T(n).
+
+37
+00:02:47.617 --> 00:02:51.919
+One way to think about it if you're trying
+to establish that something is big-Oh of
+
+38
+00:02:51.919 --> 00:02:56.169
+some function it's like you're playing a
+game against an opponent and you want to
+
+39
+00:02:56.169 --> 00:03:00.421
+prove that. This inequality here holds and
+your opponent must show that it doesn't
+
+40
+00:03:00.421 --> 00:03:04.829
+hold for sufficiently large n you have to
+go first your job is to pick a strategy in
+
+41
+00:03:04.829 --> 00:03:09.133
+the form of a constant c and a constant n0 and your opponent is then allowed to
+
+42
+00:03:09.133 --> 00:03:13.592
+pick any number n larger than n0 so the
+function is big-Oh of f(n) if and only if you
+
+43
+00:03:13.592 --> 00:03:17.896
+have a winning strategy in this game. If
+you can up front commit to constants c and
+
+44
+00:03:17.896 --> 00:03:22.149
+n0 so that no matter how big of an n
+your opponent picks, this inequality holds
+
+45
+00:03:22.149 --> 00:03:26.504
+if you have no winning strategy then it's
+not big-Oh of f(n) no matter what C and n0
+
+46
+00:03:26.504 --> 00:03:30.796
+you choose your opponent can always
+flip this in equality. By choosing a
+
+47
+00:03:30.796 --> 00:03:36.392
+suitable, suitable large value of n. I
+want to emphasis one last thing which is
+
+48
+00:03:36.392 --> 00:03:41.365
+that these constants, what do I mean by
+constants. I mean they are independent of
+
+49
+00:03:41.365 --> 00:03:45.382
+n. And so when you apply this definition,
+and you choose your constant c and
+
+50
+00:03:45.382 --> 00:03:49.179
+n0, it better be that n does not appear
+anywhere. So C should just be something
+
+51
+00:03:49.179 --> 00:03:52.784
+like a thousand or a million. Some
+constant independent of n. So those are a
+
+52
+00:03:52.784 --> 00:03:56.533
+bunch of way to think about big-Oh
+notation. In English, you wanna have it
+
+53
+00:03:56.533 --> 00:04:00.522
+bound above for sufficiently large numbers
+n. I'm showing you how to translate that
+
+54
+00:04:00.522 --> 00:04:04.463
+into mathematics that give you a pictorial
+representation. And also sort of a game
+
+55
+00:04:04.463 --> 00:04:08.163
+theoretic way to think about it. Now,
+let's move on to a video that explores a
+
+56
+00:04:08.163 --> 00:04:09.077
+number of examples.

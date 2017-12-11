@@ -1,0 +1,490 @@
+WEBVTT
+
+1
+00:00:00.872 --> 00:00:03.935
+In this lecture, we'll continue our formal
+treatment of asymptotic notation. We've
+
+2
+00:00:03.935 --> 00:00:07.307
+already discussed big O notation, which is
+by far the most important and ubiquitous
+
+3
+00:00:07.307 --> 00:00:11.489
+concept that's part of asymptotic notation,
+but, for completeness, I do want to tell you
+
+4
+00:00:11.489 --> 00:00:16.655
+about a couple of close relatives of big
+O, namely omega and theta. If big O is
+
+5
+00:00:16.655 --> 00:00:21.422
+analogous to less than or equal to, then
+omega and theta are analogous to greater
+
+6
+00:00:21.422 --> 00:00:24.785
+than or equal to, and equal to,
+respectively. But let's treat them a
+
+7
+00:00:24.785 --> 00:00:28.373
+little more precisely. The formal
+definition of omega notation closely
+
+8
+00:00:28.373 --> 00:00:33.370
+mirrors that of big O notation. We say
+that one function, T of N, is big omega of
+
+9
+00:00:33.370 --> 00:00:36.690
+another function, F of N, if
+eventually, that is for sufficiently large
+
+10
+00:00:36.690 --> 00:00:42.642
+N, it's lower bounded by a constant multiple
+of F of N. And we quantify the ideas of a
+
+11
+00:00:42.642 --> 00:00:46.851
+constant multiple and eventually in
+exactly the same way as before, namely via
+
+12
+00:00:46.851 --> 00:00:52.316
+explicitly giving two constants, C and N naught, such that T of N is bounded below by
+
+13
+00:00:52.316 --> 00:00:58.471
+C times F of N for all sufficiently large
+N. That is, for all N at least N naught.
+
+14
+00:00:58.471 --> 00:01:02.535
+There's a picture just like there was for
+big O notation. Perhaps we have a function
+
+15
+00:01:02.535 --> 00:01:06.289
+T of N which looks something like this
+green curve. And then we have another
+
+16
+00:01:06.289 --> 00:01:12.592
+function F of N which is above T of N. But
+then when we multiply F of N by one half,
+
+17
+00:01:12.592 --> 00:01:18.192
+we get something that, eventually, is
+always below T of N. So in this picture,
+
+18
+00:01:18.192 --> 00:01:24.416
+this is an example where T of N is indeed
+big Omega of F of N. As far as what the
+
+19
+00:01:24.416 --> 00:01:30.024
+constants are, well, the multiple that we
+use, C, is obviously just one half. That's
+
+20
+00:01:30.024 --> 00:01:33.566
+what we're multiplying F of N by. And as before, N naught is the
+
+21
+00:01:33.566 --> 00:01:39.417
+crossing point between the two functions.
+So, N naught is the point after which C
+
+22
+00:01:39.417 --> 00:01:44.892
+times F of N always lies below T of N
+forevermore. So that's Big Omega. Theta
+
+23
+00:01:44.892 --> 00:01:47.870
+notation is the equivalent of
+equals, and so it just means that the
+
+24
+00:01:47.870 --> 00:01:52.892
+function is both Big O of F of N and Omega
+of F of N. An equivalent way to think
+
+25
+00:01:52.892 --> 00:01:57.424
+about this is that, eventually, T of N is
+sandwiched between two different constant
+
+26
+00:01:57.424 --> 00:02:01.493
+multiples of F of N. I'll write that down,
+and I'll leave it to you to verify that
+
+27
+00:02:01.493 --> 00:02:06.575
+the two notions are equivalent. That is,
+one implies the other and vice versa. So
+
+28
+00:02:06.575 --> 00:02:10.738
+what do I mean by T of N is eventually
+sandwiched between two multiples of F of N?
+
+29
+00:02:10.738 --> 00:02:15.356
+Well, I just mean we choose two constants. A small one, C1, and a big constant, C2,
+
+30
+00:02:15.356 --> 00:02:20.507
+and for all N at least N naught, T of N lies between
+those two constant multiples.
+
+31
+00:02:20.507 --> 00:02:28.251
+One way that algorithm designers can be quite sloppy is by using O notation instead of theta notation.
+
+32
+00:02:28.251 --> 00:02:32.285
+So that's a common convention and I will follow that convention often in this class.
+
+33
+00:02:32.285 --> 00:02:36.218
+Let me give you an example. Suppose we have a subroutine, which does a linear scan
+
+34
+00:02:36.218 --> 00:02:41.426
+through an array of length N. It looks at each entry in the array and does a constant amount of work
+
+35
+00:02:41.426 --> 00:02:46.702
+with each entry. So the merge subroutine would be more or less an example of a subroutine of that type.
+
+36
+00:02:46.702 --> 00:02:50.537
+So even though the running time of such an algorithm, a subroutine, is patently
+
+37
+00:02:50.537 --> 00:02:55.351
+theta of N, it does constant work for each of N entries, so it's exactly theta of N,
+
+38
+00:02:55.351 --> 00:02:59.168
+we'll often just say that it has running time O of N. We won't bother
+
+39
+00:02:59.168 --> 00:03:02.738
+to make the stronger statement that it's theta of N. The reason we do that is because
+
+40
+00:03:02.738 --> 00:03:05.471
+you know, as algorithm designers, what we really care about is upper bounds.
+
+41
+00:03:05.471 --> 00:03:08.042
+We want guarantees on how long our algorithms are going to run,
+
+42
+00:03:08.042 --> 00:03:11.853
+so naturally we focus on the upper bounds and not so much on the lower bound side.
+
+43
+00:03:11.853 --> 00:03:16.552
+So don't get confused. Once in a while, there will a quantity which is obviously theta of F of N,
+
+44
+00:03:16.552 --> 00:03:20.190
+and I'll just make the weaker statement that it's O of F of N.
+
+45
+00:03:20.190 --> 00:03:23.892
+The next quiz is meant to check your understanding
+of these three concepts:
+
+46
+00:03:23.892 --> 00:03:26.585
+Big O, Big Omega, and Big Theta notation.
+
+47
+00:03:29.000 --> 00:03:31.128
+So the final three responses are all correct, and I
+
+48
+00:03:31.128 --> 00:03:35.671
+hope the high level intuition for why is
+fairly clear. T of N is definitely a
+
+49
+00:03:35.671 --> 00:03:39.541
+quadratic function. We know that the
+linear term doesn't matter much as it
+
+50
+00:03:39.541 --> 00:03:43.592
+grows, as N grows large. So since it has
+quadratic growth, then the third response
+
+51
+00:03:43.592 --> 00:03:48.635
+should be correct. It's theta of N
+squared. And it is omega of N. So Omega
+
+52
+00:03:48.635 --> 00:03:52.422
+of N is not a very good lower bound on
+the asymptotic rate of growth of T of N,
+
+53
+00:03:52.422 --> 00:03:56.107
+but it is legitimate. Indeed, as a
+quadratic growing function, it grows
+
+54
+00:03:56.107 --> 00:04:00.471
+at least as fast as a linear function. So
+it's Omega of N. For the same reason, big
+
+55
+00:04:00.471 --> 00:04:04.069
+O of N cubed, it's not a very good upper
+bound, but it is a legitimate one, it is
+
+56
+00:04:04.069 --> 00:04:07.818
+correct. The rate of growth of T of N is
+at most cubic. In fact, it's at most
+
+57
+00:04:07.818 --> 00:04:12.059
+quadratic, but it is indeed, at most,
+cubic. Now if you wanted to prove these
+
+58
+00:04:12.059 --> 00:04:17.241
+three statements formally, you would just
+exhibit the appropriate constants. So for
+
+59
+00:04:17.241 --> 00:04:21.887
+proving that it's big Omega of N,
+you could take N naught equal to one, and
+
+60
+00:04:21.887 --> 00:04:25.638
+C equal to one-half. For the final
+statement, again you could take N naught
+
+61
+00:04:25.638 --> 00:04:30.788
+equal to one. And C equal to say four. And
+to prove that it's theta of N squared you
+
+62
+00:04:30.788 --> 00:04:35.037
+could do something similar just using the
+two constants combined. So N naught would
+
+63
+00:04:35.037 --> 00:04:41.154
+be one. You could take C1 to be one-half and C2
+to be four. And I'll leave it to you to
+
+64
+00:04:41.154 --> 00:04:45.773
+verify that the formal definitions of big
+omega, big theta, and big O would be
+
+65
+00:04:45.773 --> 00:04:50.407
+satisfied with these choices of constants.
+One final piece of asymptotic notation,
+
+66
+00:04:50.407 --> 00:04:53.597
+we're are not going to use this much, but
+you do see it from time to time so I
+
+67
+00:04:53.597 --> 00:04:57.000
+wanted to mention it briefly. This is
+called little O notation, in contrast to
+
+68
+00:04:57.000 --> 00:05:01.440
+big O notation. So while big O notation
+informally is a less than or equal to type
+
+69
+00:05:01.440 --> 00:05:06.292
+relation, little O is a strictly less than
+relation. So intuitively it means that one
+
+70
+00:05:06.292 --> 00:05:10.976
+function is growing strictly less quickly
+than another. So formally we say that a
+
+71
+00:05:10.976 --> 00:05:19.136
+function T of N is  little O of F of N,
+if and only if for all constants C, there is
+
+72
+00:05:19.136 --> 00:05:23.017
+a constant N naught beyond which T of N is
+upper bounded by this constant multiple C
+
+73
+00:05:23.017 --> 00:05:26.991
+times by F of N. So the difference between
+this definition and that of Big-O notation, is
+
+74
+00:05:26.991 --> 00:05:30.775
+that, to prove that one function is big O of another, we only have to
+
+75
+00:05:30.775 --> 00:05:36.810
+exhibit one measly constant C, such that C
+times F of N is upper bound,
+
+76
+00:05:36.810 --> 00:05:40.260
+eventually, for T of N. By contrast, to
+prove that something is little O of
+
+77
+00:05:40.260 --> 00:05:44.320
+another function, we have to prove
+something quite a bit stronger. We have to
+
+78
+00:05:44.320 --> 00:05:48.156
+prove that, for every single constant C,
+no matter how small, for every C, there
+
+79
+00:05:48.156 --> 00:05:53.444
+exists some large enough N naught beyond
+which T of N is bounded above by C times F
+
+80
+00:05:53.444 --> 00:05:57.523
+of N. So, for those of you looking for a
+little more facility with little O
+
+81
+00:05:57.523 --> 00:06:03.043
+notation, I'll leave it as an exercise to
+prove that, as you'd expect for all
+
+82
+00:06:03.043 --> 00:06:12.211
+polynomial powers K, in fact, N to the K
+minus one is little O of N to the K. There
+
+83
+00:06:12.211 --> 00:06:16.188
+is an analogous notion of little omega
+notation expressing that one function
+
+84
+00:06:16.188 --> 00:06:19.372
+grows strictly quicker than another. But
+that one you don't see very often, and I'm
+
+85
+00:06:19.372 --> 00:06:23.527
+not gonna say anything more about it. So
+let me conclude this video with a quote
+
+86
+00:06:23.527 --> 00:06:28.144
+from an article, back from 1976, about my
+colleague Don Knuth, widely regarded as
+
+87
+00:06:28.144 --> 00:06:33.088
+the grandfather of the formal analysis of
+algorithms. And it's rare that you can
+
+88
+00:06:33.088 --> 00:06:37.528
+pinpoint why and where some kind of
+notation became universally adopted in the
+
+89
+00:06:37.528 --> 00:06:41.504
+field. In the case of asymptotic notation, indeed, it's very clear where it came
+
+90
+00:06:41.504 --> 00:06:45.206
+from. The notation was not invented by
+algorithm designers or computer
+
+91
+00:06:45.206 --> 00:06:49.455
+scientists. It's been in use in number
+theory since the nineteenth century. But
+
+92
+00:06:49.455 --> 00:06:53.837
+it was Don Knuth in '76 that proposed
+that this become the standard language for
+
+93
+00:06:53.837 --> 00:06:57.126
+discussing rate of growth,
+and in particular, for the running time of
+
+94
+00:06:57.126 --> 00:07:00.293
+algorithms. So in particular, he says in
+this article, "On the basis of the issues
+
+95
+00:07:00.293 --> 00:07:04.492
+discussed here, I propose that members of
+SIGACT," this is the special
+
+96
+00:07:04.492 --> 00:07:07.819
+interest group of the ACM, which is
+concerned with theoretical computer
+
+97
+00:07:07.819 --> 00:07:11.524
+science, in particular the analysis of
+algorithms. So, "I propose that the members
+
+98
+00:07:11.524 --> 00:07:15.170
+of SIGACT and editors in computer science
+and mathematics journals adopt the O,
+
+99
+00:07:15.170 --> 00:07:19.155
+omega, and theta notations as defined
+above unless a better alternative can be
+
+100
+00:07:19.155 --> 00:07:24.028
+found reasonably soon. So clearly a better
+alternative was not found and ever since
+
+101
+00:07:24.028 --> 00:07:27.258
+that time this has been the standard way
+of discussing the rate of growth of
+
+102
+00:07:27.258 --> 00:07:31.200
+running times of algorithms and that's
+what we'll be using here.

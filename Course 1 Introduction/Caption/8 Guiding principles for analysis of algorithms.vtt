@@ -1,0 +1,1053 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.320
+Having completed our first analysis of an
+algorithm, namely an upper bound on the
+
+2
+00:00:04.320 --> 00:00:08.746
+running time of the Merge Short algorithm.
+What I wanna do next is take a step back,
+
+3
+00:00:08.746 --> 00:00:13.173
+and be explicit about three assumptions,
+three biases that we made when we did this
+
+4
+00:00:13.173 --> 00:00:17.386
+analysis of Merge Short, and interpreted
+the results. These three assumptions we
+
+5
+00:00:17.386 --> 00:00:21.600
+will adopt as guiding principles for how
+to reason about algorithms, and how to
+
+6
+00:00:21.600 --> 00:00:25.973
+define a so called fast algorithm for the
+rest of the course. So, the first guiding
+
+7
+00:00:25.973 --> 00:00:30.240
+principle is that we used what's often
+called worst case analysis. By worst case.
+
+8
+00:00:30.240 --> 00:00:34.715
+Analysis, I simply mean that our upper
+bound of six N log N plus six N. Applies
+
+9
+00:00:34.715 --> 00:00:39.533
+to the number of lines of executed for
+every single input array of length end. We
+
+10
+00:00:39.533 --> 00:00:44.352
+made absolutely no assumptions about the
+input, where it comes from, what it looks
+
+11
+00:00:44.352 --> 00:00:48.932
+like beyond what the input length N was.
+Put differently, if, hypothetically, we
+
+12
+00:00:48.932 --> 00:00:53.869
+had some adversary whose sole purpose in
+life was to concoct some malevolent input
+
+13
+00:00:53.869 --> 00:00:58.627
+designed to make our algorithm run as slow
+as possible. The worst this adversary
+
+14
+00:00:58.627 --> 00:01:03.367
+could do, is. Upper bounded by this same
+number, 6N log N + 6N. Now, this, so,
+
+15
+00:01:03.367 --> 00:01:08.177
+sort of worst case guarantee popped out so
+naturally from our analysis of Merge
+
+16
+00:01:08.177 --> 00:01:12.987
+Short, you might well be wondering, what
+else could you do? Well, two other methods
+
+17
+00:01:12.987 --> 00:01:17.677
+of analysis, which do have their place,
+although we won't really dicuss them in
+
+18
+00:01:17.677 --> 00:01:22.366
+this course, are quote unquote, average
+case analysis. And also the use of a set
+
+19
+00:01:22.366 --> 00:01:26.637
+of prespecified benchmarks. By average
+case analysis, I mean, you analyze the
+
+20
+00:01:26.637 --> 00:01:30.938
+average running time of an algorithm under
+some assumption about the relative
+
+21
+00:01:30.938 --> 00:01:35.350
+frequencies of different inputs. So, for
+example, in the sorting problem, one thing
+
+22
+00:01:35.350 --> 00:01:39.983
+you could do, although it's not what we do
+here. You could assume that every possible
+
+23
+00:01:39.983 --> 00:01:44.395
+input array is equally unlikely, and
+then analyze the average running time of
+
+24
+00:01:44.395 --> 00:01:48.751
+an algorithm. By benchmarks, I just mean
+that one agrees up front about some set,
+
+25
+00:01:48.751 --> 00:01:53.150
+say ten or twenty, Benchmark inputs, which
+are thought to represent practical or
+
+26
+00:01:53.150 --> 00:01:57.347
+typical inputs for the algorithm. Now,
+both average-case analysis and benchmarks
+
+27
+00:01:57.347 --> 00:02:01.438
+are useful in certain settings, but for
+them to make sense, you really have to
+
+28
+00:02:01.438 --> 00:02:05.688
+have domain knowledge about your problem.
+You need to have some understanding of
+
+29
+00:02:05.688 --> 00:02:09.778
+what inputs are more common than others,
+what inputs better represent typical
+
+30
+00:02:09.778 --> 00:02:13.763
+inputs than others. By contrast, in
+worst-case analysis, by definition you're
+
+31
+00:02:13.763 --> 00:02:17.694
+making absolutely no assumptions about
+where the input comes from. So, as a
+
+32
+00:02:17.694 --> 00:02:20.828
+result, worst-case analysis is
+particularly appropriate for
+
+33
+00:02:20.828 --> 00:02:25.456
+general-purpose sub-routines. Sub-routines
+that you design. Find without having any
+
+34
+00:02:25.456 --> 00:02:30.192
+knowledge of how they will be used or what
+kind of inputs they will be used on. And
+
+35
+00:02:30.192 --> 00:02:34.556
+happily, another bonus of doing worst case
+analysis, as we will in this course, it's
+
+36
+00:02:34.556 --> 00:02:38.388
+usually mathematically much more
+attractable than trying to analyze the
+
+37
+00:02:38.388 --> 00:02:42.539
+average performance of an algorithm under
+some distribution over inputs. Or to
+
+38
+00:02:42.539 --> 00:02:46.903
+understand the detailed behavior of an
+algorithm on a particular set of benchmark
+
+39
+00:02:46.903 --> 00:02:51.161
+inputs. This mathemetical tractabilty
+was reflected in our Merge Sort analysis,
+
+40
+00:02:51.161 --> 00:02:55.258
+where we had no a priori goal of
+analyzing the worst case, per se. But it's
+
+41
+00:02:55.258 --> 00:02:59.630
+naturally what popped out of our reasoning
+about the algorithm's running time. The
+
+42
+00:02:59.630 --> 00:03:03.976
+second and third guiding principles are
+closely related. The second one is that,
+
+43
+00:03:03.976 --> 00:03:07.827
+in this course, when we analyze
+algorithms, we won't worry unduly about
+
+44
+00:03:07.827 --> 00:03:12.228
+small constant factors or lower order
+terms. We saw this philosophy at work very
+
+45
+00:03:12.228 --> 00:03:16.629
+early on in our analysis of merge sort.
+When we discussed the number of lines of
+
+46
+00:03:16.629 --> 00:03:21.015
+code that the merge subroutine requires.
+We first upper-bounded it by 4m plus two,
+
+47
+00:03:21.015 --> 00:03:25.120
+for an array of length m, and then we
+said, eh, let's just think about it as 6m
+
+48
+00:03:25.120 --> 00:03:29.118
+instead. Let's have a simpler, sloppy
+upper-bound and work with that. So, that
+
+49
+00:03:29.118 --> 00:03:33.116
+was already an example of not worrying
+about small changes in the constant
+
+50
+00:03:33.116 --> 00:03:37.327
+factor. Now, the question you should be
+wondering about is, why do we do this, and
+
+51
+00:03:37.327 --> 00:03:41.204
+can we really get away with it? So let me
+tell you about the justifications for this
+
+52
+00:03:41.204 --> 00:03:45.430
+guiding principle. So the first motivation
+is clear, and we used it already in our
+
+53
+00:03:45.430 --> 00:03:49.837
+merge short analysis. Which is simply way
+easier mathematically, if we don't have
+
+54
+00:03:49.837 --> 00:03:54.190
+to, precisely pin down what the [inaudible] constant factors and lower-order terms are.
+
+55
+00:03:54.190 --> 00:03:58.479
+The second justification is a little less
+obvious, but is extremely important. So, I
+
+56
+00:03:58.479 --> 00:04:02.715
+claim that, given the level at which we're
+describing and analyzing algorithms in
+
+57
+00:04:02.715 --> 00:04:06.325
+this course, it would be totally
+inappropriate to obsess unduly about
+
+58
+00:04:06.325 --> 00:04:10.143
+exactly what the constant factors are.
+Recall our discussion of the merge
+
+59
+00:04:10.143 --> 00:04:13.961
+subroutine. So, we wrote that subroutine
+down in pseudocode, and we gave it
+
+60
+00:04:13.961 --> 00:04:18.250
+analysis of 4m plus two on the number of
+lines of code executed, given an input of
+
+61
+00:04:18.250 --> 00:04:22.278
+length m. We also noted that, it was
+somewhat ambiguous exactly how many lines
+
+62
+00:04:22.278 --> 00:04:26.677
+of code we should count it as, depending
+on how you count loop increments and so on. So
+
+63
+00:04:26.677 --> 00:04:30.811
+even there it's small constant factors
+could creep in given the under
+
+64
+00:04:30.811 --> 00:04:35.064
+specification of the pseudo code.
+Depending on how that pseudo code gets
+
+65
+00:04:35.064 --> 00:04:39.921
+translated into an actual program language
+like C or Java. You'll see the number of
+
+66
+00:04:39.921 --> 00:04:44.330
+lines of code deviate even further, not
+but a lot but again by small constant
+
+67
+00:04:44.330 --> 00:04:48.625
+factors. When such a program is then
+compiled down into machine code, you'll
+
+68
+00:04:48.625 --> 00:04:52.977
+see even greater variance depending on the
+exact processor, the compiler, the
+
+69
+00:04:52.977 --> 00:04:56.985
+compiler optimizations, the programming
+implementation, and so on. So to
+
+70
+00:04:56.985 --> 00:05:01.843
+summarize, because we're going to describe
+algorithms at a level. That transcends any
+
+71
+00:05:01.843 --> 00:05:06.438
+particular programming language. It would
+be inappropriate to specify precise
+
+72
+00:05:06.438 --> 00:05:11.092
+constants. The precise constants were
+ultimately determined by more machine
+
+73
+00:05:11.092 --> 00:05:15.567
+dependent aspects like who the programmer
+is, what the compiler is, what the
+
+74
+00:05:15.567 --> 00:05:20.289
+processor is, and so on. And now the third
+justification is frankly, we're just going
+
+75
+00:05:20.289 --> 00:05:25.415
+to be able to get away with it. [sound]
+That is, one might be concerned that
+
+76
+00:05:25.415 --> 00:05:29.994
+ignoring things like small constant factors
+leads us astray. That we wind up deriving
+
+77
+00:05:29.994 --> 00:05:34.683
+results which suggest that an algorithm is
+fast when it's really slow in practice, or
+
+78
+00:05:34.683 --> 00:05:38.985
+vice versa. And for the problems we
+discuss in this course we'll get extremely
+
+79
+00:05:38.985 --> 00:05:43.212
+accurate predictive power. Even though we
+won't be keeping track of lower terms and
+
+80
+00:05:43.212 --> 00:05:47.180
+constant factors. When the mathematical
+analysis we do suggests that an algorithm
+
+81
+00:05:47.180 --> 00:05:50.806
+is fast, indeed it will be. When it
+suggests that it's not fast, indeed that
+
+82
+00:05:50.806 --> 00:05:54.627
+will be the case. So we lose a little bit
+of granularity of information. But we
+
+83
+00:05:54.627 --> 00:05:58.448
+don't lose in what we really care about,
+which is accurate guidance about what
+
+84
+00:05:58.448 --> 00:06:02.221
+algorithms are gonna be faster than
+others. So the first two justifications, I
+
+85
+00:06:02.221 --> 00:06:06.287
+think, are pretty self evident. This third
+justification is more of an assertion, but
+
+86
+00:06:06.287 --> 00:06:10.304
+it's one we'll be baking up over and over
+again as we proceed through this course.
+
+87
+00:06:10.304 --> 00:06:13.979
+Now, don't get me wrong. I'm not saying
+constant factors aren't important in
+
+88
+00:06:13.979 --> 00:06:18.330
+practice. Obviously, for crucial programs
+the constant factors are hugely important.
+
+89
+00:06:18.330 --> 00:06:22.776
+If you're running the sorta crucial loop,
+you know, your start up's survival depends
+
+90
+00:06:22.776 --> 00:06:26.633
+on, by all means optimize the constant
+like crazy. The point is just that
+
+91
+00:06:26.633 --> 00:06:30.973
+understanding tiny constant factors in the
+analysis is an inappropriate level of
+
+92
+00:06:30.973 --> 00:06:35.205
+granularity for the kind of algorithm
+analysis we're going to be doing in this
+
+93
+00:06:35.205 --> 00:06:39.696
+course. Okay, lets move on the, the third
+and final guiding principle. So the third
+
+94
+00:06:39.696 --> 00:06:44.061
+principle is that we're going to use
+what's called asymptotic analysis, by
+
+95
+00:06:44.061 --> 00:06:49.016
+which I mean we will focus on the case of
+a large input sizes. The performance of an
+
+96
+00:06:49.016 --> 00:06:53.671
+algorithm as the size N of the input grows
+large, that is, tends to infinity. Now
+
+97
+00:06:53.671 --> 00:06:58.299
+this focus on large input size is it was
+already evident when we interpreted our
+
+98
+00:06:58.299 --> 00:07:02.523
+bound on Merge Sort. So, how did we
+describe the bound on Merge Sort? We said,
+
+99
+00:07:02.523 --> 00:07:07.209
+oh, well, it needs a number of operations
+proportional, a constant fact or times in
+
+100
+00:07:07.209 --> 00:07:11.721
+login. And we very cavalierly declared
+that this was better than any algorithm
+
+101
+00:07:11.721 --> 00:07:16.350
+which has quadratic dependence of it's
+running time on the number of operations.
+
+102
+00:07:16.350 --> 00:07:21.017
+So for example, we argued that merge sort
+is a better, faster algorithm than
+
+103
+00:07:21.017 --> 00:07:25.934
+something like insertion sort, without
+actually discussing the constant factors
+
+104
+00:07:25.934 --> 00:07:31.185
+at all. So mathematically. We were saying
+the running time of merge short, which we
+
+105
+00:07:31.185 --> 00:07:36.676
+know, which we can represent as the
+function. Six N log base two of N + 6N
+
+106
+00:07:36.676 --> 00:07:41.315
+is better than any function which has a
+quadratic dependence on n.  Even one with a
+
+107
+00:07:41.315 --> 00:07:45.955
+small constant like lets say 1/2 N squared which might roughly be the running
+
+108
+00:07:45.955 --> 00:07:50.640
+time of insertion sort. And this is a
+mathematical statement that is true if and
+
+109
+00:07:50.640 --> 00:07:55.230
+only if N is sufficiently large once N
+grows large it is certainly true that
+
+110
+00:07:55.230 --> 00:08:00.050
+the expression on the left is smaller than
+the expression on the right but for small
+
+111
+00:08:00.050 --> 00:08:04.926
+N the expression on the right is actually
+going to be smaller because of the smaller
+
+112
+00:08:04.926 --> 00:08:09.689
+leading term so in saying that merge sort
+is superior to insertion sort the bias
+
+113
+00:08:09.689 --> 00:08:14.566
+is that we're focusing on problems with a
+large N so the question you should have is
+
+114
+00:08:14.566 --> 00:08:18.983
+that reasonable is that a justified
+assumption to focus on large input sizes
+
+115
+00:08:18.983 --> 00:08:23.320
+and the answer is certainly yes. So the
+reason we focus on large input sizes is
+
+116
+00:08:23.320 --> 00:08:27.364
+because, frankly, those are the only
+problems which are even, which are at all
+
+117
+00:08:27.364 --> 00:08:31.780
+interesting. If all you need to do is sort
+100 numbers, use whatever method you want,
+
+118
+00:08:31.780 --> 00:08:36.089
+and it's gonna happen instantaneously on
+modern computers. You don't need to know
+
+119
+00:08:36.089 --> 00:08:40.392
+say, the divide and conquer paradigm, if
+all you need to do is sort 100 numbers. So
+
+120
+00:08:40.392 --> 00:08:44.563
+one thing you might be wondering is if,
+with computers getting faster all the time
+
+121
+00:08:44.563 --> 00:08:48.276
+according to Moore's Law, if really, it
+doesn't even matter to think about
+
+122
+00:08:48.276 --> 00:08:52.142
+algorithmic analysis, if eventually all
+problem sizes will just be trivially
+
+123
+00:08:52.142 --> 00:08:56.129
+solvable on super fast computers. But, in
+fact, the opposite is true. Moore's Law,
+
+124
+00:08:56.129 --> 00:09:00.432
+with computers getting faster, actually
+says that our computational ambitions will
+
+125
+00:09:00.432 --> 00:09:04.841
+naturally grow. We naturally focus on ever
+larger problem sizes. And the gulf between
+
+126
+00:09:04.841 --> 00:09:08.672
+an N squared algorithm and an m log n
+algorithm will become ever wider. A
+
+127
+00:09:08.672 --> 00:09:12.765
+different way to think about it is in
+terms of how much bigger a problem size
+
+128
+00:09:12.765 --> 00:09:17.047
+you can solve. As computers get faster. If
+you are using an algorithm with a running
+
+129
+00:09:17.047 --> 00:09:21.160
+time which is proportional to the input
+size then the computers get faster by a
+
+130
+00:09:21.160 --> 00:09:25.531
+factor of four then you can solve problems
+that are factor of four or larger. Whereas
+
+131
+00:09:25.531 --> 00:09:29.592
+if you are using an algorithm whose
+running time is proportional to the square
+
+132
+00:09:29.592 --> 00:09:33.654
+of the input size then a computer gets
+faster by a factor of four, you can only
+
+133
+00:09:33.654 --> 00:09:37.716
+solve double the problem size and we'll
+see even starker examples of this gulf
+
+134
+00:09:37.716 --> 00:09:42.177
+between different algorithm approaches as
+the time goes on. So to drive this point
+
+135
+00:09:42.177 --> 00:09:47.080
+home. Let me show you a couple of graphs.
+So what we're looking at here, is we're
+
+136
+00:09:47.080 --> 00:09:53.036
+looking at a graph, of two functions. So
+the solid function. Is the upper bound
+
+137
+00:09:53.036 --> 00:10:01.841
+that we proved on merge sort. So this is
+gonna be 6nlog(base2)n plus 6n. And the
+
+138
+00:10:01.841 --> 00:10:08.001
+dotted line is an estimate. A rather
+generous estimate about the running time
+
+139
+00:10:08.001 --> 00:10:12.218
+of, [inaudible] sort. Namely one-half
+times N. Squared. And we see here in the
+
+140
+00:10:12.218 --> 00:10:16.547
+graph exactly the behavior that we
+discussed earlier, which is that the small
+
+141
+00:10:16.547 --> 00:10:23.124
+N. Down here. In fact because one-half N.
+Squared has a smaller leading constant
+
+142
+00:10:23.124 --> 00:10:29.459
+it's actually a smaller function. And this
+is true up to this crossing point of maybe
+
+143
+00:10:29.459 --> 00:10:36.000
+90 or so. Again, beyond n=90. The
+quadratic growth in the N squared term.
+
+144
+00:10:36.000 --> 00:10:40.314
+Overwhelms the fact that it had a smaller
+constant and it starts being bigger than
+
+145
+00:10:40.314 --> 00:10:44.628
+this other function six of N + six N so in
+the regime below 90 it's predicting that
+
+146
+00:10:44.628 --> 00:10:48.942
+the insertion store will be better and in
+the regime above 90 it's predicting that
+
+147
+00:10:48.942 --> 00:10:53.048
+merge sort will be faster. Now here's
+what's interesting let's scale the X axis
+
+148
+00:10:53.048 --> 00:10:57.414
+let's look well beyond this crossing point
+of 90 let's just increase it in order of
+
+149
+00:10:57.414 --> 00:11:01.676
+magnitude up to a raise in size 1500. And
+I want to emphasize these are still very
+
+150
+00:11:01.676 --> 00:11:05.574
+small problem sizes. If all you need to do is
+sort arrays of size 1500 you really don't
+
+151
+00:11:05.574 --> 00:11:09.053
+need to know Divide-and-conquer
+or anything else we'll talk about -- that's a
+
+152
+00:11:09.053 --> 00:11:12.901
+pretty trivial problem on modern
+computers. [sound]. So what we're seeing
+
+153
+00:11:12.901 --> 00:11:16.904
+is, that even for very modest problem
+sizes here, array of, of, size, say 1500.
+
+154
+00:11:17.060 --> 00:11:21.271
+The quadratic dependence in the insertion
+sort bound is more than dwarfing the
+
+155
+00:11:21.271 --> 00:11:25.690
+fact, that it had a lower constant factor.
+So in this large regime, the gulf between
+
+156
+00:11:25.690 --> 00:11:29.693
+the two algorithms is growing. And of
+course, if I increased it another 10X or
+
+157
+00:11:29.693 --> 00:11:33.644
+100x or 1000x to get to genuinely
+interesting problem sizes, the gap between
+
+158
+00:11:33.644 --> 00:11:37.647
+these two algorithms would be even bigger,
+it would be huge. That said, I'm not
+
+159
+00:11:37.647 --> 00:11:41.806
+saying you should be completely ignorant
+of constant factors when you implement
+
+160
+00:11:41.806 --> 00:11:45.810
+algorithms. It's still good to have a
+general sense of what these constant
+
+161
+00:11:45.810 --> 00:11:50.060
+factors are so for example in highly tuned
+versions of Merge Sort which you'll find
+
+162
+00:11:50.060 --> 00:11:53.802
+in mny programming libraries. In
+fact, because of the difference in
+
+163
+00:11:53.802 --> 00:11:57.967
+constant factors, the algorithm will
+actually switch from Merge Sort over to
+
+164
+00:11:57.967 --> 00:12:02.240
+insertion sort, once the problem size
+drops below some particular threshold, say
+
+165
+00:12:02.240 --> 00:12:06.405
+seven elements, or something like that. So
+for small problem sizes, you use the
+
+166
+00:12:06.405 --> 00:12:10.841
+algorithm with smaller constant factors,
+and the insertion sort for larger problem
+
+167
+00:12:10.841 --> 00:12:15.095
+sizes, you use the algorithm and better
+rate of growth, mainly merge short. So, to
+
+168
+00:12:15.095 --> 00:12:19.418
+review our first guiding principal is that
+we're going to pursue worse case analysis.
+
+169
+00:12:19.418 --> 00:12:23.232
+We're going to look to bounds on the
+performance, on the running time of an
+
+170
+00:12:23.232 --> 00:12:26.742
+algorithm which make no domain
+assumptions, which make no assumptions
+
+171
+00:12:26.742 --> 00:12:30.861
+about which input of a given length the
+algorithm is provided. The second guiding
+
+172
+00:12:30.861 --> 00:12:34.930
+principal is we're not going to focus on
+constant factors or lower returns, that
+
+173
+00:12:34.930 --> 00:12:38.999
+would be inappropriate, given the level of
+granularity at which we're describing
+
+174
+00:12:38.999 --> 00:12:43.119
+algorithms and third is where going to
+focus on the rate of growth of algorithms
+
+175
+00:12:43.119 --> 00:12:47.262
+for large problem sizes. Putting these
+three principles together, we get a
+
+176
+00:12:47.262 --> 00:12:51.437
+mathematical definition of a fast
+algorithm. Namely, we're gonna pursue
+
+177
+00:12:51.437 --> 00:12:56.267
+algorithms whose worst case running time
+grows slowly as a function of the input
+
+178
+00:12:56.267 --> 00:13:01.039
+size. So let me tell you how you should
+interpret what I just wrote down in this
+
+179
+00:13:01.039 --> 00:13:05.452
+box. So on the left hand side is clearly
+what we want. Okay, we want algorithms
+
+180
+00:13:05.452 --> 00:13:09.626
+which run quickly if we implement them.
+And on the right hand side is a proposed
+
+181
+00:13:09.626 --> 00:13:13.331
+mathematical surrogate of a fast
+algorithm. Right, the left hand side is
+
+182
+00:13:13.331 --> 00:13:17.557
+not a mathematical definition. The right
+hand side is, as well become clear in the
+
+183
+00:13:17.557 --> 00:13:21.731
+next set of lectures. So we're identifying
+fast algorithms, which, those that have
+
+184
+00:13:21.731 --> 00:13:25.801
+good asymptotic running time which grows
+slowly with the input size. Now, what
+
+185
+00:13:25.801 --> 00:13:29.750
+would we want from a mathematical
+definition? We'd want a sweet spot. On one
+
+186
+00:13:29.750 --> 00:13:34.327
+hand we want something we can actually
+reason about. This is why we zoom out and
+
+187
+00:13:34.327 --> 00:13:39.075
+squint and ignore things like constant
+factors and lower terms. We can't keep
+
+188
+00:13:39.075 --> 00:13:43.514
+track of everything. Otherwise we'd never
+be able to analyze stuff. On the other hand
+
+189
+00:13:43.514 --> 00:13:47.323
+we don't want to throw out the baby with
+the bath water, we want to retain
+
+190
+00:13:47.323 --> 00:13:51.441
+predictive power and this turns out this
+definition turns out for the problems
+
+191
+00:13:51.441 --> 00:13:55.662
+we're going to talk about in this course,
+to be the sweet spot for reasoning about
+
+192
+00:13:55.662 --> 00:13:59.780
+algorithms okay worst case analysis using
+the asymptotic running time. We'll be able to
+
+193
+00:13:59.780 --> 00:14:03.796
+prove lots of theorems. We'll be able to
+establish a lot of performance guarantees
+
+194
+00:14:03.796 --> 00:14:08.223
+for fundamental algorithms but at the same
+time we'll have good predictive power what
+
+195
+00:14:08.223 --> 00:14:12.186
+the theory advocates will in fact be
+algorithms that are known to be best in
+
+196
+00:14:12.186 --> 00:14:16.080
+practice. So, the final explanation I owe
+you, is, what do I mean by, the running
+
+197
+00:14:16.080 --> 00:14:19.863
+time grows slowly, with respect to the
+input size? Well, the answer depends a
+
+198
+00:14:19.863 --> 00:14:23.697
+little bit on the context, but, for almost
+all of the problems we're going to
+
+199
+00:14:23.697 --> 00:14:27.733
+discuss, the holy grail will be to have
+what's called a linear time algorithm, an
+
+200
+00:14:27.733 --> 00:14:31.718
+algorithm whose number of instructions
+grows proportional to the input size. So,
+
+201
+00:14:31.718 --> 00:14:35.804
+we won't always be able to achieve linear
+time, but that's, in some sense, the best
+
+202
+00:14:35.804 --> 00:14:39.789
+case scenario. Notice, linear time is even
+better than what we achieved with our
+
+203
+00:14:39.789 --> 00:14:43.875
+merge short algorithm for sorting. Merge
+short runs a little bit superlinear, it's
+
+204
+00:14:43.875 --> 00:14:47.729
+n times log n, running as the input size.
+If possible, we. To be linear time. It's
+
+205
+00:14:47.729 --> 00:14:51.588
+not always gonna be possible, but that is
+what we will aspire toward. For most of
+
+206
+00:14:51.588 --> 00:14:56.036
+the problems we'll discuss in this course.
+Looking ahead, the next series of videos
+
+207
+00:14:56.036 --> 00:14:59.986
+is going to have two goals. First of all,
+on the analysis side, I'll describe
+
+208
+00:14:59.986 --> 00:15:03.989
+formally what I mean by asymptotic
+running time. I'll introduce "Big Oh"
+
+209
+00:15:03.989 --> 00:15:07.992
+notation and its variants, explain its
+mathematical definitions, and give a
+
+210
+00:15:07.992 --> 00:15:12.047
+number of examples. On the design side,
+we'll get more experience applying the
+
+211
+00:15:12.047 --> 00:15:14.102
+divide and conquer paradigm to further problems.  See you then.
