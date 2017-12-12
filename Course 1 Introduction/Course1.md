@@ -1,13 +1,3 @@
-title: Algorithm专项课程—Course 1
-description: Coursera上学习“Algorithm专项课程”的第一课程，主要涉及渐近表示法(大O表示法)，排序与搜索算法，分治算法(主项定理、整数与矩阵乘法、最近点对问题)，以及随机算法(快速排序、最小割集收缩算法)。第一篇是Course 1的笔记。
-date: 2017-12-06 08:31
-toc: false
-category: Tech
-tag: [Algorithm Specialization]
-banner: http://7xwggp.com1.z0.glb.clouddn.com/course1.jpg
-
----
-
 # Introduction / 简介
 
 > update: 2017/12/05
