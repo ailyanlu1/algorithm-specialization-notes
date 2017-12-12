@@ -1,0 +1,866 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.055
+In this next series of videos, we'll get
+some more practice applying the divide and
+
+2
+00:00:04.055 --> 00:00:08.110
+conquer algorithm and design paradigm to
+various problems. This will also give us a
+
+3
+00:00:08.110 --> 00:00:11.383
+glimpse of the kinds of application
+[inaudible] to which it's been
+
+4
+00:00:11.383 --> 00:00:15.292
+successfully applied. We're gonna start by
+extending the merge sort algorithm to
+
+5
+00:00:15.292 --> 00:00:19.150
+solve a problem involving counting the
+number of inversions of an array. Before
+
+6
+00:00:19.150 --> 00:00:23.234
+we tackle the specific problem of counting
+the number of inversions in an array, let
+
+7
+00:00:23.234 --> 00:00:26.978
+me say a few words about the divide and
+conquer paradigm in general. So again,
+
+8
+00:00:26.978 --> 00:00:30.819
+you've already seen the totally canonical
+example of divide and conquer, namely
+
+9
+00:00:30.819 --> 00:00:34.465
+merge sort. So the following three
+conceptual steps will be familiar to you.
+
+10
+00:00:34.465 --> 00:00:38.933
+The first step, no prizes for guessing is
+you divide. The problem. Into smaller
+
+11
+00:00:38.933 --> 00:00:43.164
+sub-problems. Sometimes this division
+happens only in your mind. It's really
+
+12
+00:00:43.164 --> 00:00:47.565
+more of a conceptual step than part of
+your code. Sometimes you really do copy
+
+13
+00:00:47.565 --> 00:00:52.192
+over parts of the input into say new
+arrays to pass on to your recursive calls.
+
+14
+00:00:52.192 --> 00:00:56.705
+The second step, again no prizes here, is
+you conquer the sub-problems just using
+
+15
+00:00:56.705 --> 00:01:00.578
+recursion. So for example, in Merge Sort,
+you conceptually divide the array into two
+
+16
+00:01:00.578 --> 00:01:04.483
+different pieces. And then you [inaudible]
+with the conquer or sort to the first half
+
+17
+00:01:04.483 --> 00:01:08.021
+of the array. And you, you do the same
+thing with the second half of the array.
+
+18
+00:01:08.021 --> 00:01:11.697
+Now, of course, it's not quite as easy as
+just doing these two steps. Dividing the
+
+19
+00:01:11.697 --> 00:01:15.464
+problem, and then solving the sub problems
+recursively. Usually, you have some extra
+
+20
+00:01:15.464 --> 00:01:19.094
+cleanup work after the recursive calls,
+and to stitch together the solutions to
+
+21
+00:01:19.094 --> 00:01:22.586
+the sub problems into one for the big
+problem, the problem that you actually
+
+22
+00:01:22.586 --> 00:01:26.215
+care about. Recall, for example, in Merge
+Sort, after our recursive calls, the left
+
+23
+00:01:26.215 --> 00:01:29.937
+half of the array was sorted, the right
+half of the array was sorted. But we still
+
+24
+00:01:29.937 --> 00:01:34.819
+had to stitch those together. Merge into a
+sorted version of the entire array. So the
+
+25
+00:01:34.819 --> 00:01:38.824
+[inaudible] step is to combine. The
+solutions to the subproblem into one
+
+26
+00:01:38.824 --> 00:01:42.736
+problem. Generally the largest amount of
+ingenuity happens in the third step. How
+
+27
+00:01:42.736 --> 00:01:46.745
+do you actually quickly combine solutions
+to subproblems into one to the original
+
+28
+00:01:46.745 --> 00:01:50.167
+problem? Sometimes you also get some
+cleverness in the first step with
+
+29
+00:01:50.167 --> 00:01:54.274
+division. Sometimes it's as simple as just
+spliting a ray in two. But there are cases
+
+30
+00:01:54.274 --> 00:01:57.844
+where the division step also has some
+ingenuity. Now let's move on to the
+
+31
+00:01:57.844 --> 00:02:01.608
+specific problem of counting inversions
+and see how to apply this divide and
+
+32
+00:02:01.608 --> 00:02:06.605
+conquer paradygm. So let begin by defining
+the problem formally now. We're given as
+
+33
+00:02:06.605 --> 00:02:11.237
+input an array A with a length N. And you
+can define the problem so that the array a
+
+34
+00:02:11.237 --> 00:02:15.088
+contains any ole distinct numbers. But,
+let's just keep thing simple and assume
+
+35
+00:02:15.088 --> 00:02:18.939
+that it contains the numbers one through
+n. The integers in that range in some
+
+36
+00:02:18.939 --> 00:02:22.861
+order. That captures the essence of the
+problem. And the goal is to compute the
+
+37
+00:02:22.861 --> 00:02:26.890
+number of inversions of this array so
+what's an inversion you may ask well an
+
+38
+00:02:26.890 --> 00:02:30.815
+inversion is just a pair of array
+[inaudible] I and J with I smaller than J
+
+39
+00:02:30.815 --> 00:02:35.258
+so that earlier array entry the I entry is
+bigger than the latter one the Jake one so
+
+40
+00:02:35.258 --> 00:02:39.390
+one thing that should be evident is that
+if the array contains these numbers in
+
+41
+00:02:39.390 --> 00:02:43.522
+sorted order if the array is simply one
+two three four all the way up to N then
+
+42
+00:02:43.522 --> 00:02:47.396
+the number of inversions is zero. The
+converse you might also want to think
+
+43
+00:02:47.396 --> 00:02:51.374
+through if the array has any other
+ordering of the numbers between one and N
+
+44
+00:02:51.374 --> 00:02:55.590
+other than the assorted one, then it's
+going to have a non. Of zero number of
+
+45
+00:02:55.590 --> 00:03:01.045
+inversions. Let's look at another example.
+So'spose we have an array of six entries.
+
+46
+00:03:01.045 --> 00:03:05.940
+So the numbers one thru six in the
+following order. One, three, five followed
+
+47
+00:03:05.940 --> 00:03:10.965
+by two, four, six. So how many inversions
+does this array have? So again what we
+
+48
+00:03:10.965 --> 00:03:16.055
+need to look for are pairs of array
+entries so that the earlier or left entry
+
+49
+00:03:16.055 --> 00:03:21.210
+is bigger than the later or right entry.
+So one example which we see right here
+
+50
+00:03:21.210 --> 00:03:26.105
+would five and two. Those are right next
+to each other and out of order, the
+
+51
+00:03:26.105 --> 00:03:31.325
+earlier entry is bigger than the other
+one. But there's others, there's three and
+
+52
+00:03:31.325 --> 00:03:37.715
+two for example Those are out of order.
+And, five and four are also out of order.
+
+53
+00:03:37.715 --> 00:03:44.597
+And I'll leave it to you to check that
+those are the only three pairs that are
+
+54
+00:03:44.597 --> 00:03:51.130
+out of order. So summarizing the
+inversions in this array of length six are
+
+55
+00:03:51.130 --> 00:03:57.227
+3-2, 5-2, and 5-4. Corresponding to the
+array entries, 2-4, 3-4, and 3-5.
+
+56
+00:03:57.227 --> 00:04:03.166
+Pictorially, we can think of it thusly, we
+can first. Write down the numbers in
+
+57
+00:04:03.166 --> 00:04:07.596
+order, one up to six. And then we can
+write down the numbers again but, ordered
+
+58
+00:04:07.596 --> 00:04:12.084
+in the way that their given in the input
+array. So, one three five two four six.
+
+59
+00:04:12.084 --> 00:04:16.799
+And then we can connect the dots, meaning
+we connect one to one. Reconnect two to
+
+60
+00:04:16.799 --> 00:04:21.285
+two, and so on. It turns out, and I'll
+leave to for you to, to think this
+
+61
+00:04:21.285 --> 00:04:26.668
+through, that the number of crossing pairs
+of line segments prescisely correspond to
+
+62
+00:04:26.668 --> 00:04:31.667
+the number of inversions. So we see that
+there are one, two, three crossing line
+
+63
+00:04:31.667 --> 00:04:36.474
+segments. And these are exactly in
+correspondence with the three inversions,
+
+64
+00:04:36.666 --> 00:04:41.612
+we found earlier. Five and two, three and
+two, and five and four. Now, [inaudible]
+
+65
+00:04:41.612 --> 00:04:46.538
+wanna solve this problem you might ask.
+Well there's few reasons that come up. One
+
+66
+00:04:46.538 --> 00:04:51.220
+would be to have a numerical similarity
+measure that quantifies how close to
+
+67
+00:04:51.220 --> 00:04:55.499
+[inaudible] lists are to each other. So
+for example, suppose I took you and a
+
+68
+00:04:55.499 --> 00:04:59.572
+friend, and I took, identified ten movies
+that both of you had seen. And I asked
+
+69
+00:04:59.572 --> 00:05:03.594
+each of you to order, or to rank these
+movies from your most favorite to your
+
+70
+00:05:03.594 --> 00:05:07.772
+least favorite. Now I can form an array,
+and compute inversions. And it quantifies,
+
+71
+00:05:07.772 --> 00:05:11.741
+in some sense, how dissimilar your two
+rankings are to each other. So in more
+
+72
+00:05:11.741 --> 00:05:15.867
+detail, in the first entry of this array,
+I would put down the ranking that your
+
+73
+00:05:15.867 --> 00:05:20.150
+friend gave to your favorite movie. So if
+you had your favorite movie, Star Wars or
+
+74
+00:05:20.150 --> 00:05:24.433
+whatever. And your friend only thought it
+was the fifth best out of the ten, then I
+
+75
+00:05:24.433 --> 00:05:28.434
+would write down a five in the first entry
+of this array. Generally, I would take
+
+76
+00:05:28.434 --> 00:05:31.953
+your second favorite movie. I would look
+at how your friend ranked that. I would
+
+77
+00:05:31.953 --> 00:05:35.517
+put that in the second entry of the array
+and so on, all the way up to the tenth
+
+78
+00:05:35.517 --> 00:05:39.170
+entry of the array, where I would put your
+friend's ranking of your least favorite
+
+79
+00:05:39.170 --> 00:05:42.779
+movie. Now, if you have exactly identical
+preferences, if you rank them exactly the
+
+80
+00:05:42.779 --> 00:05:46.387
+same way, the number of inversions of this
+array would be zero. And in general, the
+
+81
+00:05:46.387 --> 00:05:49.728
+more inversions this array has, it
+quantifies that your lists look more and
+
+82
+00:05:49.728 --> 00:05:53.402
+more different from each other. Now why
+might you want to do this why might you
+
+83
+00:05:53.402 --> 00:05:57.174
+want to know whether two different people
+ranked things in the similar way had
+
+84
+00:05:57.174 --> 00:06:01.137
+similar preferences well one reason might
+be what's called collaborative filtering,
+
+85
+00:06:01.137 --> 00:06:04.671
+probably many of you have had the
+experience of going to a website and if
+
+86
+00:06:04.671 --> 00:06:08.491
+you've made a few purchases through this
+website it starts recommending further
+
+87
+00:06:08.491 --> 00:06:12.311
+purchases for you, so one way to solve
+this problem under the hood, is to look at
+
+88
+00:06:12.311 --> 00:06:16.131
+your purchases look at what you seem to
+like, find other people who have similar
+
+89
+00:06:16.131 --> 00:06:20.142
+preferences similar history look at things
+they've bought that you haven't, and then
+
+90
+00:06:20.142 --> 00:06:24.200
+recommend. New products to you based on
+what similar customers seemed to have
+
+91
+00:06:24.200 --> 00:06:28.445
+bought. So this problem captures some of
+the essence of identifying which customers
+
+92
+00:06:28.445 --> 00:06:32.631
+or which people are similar based on data
+about what they prefer. So just to make
+
+93
+00:06:32.631 --> 00:06:36.722
+sure we're all on the same page, let me
+pause for a brief quiz. We've already
+
+94
+00:06:36.722 --> 00:06:41.191
+noticed that a given array will have zero
+inversions, if and only if it's in sorted
+
+95
+00:06:41.191 --> 00:06:45.498
+order. If it only contains the numbers of
+one through N in order. So, on the other
+
+96
+00:06:45.498 --> 00:06:49.536
+side, what is the largest number of
+inversions an array could possibly have?
+
+97
+00:06:49.536 --> 00:06:54.644
+Let's say, just for an array of size six,
+like the one in this example here. So the
+
+98
+00:06:54.644 --> 00:06:59.658
+answer to this question is the first one.
+Fifteen. Or in general in an N. Element
+
+99
+00:06:59.658 --> 00:07:04.585
+array the largest number of inversions is
+N. Choose two. Also known as N times N
+
+100
+00:07:04.585 --> 00:07:09.429
+minus one over two. Which, again, in the
+case of a [inaudible] is going to evaluate
+
+101
+00:07:09.429 --> 00:07:14.214
+to fifteen. The reason is, the worst case
+is when the array is in backwards order,
+
+102
+00:07:14.214 --> 00:07:18.639
+reverse [inaudible] order, and every
+single pair of [inaudible] indices is
+
+103
+00:07:18.639 --> 00:07:23.005
+inverted. And so the number of indices IJ,
+with I less than J is precisely
+
+104
+00:07:23.005 --> 00:07:27.610
+[inaudible] too. Let's now turn our
+attention to the problem of computing the
+
+105
+00:07:27.610 --> 00:07:32.146
+number of inversions of an array as
+quickly as possible. So one option that is
+
+106
+00:07:32.146 --> 00:07:36.513
+certainly available to us is the brute
+force algorithm. And by brute force I just
+
+107
+00:07:36.513 --> 00:07:40.868
+mean we could set up a double four loop.
+One which goes through I, one which goes
+
+108
+00:07:40.868 --> 00:07:45.538
+through J bigger than I, and we just check
+each pair IJ individually with I less than
+
+109
+00:07:45.538 --> 00:07:49.989
+J whether that particular pair of array
+entities AI and AJ is inverted and if it
+
+110
+00:07:49.989 --> 00:07:54.440
+is then we add it to our running count.
+And then we return the final count at the
+
+111
+00:07:54.440 --> 00:07:58.616
+end of the double four loop. That's
+certainly correct. The only problem is, as
+
+112
+00:07:58.616 --> 00:08:02.902
+we just observed, there's N [inaudible]
+two or a quadratic number of potential
+
+113
+00:08:02.902 --> 00:08:07.079
+inversions so this algorithm's almost
+going to run in time quadratic in the
+
+114
+00:08:07.079 --> 00:08:11.640
+array link. Now remember the mantra of any
+good algorithm designer. Can we do better?
+
+115
+00:08:11.640 --> 00:08:16.030
+And the answer is yes. And the method
+we'll be using, divide and conquer. The
+
+116
+00:08:16.030 --> 00:08:20.478
+way in which we'll divide will be
+motivated directly by merge sort where we
+
+117
+00:08:20.478 --> 00:08:25.220
+recurs e separately on the left and the
+right half's of the array. We're gonna do
+
+118
+00:08:25.220 --> 00:08:29.727
+the same thing here. To understand how
+much progress we can make purely using
+
+119
+00:08:29.727 --> 00:08:34.644
+recursion let's classify the inversions of
+array into one of three types. So suppose
+
+120
+00:08:34.644 --> 00:08:39.561
+we have an inversion of an array I, J, and
+remember in an inversion you always have I
+
+121
+00:08:39.561 --> 00:08:44.166
+less than J. We're gonna call it a left
+inversion. If both of the array indices
+
+122
+00:08:44.166 --> 00:08:48.895
+are at most N over two, where N is the
+array length. We're gonna call it a right
+
+123
+00:08:48.895 --> 00:08:53.984
+inversion if they're both strictly greater
+than N over two. And we're gonna call it a
+
+124
+00:08:53.984 --> 00:08:58.953
+split inversion if the smaller index is at
+most N over two and the larger index is
+
+125
+00:08:58.953 --> 00:09:03.764
+bigger than N over two. We can discuss the
+progress made by recursion in these terms.
+
+126
+00:09:03.764 --> 00:09:07.988
+When we recurse on the left-half of an
+array, if we implement our algorithm
+
+127
+00:09:07.988 --> 00:09:12.661
+correctly, we'll successfully be able to
+count all of the inversions located purely
+
+128
+00:09:12.661 --> 00:09:17.054
+in that first half. Those are precisely
+the left inversions. Similarly, a second
+
+129
+00:09:17.054 --> 00:09:21.108
+recursive call on just the right half of
+an array, the second half of an
+
+130
+00:09:21.108 --> 00:09:25.743
+[inaudible] array will successfully count
+all of the right inversions. There remains
+
+131
+00:09:25.743 --> 00:09:29.757
+the questions of how to count the split
+inversions. But we shouldn't be surprised
+
+132
+00:09:29.757 --> 00:09:33.771
+there's some residual work left over, even
+after the recursive calls do their job.
+
+133
+00:09:33.771 --> 00:09:37.538
+That, of course, was the case at Merge
+Short, where [inaudible] magically took
+
+134
+00:09:37.538 --> 00:09:41.155
+care of sorting the left half of the
+array, sorting the right half of the
+
+135
+00:09:41.155 --> 00:09:44.971
+array. But there was still, after their
+return, the matter of merging those two
+
+136
+00:09:44.971 --> 00:09:48.936
+sorted lists into one. And here again,
+after the recursion is gonna be the matter
+
+137
+00:09:48.936 --> 00:09:53.332
+of cleaning up and counting the number of
+split inversions. So for example if you go
+
+138
+00:09:53.332 --> 00:09:58.104
+back to the six element array we worked
+through before, 135246, you'll notice that
+
+139
+00:09:58.104 --> 00:10:02.757
+there, in fact, all of the inversions are
+split. So the recursive calls will both
+
+140
+00:10:02.757 --> 00:10:07.470
+come back counting zero inversions. And
+all of the work for that example will be
+
+141
+00:10:07.470 --> 00:10:11.630
+done by the count split inversions
+subroutine. So let's summarize where
+
+142
+00:10:11.630 --> 00:10:16.271
+things stand given underspecified high
+level description of the algorithm as we
+
+143
+00:10:16.271 --> 00:10:21.028
+envision it. There is a base case. I'll go
+ahead and write it down for completeness,
+
+144
+00:10:21.028 --> 00:10:25.669
+which is if we're given a one element
+array, then there's certainly no inversion
+
+145
+00:10:25.669 --> 00:10:30.054
+so we can just immediately return the
+answer zero. For any bigger array, we're
+
+146
+00:10:30.054 --> 00:10:34.673
+going to divde and conquer. So we'll count
+the left inversions with a recursive call.
+
+147
+00:10:34.673 --> 00:10:38.962
+The right inversions with a recursive
+call. And then we'll have some currently
+
+148
+00:10:38.962 --> 00:10:43.526
+unimplemented subroutine that counts the
+split inversions. Since every inversion is
+
+149
+00:10:43.526 --> 00:10:47.980
+either left or right, or split, and can't
+be any more than one of those three, then,
+
+150
+00:10:47.980 --> 00:10:52.123
+having done these three things, we can
+simply return their sum. So that's our
+
+151
+00:10:52.123 --> 00:10:56.211
+high level attack on how we're gonna count
+up the number of inversions. And of
+
+152
+00:10:56.211 --> 00:11:00.562
+course, we need to specify how we're gonna
+count the number of split inversions. And
+
+153
+00:11:00.562 --> 00:11:04.493
+moreover, we lack that subroutine to run
+quickly. An analogy to emerge short,
+
+154
+00:11:04.493 --> 00:11:08.790
+where, outside the recursive calls, we did
+merely linear work. Outs-, in the merge
+
+155
+00:11:08.790 --> 00:11:12.878
+subroutine. Here, we'd like to do only
+linear work in counting up the number of
+
+156
+00:11:12.878 --> 00:11:17.790
+split inversions. If we succeed in this
+goal, if we produce a correct and linear
+
+157
+00:11:17.790 --> 00:11:22.913
+time of limitation to count up the number
+of split incursions, then this entire
+
+158
+00:11:22.913 --> 00:11:27.996
+recursive algorithm will run in big O. Of
+N. Log in time. The reason the overall out
+
+159
+00:11:27.996 --> 00:11:32.604
+rhythm will run in O. Of N. Log in time is
+exactly the same reason that merge short
+
+160
+00:11:32.604 --> 00:11:36.536
+ran in N. Log in time. There's two
+recursive calls. Each on a problem of
+
+161
+00:11:36.536 --> 00:11:40.919
+one-half the size. And outside of the
+recursive calls we would be doing linear
+
+162
+00:11:40.919 --> 00:11:45.470
+work. So you could copy down exactly the
+same recursion tree argument we used for
+
+163
+00:11:45.470 --> 00:11:49.796
+merge short. It would apply equally well
+here. Alternatively, very soon we will
+
+164
+00:11:49.796 --> 00:11:54.290
+cover the master method, and as one very
+special case it will prove that this
+
+165
+00:11:54.290 --> 00:11:59.001
+algorithm, if we can implement it thusly,
+will run in O. Of N. Log in time. Now one
+
+166
+00:11:59.001 --> 00:12:03.504
+thing to realize, is this is a fairly
+ambitious goal, to count up the number of
+
+167
+00:12:03.504 --> 00:12:07.892
+split inversions in linear time. It's not
+that there can't be too many split
+
+168
+00:12:07.892 --> 00:12:12.741
+inversions. There can actually be a lot of
+them. If you have an array where the first
+
+169
+00:12:12.741 --> 00:12:17.314
+half of the array contains the numbers N
+over two plus one, up to N. Whereas the
+
+170
+00:12:17.314 --> 00:12:21.890
+second part of the array contains the
+numbers one up to N over two, that has a
+
+171
+00:12:21.890 --> 00:12:26.525
+quadratic number of inversions, all of
+which are split. So, what we're attempting
+
+172
+00:12:26.525 --> 00:12:31.335
+to do here is count up a quadratic number
+of things using only linear time. Can it
+
+173
+00:12:31.335 --> 00:12:34.680
+really be done? Yes is can, as we'll see
+in the next video.
