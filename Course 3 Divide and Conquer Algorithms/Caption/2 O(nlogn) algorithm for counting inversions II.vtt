@@ -1,0 +1,1487 @@
+WEBVTT
+
+1
+00:00:00.770 --> 00:00:02.280
+So far we've developed a divide and
+
+2
+00:00:02.280 --> 00:00:04.730
+conquer approach to count the number
+of inversions of an array.
+
+3
+00:00:04.730 --> 00:00:06.810
+So we're going to split
+the array in two parts,
+
+4
+00:00:06.810 --> 00:00:09.220
+recursively count inversions on the left,
+on the right.
+
+5
+00:00:09.220 --> 00:00:12.280
+We've identified the key challenge
+is counting the number of split
+
+6
+00:00:12.280 --> 00:00:13.570
+inversions quickly.
+
+7
+00:00:13.570 --> 00:00:17.210
+Where a split inversion means that
+the earlier indexes on the left half of
+
+8
+00:00:17.210 --> 00:00:19.880
+the array, the second index is
+on the right half of the array.
+
+9
+00:00:19.880 --> 00:00:23.345
+These are precisely inversions that
+are going to be missed by both
+
+10
+00:00:23.345 --> 00:00:25.010
+of our recursive calls.
+
+11
+00:00:25.010 --> 00:00:28.460
+And the cracks or the problem is that
+there might be as many as quadratics but
+
+12
+00:00:28.460 --> 00:00:29.430
+conversions.
+
+13
+00:00:29.430 --> 00:00:30.920
+It somehow they go the run time they want.
+
+14
+00:00:30.920 --> 00:00:32.380
+We need to do it in a linear time.
+
+15
+00:00:32.380 --> 00:00:35.970
+So, here is the really nice idea
+which is going to let us do that.
+
+16
+00:00:35.970 --> 00:00:39.440
+The idea is to piggy back on merge sort.
+
+17
+00:00:39.440 --> 00:00:42.820
+By which I mean we're actually going to
+demand a bit more of our recursive calls
+
+18
+00:00:42.820 --> 00:00:46.190
+to make the job of counting the number
+of split recursions easier.
+
+19
+00:00:46.190 --> 00:00:48.800
+This is analogous to when you're
+doing a proof by induction,
+
+20
+00:00:48.800 --> 00:00:51.580
+sometimes making the inductive
+hypothesis stronger,
+
+21
+00:00:51.580 --> 00:00:54.130
+that's what lets you push
+through the inductive proof.
+
+22
+00:00:54.130 --> 00:00:58.280
+So we're going to ask our recursive calls
+to not only count inversions in the array
+
+23
+00:00:58.280 --> 00:01:02.110
+that they're passed, but
+also along the way to sort the array.
+
+24
+00:01:02.110 --> 00:01:03.290
+And hey, why not?
+
+25
+00:01:03.290 --> 00:01:04.580
+We know sorting is fast.
+
+26
+00:01:04.580 --> 00:01:05.970
+Merge sort will do it in n log in time,
+
+27
+00:01:05.970 --> 00:01:09.330
+which is the run time we're shooting for,
+so why not just throw that in?
+
+28
+00:01:09.330 --> 00:01:13.010
+Maybe it'll help us in the combined step,
+and as we'll see, it will.
+
+29
+00:01:13.010 --> 00:01:16.510
+So, what is this bias,
+why should we demand more recursive calls?
+
+30
+00:01:16.510 --> 00:01:20.000
+Well, as we'll see in a couple of slides,
+the merge subroutine
+
+31
+00:01:20.000 --> 00:01:23.610
+almost seem designed just to count
+the number of split inversions.
+
+32
+00:01:23.610 --> 00:01:26.410
+As we'll see,
+as you merge two sorted sub arrays,
+
+33
+00:01:26.410 --> 00:01:29.310
+you will naturally uncover,
+all of the split inversions.
+
+34
+00:01:30.560 --> 00:01:33.550
+So, let me just be a little bit more
+clear about how our previous high level
+
+35
+00:01:33.550 --> 00:01:38.580
+algorithm is going to now be souped up so
+that the recursive calls sort, as well.
+
+36
+00:01:38.580 --> 00:01:41.780
+So, here is the high level algorithm we
+proposed before where we just recursively
+
+37
+00:01:41.780 --> 00:01:43.870
+counted versions on the left side,
+on the right side.
+
+38
+00:01:43.870 --> 00:01:48.020
+And then, we have some currently
+unimplemented subroutine counts splint if
+
+39
+00:01:48.020 --> 00:01:51.030
+which is responsible for
+counting the number of split inversions.
+
+40
+00:01:51.030 --> 00:01:53.200
+So we're just going to
+augment this as follows so
+
+41
+00:01:53.200 --> 00:01:56.780
+instead of being called count now
+we're going to call it sort and count.
+
+42
+00:01:56.780 --> 00:01:59.310
+That's going to be
+the name of our algorithm.
+
+43
+00:01:59.310 --> 00:02:02.610
+The recursive calls, again,
+just invoke sort and count.
+
+44
+00:02:02.610 --> 00:02:06.430
+And so now we know each of those will not
+only count the number of inversions in sub
+
+45
+00:02:06.430 --> 00:02:09.640
+array, but also return a sorted version.
+
+46
+00:02:09.640 --> 00:02:13.650
+So, out from the first one we're going to
+get arrayed B back which is the sorted
+
+47
+00:02:13.650 --> 00:02:17.230
+version of the array that we past it and
+we got the sorted array C back from
+
+48
+00:02:17.230 --> 00:02:21.070
+the second recursive call or sort of
+version of the array that we past it.
+
+49
+00:02:21.070 --> 00:02:25.440
+And now, the counts split inversions now,
+in addition to count and split inversions
+
+50
+00:02:25.440 --> 00:02:30.590
+is responsible for merging the two
+sort of subarrays, B and C.
+
+51
+00:02:30.590 --> 00:02:33.590
+So CountSplitInv will be responsible for
+
+52
+00:02:33.590 --> 00:02:37.660
+outputting an array D, which is a sorted
+version of the original input array A.
+
+53
+00:02:37.660 --> 00:02:42.080
+And so I should also rename our
+unimplemented subroutine to reflect its
+
+54
+00:02:42.080 --> 00:02:44.620
+now more ambitious agenda.
+
+55
+00:02:44.620 --> 00:02:50.000
+So we'll call this mergeAndCountSplitInv.
+
+56
+00:02:51.230 --> 00:02:54.460
+Now, we shouldn't be intimidated by
+asking our combining subroutine to
+
+57
+00:02:54.460 --> 00:02:57.480
+merge the two sorted subarrays B and
+C, because we've already seen,
+
+58
+00:02:57.480 --> 00:02:59.230
+we know how to do that in linear time.
+
+59
+00:02:59.230 --> 00:03:01.480
+So the question is just,
+piggybacking on that worth,
+
+60
+00:03:01.480 --> 00:03:06.660
+can we also count the number of split
+inversions in an additional linear time?
+
+61
+00:03:06.660 --> 00:03:08.619
+We'll see that we can,
+although that's certainly not obvious.
+
+62
+00:03:10.260 --> 00:03:13.149
+So you should again at this point have
+the question why are we doing this?
+
+63
+00:03:13.149 --> 00:03:15.640
+Why are we just making
+ourselves do more work?
+
+64
+00:03:15.640 --> 00:03:19.587
+And again the hope is that the payoff is
+somehow counting split inversions becomes
+
+65
+00:03:19.587 --> 00:03:23.378
+easier by asking our recursive calls to
+give some additional work of sorting.
+
+66
+00:03:23.378 --> 00:03:26.500
+So to develop some intuition for
+why that's true.
+
+67
+00:03:26.500 --> 00:03:31.060
+Why merging naturally uncovers
+the number of splits inversions.
+
+68
+00:03:31.060 --> 00:03:33.740
+Let's recall with just the definition
+of the original merge subroutine from
+
+69
+00:03:33.740 --> 00:03:35.330
+merge sort was.
+
+70
+00:03:35.330 --> 00:03:37.540
+So here's the same pseudocode we
+went through several videos ago.
+
+71
+00:03:37.540 --> 00:03:40.380
+I have renamed the letters of
+the arrays to be consistent with
+
+72
+00:03:40.380 --> 00:03:41.750
+the current notation.
+
+73
+00:03:41.750 --> 00:03:44.150
+So we're given two sorted subarrays.
+
+74
+00:03:44.150 --> 00:03:45.500
+These come back from a recursive calls.
+
+75
+00:03:45.500 --> 00:03:46.600
+I'm calling them B and C.
+
+76
+00:03:46.600 --> 00:03:49.390
+They both have length n/2 and
+were responsible for
+
+77
+00:03:49.390 --> 00:03:54.670
+producing the sorted combination of B and
+C so that's an output array D of length n.
+
+78
+00:03:54.670 --> 00:04:00.480
+And again the ideas simple, you just take
+the two sorted sub-arrays B and C and
+
+79
+00:04:00.480 --> 00:04:05.340
+then you take the output array D which
+you're responsible for populating.
+
+80
+00:04:05.340 --> 00:04:11.160
+And using an index k you're going to
+traverse the output D from left to right.
+
+81
+00:04:11.160 --> 00:04:15.690
+That's what this outer form here does and
+you're going to maintain pointers i and
+
+82
+00:04:15.690 --> 00:04:19.150
+j to the sorted sub arrays B and
+C respectively.
+
+83
+00:04:19.150 --> 00:04:22.430
+And, the only observation is that whatever
+the minimum element that you haven't
+
+84
+00:04:22.430 --> 00:04:27.290
+copied over to D yet is, it's got to be
+either the left most element of B that
+
+85
+00:04:27.290 --> 00:04:30.820
+you haven't seen yet or the left most
+element of C that you haven't seen yet.
+
+86
+00:04:30.820 --> 00:04:32.610
+B and C by virtue of being sorted,
+
+87
+00:04:32.610 --> 00:04:37.370
+the minimum element remaining has to be
+the next one available to either B or C.
+
+88
+00:04:37.370 --> 00:04:38.940
+So you just proceed in the obvious way.
+
+89
+00:04:38.940 --> 00:04:41.120
+You compare the two candidates for
+the next ones that copy over.
+
+90
+00:04:41.120 --> 00:04:42.600
+You look at B(i).
+You look at C(j).
+
+91
+00:04:42.600 --> 00:04:44.700
+Whichever one is smaller,
+you copy over, so
+
+92
+00:04:44.700 --> 00:04:47.800
+the first part of the if statement is for
+when B contains the smaller one.
+
+93
+00:04:47.800 --> 00:04:51.440
+The second part of the else statement is
+for when C contains the smaller one, okay?
+
+94
+00:04:51.440 --> 00:04:52.850
+So, that's how merge works.
+
+95
+00:04:52.850 --> 00:04:54.110
+You go down B and C in parallel,
+
+96
+00:04:54.110 --> 00:04:57.960
+populating D in sorted
+order from left to right.
+
+97
+00:04:57.960 --> 00:04:59.480
+Now to get some feel for
+
+98
+00:04:59.480 --> 00:05:02.640
+what on Earth any of this has to do
+with the split inversions of an array,
+
+99
+00:05:02.640 --> 00:05:07.000
+I want you to think about an input array
+A that has the following property.
+
+100
+00:05:07.000 --> 00:05:11.660
+That has the property that there
+are no split inversions whatsoever.
+
+101
+00:05:11.660 --> 00:05:15.850
+So every inversion in this input array A
+is going to be either a left inversion, so
+
+102
+00:05:15.850 --> 00:05:18.840
+both indices are at most n/2,
+or a right end version.
+
+103
+00:05:18.840 --> 00:05:20.850
+So both indexes are strictly
+greater than n/2.
+
+104
+00:05:20.850 --> 00:05:24.019
+Now, the question is,
+given such an array A,
+
+105
+00:05:24.019 --> 00:05:28.895
+once you're merging at this step,
+what do the assorted subarrays B and
+
+106
+00:05:28.895 --> 00:05:32.982
+C look like for an input array
+that has no split inversions?
+
+107
+00:05:37.509 --> 00:05:40.180
+The correct answer is the second one.
+
+108
+00:05:40.180 --> 00:05:43.570
+That if you have an array with no split
+inversions then everything in the first
+
+109
+00:05:43.570 --> 00:05:47.500
+half is less than everything
+in the second half, why?
+
+110
+00:05:47.500 --> 00:05:49.030
+Well, consider the contra-positive.
+
+111
+00:05:49.030 --> 00:05:52.000
+Suppose you had even one element in
+the first half which was bigger than
+
+112
+00:05:52.000 --> 00:05:53.740
+any element in the second half,
+
+113
+00:05:53.740 --> 00:05:57.590
+that pair of elements alone would
+constitute a split inversion, okay?
+
+114
+00:05:57.590 --> 00:06:00.600
+So if you have no split inversions then
+everything on the left is smaller than
+
+115
+00:06:00.600 --> 00:06:03.330
+everything in the right half of the array.
+
+116
+00:06:03.330 --> 00:06:07.950
+Now, more to the point, think about
+the execution of the merge subroutine
+
+117
+00:06:07.950 --> 00:06:10.780
+on an array with this property,
+on an input array A where
+
+118
+00:06:10.780 --> 00:06:14.610
+everything in the left half is less
+than everything in the right half.
+
+119
+00:06:14.610 --> 00:06:15.520
+What is merge going to do?
+
+120
+00:06:15.520 --> 00:06:17.509
+All right,
+just remember it's always looking for
+
+121
+00:06:17.509 --> 00:06:19.775
+whichever is smaller the first
+element of remaining in B or
+
+122
+00:06:19.775 --> 00:06:22.332
+the first element remaining in C and
+that's what it copies over.
+
+123
+00:06:22.332 --> 00:06:25.776
+When everything in B is less than
+everything in C everything in
+
+124
+00:06:25.776 --> 00:06:30.030
+B is going to get copied over in to the
+output array D before C ever gets touched.
+
+125
+00:06:30.030 --> 00:06:34.456
+Okay, so merge has an unusually trivial
+execution on input arrays with no split
+
+126
+00:06:34.456 --> 00:06:38.353
+inversions with zero split inversions
+First it just goes through B and
+
+127
+00:06:38.353 --> 00:06:41.520
+copies it over then it just concatinate C.
+
+128
+00:06:41.520 --> 00:06:44.080
+Okay, there's no interweaving
+between the two.
+
+129
+00:06:44.080 --> 00:06:48.410
+So, no split in versions means nothing it
+copied from C, until it absolutely has to,
+
+130
+00:06:48.410 --> 00:06:50.110
+until B is exhausted.
+
+131
+00:06:50.110 --> 00:06:55.540
+So, this suggests that, perhaps, copying
+elements over from the second sub-array
+
+132
+00:06:55.540 --> 00:07:00.960
+C has something to do with the number of
+split inversions in the original array,
+
+133
+00:07:00.960 --> 00:07:02.380
+and that is in fact the case.
+
+134
+00:07:02.380 --> 00:07:07.480
+So we're going to see a general pattern
+about copies from the second array C
+
+135
+00:07:07.480 --> 00:07:13.380
+through the output array, exposing split
+inversions in the original input array A.
+
+136
+00:07:13.380 --> 00:07:17.560
+So let's look at a more detailed
+example to see what that pattern is.
+
+137
+00:07:17.560 --> 00:07:20.331
+So let's return to the example
+in the previous video,
+
+138
+00:07:20.331 --> 00:07:24.500
+which is an array with six elements,
+ordered 1, 3, 5, 2, 4, 6.
+
+139
+00:07:24.500 --> 00:07:27.910
+So we do our recursive call and in fact,
+the left half of the array is sorted and
+
+140
+00:07:27.910 --> 00:07:30.060
+the right half of the array
+is already sorted.
+
+141
+00:07:30.060 --> 00:07:31.190
+No sorting was going to be done and
+
+142
+00:07:31.190 --> 00:07:34.690
+I'm actually going to get zero
+inversions for both our recursive calls.
+
+143
+00:07:34.690 --> 00:07:39.790
+Remember in this example it turns out all
+of the inversions are split versions.
+
+144
+00:07:39.790 --> 00:07:42.360
+So now let's trace through
+the merge sub routine invoked
+
+145
+00:07:42.360 --> 00:07:44.390
+on these two sorted subarrays.
+
+146
+00:07:44.390 --> 00:07:47.280
+And try to spot a connection with
+the number of split inversions in
+
+147
+00:07:47.280 --> 00:07:49.220
+the original six element array.
+
+148
+00:07:49.220 --> 00:07:51.061
+So we initialize indices i and
+
+149
+00:07:51.061 --> 00:07:55.050
+j to point to the first element
+of each of these subarrays.
+
+150
+00:07:55.050 --> 00:07:59.270
+So this left one is B and
+this right one is C and the output is D.
+
+151
+00:07:59.270 --> 00:08:03.930
+And the first thing we do is
+we copy the 1 over from B into
+
+152
+00:08:03.930 --> 00:08:09.320
+the top of array so 1 goes there and
+we advance this index over to the 3.
+
+153
+00:08:09.320 --> 00:08:11.270
+And here,
+nothing really interesting happens,
+
+154
+00:08:11.270 --> 00:08:14.350
+there's no reason to count
+on this split inversions and
+
+155
+00:08:14.350 --> 00:08:17.520
+indeed the number one is not involved at
+any split inversions, because you want it
+
+156
+00:08:17.520 --> 00:08:21.040
+smaller than all of the other elements and
+it's also in the first index.
+
+157
+00:08:21.040 --> 00:08:23.540
+Things are much more
+interesting when we copy over
+
+158
+00:08:23.540 --> 00:08:26.480
+the element 2 from the second array C.
+
+159
+00:08:26.480 --> 00:08:30.960
+And notice, at this point, we have
+diverged from the trivial execution that
+
+160
+00:08:30.960 --> 00:08:33.790
+we would see with an array
+with no split inversions.
+
+161
+00:08:33.790 --> 00:08:38.250
+Now we're copying over something from
+C before we've exhausted copying B.
+
+162
+00:08:38.250 --> 00:08:41.440
+So we are hoping this will
+expose some split inversions.
+
+163
+00:08:41.440 --> 00:08:46.700
+So we copy over the two and
+we advance the second pointer j into C and
+
+164
+00:08:46.700 --> 00:08:51.310
+the thing to notice is,
+this exposes two split inversions.
+
+165
+00:08:51.310 --> 00:08:54.630
+The two split inversions that
+involve the element two.
+
+166
+00:08:54.630 --> 00:08:59.790
+And those inversions are 3,2 and 5,2.
+
+167
+00:08:59.790 --> 00:09:00.950
+So why did this happen?
+
+168
+00:09:00.950 --> 00:09:04.940
+Well the reason we copied two
+over is because it's smaller than
+
+169
+00:09:04.940 --> 00:09:08.910
+all the elements we haven't yet
+looked at in both B and C.
+
+170
+00:09:08.910 --> 00:09:13.280
+So in particular 2 is smaller than the
+remaining elements in B, the 3 and the 5.
+
+171
+00:09:13.280 --> 00:09:15.000
+But also because B is the left array,
+
+172
+00:09:15.000 --> 00:09:19.270
+the indices of the 3 and the 5 have
+to be less than the index of this 2.
+
+173
+00:09:19.270 --> 00:09:23.100
+So, these are inversions, 2 is further to
+the right in the original input array, and
+
+174
+00:09:23.100 --> 00:09:25.720
+yet it's smaller than these
+remaining elements in B.
+
+175
+00:09:25.720 --> 00:09:27.430
+So, there are two elements remaining in B,
+and
+
+176
+00:09:27.430 --> 00:09:31.990
+those are the two split versions
+that involve the elements two.
+
+177
+00:09:31.990 --> 00:09:34.938
+So, now let's go back to the merging
+subroutines, and what happens next.
+
+178
+00:09:34.938 --> 00:09:38.630
+Well, next we'll make a copy from the
+first array and we sort of realize that
+
+179
+00:09:38.630 --> 00:09:40.940
+nothing really interesting happens
+when we copy it from the first array,
+
+180
+00:09:40.940 --> 00:09:43.380
+at least with respect
+to split in versions.
+
+181
+00:09:43.380 --> 00:09:45.910
+Then we copy the four over, and yet again,
+
+182
+00:09:45.910 --> 00:09:50.560
+we discover a split inversion,
+the remaining one, which is 5,4.
+
+183
+00:09:50.560 --> 00:09:55.470
+Again, the reason is, given that 4 was
+copied over before what's left in B,
+
+184
+00:09:55.470 --> 00:09:58.520
+it's got to be smaller than it, but
+by virtue of being in the rightmost array,
+
+185
+00:09:58.520 --> 00:10:01.670
+it's also not going to have a bigger
+index, so it's gotta be a split inversion.
+
+186
+00:10:01.670 --> 00:10:05.970
+Now the rest of the merge subroutines
+executes without any real incident.
+
+187
+00:10:05.970 --> 00:10:09.530
+Five gets copied over and we know copies
+from the left array are boring and
+
+188
+00:10:09.530 --> 00:10:13.600
+then we copy the six over and copies from
+the right array are generally interesting
+
+189
+00:10:13.600 --> 00:10:15.470
+but not if the left array is empty.
+
+190
+00:10:15.470 --> 00:10:17.440
+That doesn't involve any split versions.
+
+191
+00:10:17.440 --> 00:10:22.180
+And you will recall from the earlier video
+that these were the inversions in your
+
+192
+00:10:22.180 --> 00:10:23.090
+original array, 3252 and 54.
+
+193
+00:10:23.090 --> 00:10:26.230
+We discovered them all on
+an automated method by just
+
+194
+00:10:26.230 --> 00:10:28.930
+keeping an eye out when we
+copy from the right array C.
+
+195
+00:10:30.150 --> 00:10:33.800
+So this is indeed a general principle so
+let me state the general claim.
+
+196
+00:10:33.800 --> 00:10:37.650
+So, the claim is not just in this specific
+example, in this specific execution.
+
+197
+00:10:37.650 --> 00:10:40.600
+But no matter what the inquiry is,
+no matter how many split inversion
+
+198
+00:10:40.600 --> 00:10:44.850
+there might be, the split inversions that
+involve an element of the second half of
+
+199
+00:10:44.850 --> 00:10:49.600
+the array are precisely those
+elements remaining in the first array
+
+200
+00:10:49.600 --> 00:10:52.070
+when that element gets copied
+over to the output array.
+
+201
+00:10:52.070 --> 00:10:55.110
+So this is exactly the pattern
+that we saw in the example.
+
+202
+00:10:55.110 --> 00:11:00.260
+What were, so on the right array C,
+we have the elements two, four and six.
+
+203
+00:11:00.260 --> 00:11:03.040
+Remember every split version has to,
+by definition,
+
+204
+00:11:03.040 --> 00:11:06.190
+involve one element from the first half
+and one element from the second half.
+
+205
+00:11:06.190 --> 00:11:09.130
+So the count for split inversions,
+we can just group them according to
+
+206
+00:11:09.130 --> 00:11:12.880
+which element of the second
+array that they involve.
+
+207
+00:11:12.880 --> 00:11:14.210
+So out of the two four and six,
+
+208
+00:11:14.210 --> 00:11:17.530
+the two is involved in the split up
+inversions three two and five two.
+
+209
+00:11:17.530 --> 00:11:18.260
+The three and
+
+210
+00:11:18.260 --> 00:11:22.220
+the five were exactly the elements
+remaining in B when we copied over two.
+
+211
+00:11:22.220 --> 00:11:26.150
+The split inversions involving four is
+exactly the inversion five, four and
+
+212
+00:11:26.150 --> 00:11:28.740
+five is exactly the element
+that was remaining.
+
+213
+00:11:28.740 --> 00:11:33.113
+In B when we copied over the four, there's
+no split inversions involving six and
+
+214
+00:11:33.113 --> 00:11:38.190
+indeed, the element B was empty when we
+copied the six over in the output array D.
+
+215
+00:11:38.190 --> 00:11:39.600
+So what's the general argument?
+
+216
+00:11:39.600 --> 00:11:41.120
+Well it's quite simple.
+
+217
+00:11:41.120 --> 00:11:42.390
+Let's just zoom in and
+
+218
+00:11:42.390 --> 00:11:46.350
+fixate on a particular element x that
+belongs to that first half of that array.
+
+219
+00:11:46.350 --> 00:11:48.590
+That's amongst the first
+half of the element.
+
+220
+00:11:48.590 --> 00:11:52.580
+And let's just examine which y's, so which
+elements of the second array, the second
+
+221
+00:11:52.580 --> 00:11:56.330
+half of the original input array,
+are involved in split inversions with x.
+
+222
+00:11:56.330 --> 00:11:57.650
+So there are two cases,
+
+223
+00:11:57.650 --> 00:12:03.080
+depending on whether x is copied over into
+the output array D before or after y.
+
+224
+00:12:03.080 --> 00:12:06.020
+Now if x is copied to the output before y,
+well
+
+225
+00:12:06.020 --> 00:12:09.430
+then since the output's in sorted order
+it means x has got to be less than y so
+
+226
+00:12:09.430 --> 00:12:11.870
+there's not going to be
+any split inversion.
+
+227
+00:12:11.870 --> 00:12:15.440
+On the other hand if y is
+copied to the output d before
+
+228
+00:12:15.440 --> 00:12:19.550
+x then again because we populate
+the left to right in sorted order,
+
+229
+00:12:19.550 --> 00:12:22.660
+that's got to mean that y is less than x.
+
+230
+00:12:22.660 --> 00:12:26.810
+Now x is still hanging out in the left
+array so it has a less index than y,
+
+231
+00:12:26.810 --> 00:12:30.580
+y comes from the right array so
+it's not a split inversion.
+
+232
+00:12:30.580 --> 00:12:31.650
+So putting these two together,
+
+233
+00:12:31.650 --> 00:12:36.770
+it says that the elements x of the array
+B that form split inversions with y
+
+234
+00:12:36.770 --> 00:12:40.870
+are precisely those that are going to
+get copied to the output array after y.
+
+235
+00:12:40.870 --> 00:12:44.560
+So those are exactly the number
+of elements remaining in B
+
+236
+00:12:44.560 --> 00:12:46.030
+when y gets copied over.
+
+237
+00:12:46.030 --> 00:12:47.530
+So that proves the general claim.
+
+238
+00:12:48.560 --> 00:12:50.480
+So this slide was really the key insight.
+
+239
+00:12:50.480 --> 00:12:55.040
+Now that we understand exactly why
+counting split inversions is easy,
+
+240
+00:12:55.040 --> 00:12:58.800
+as we're merging together two sorted
+subarrays, it's a simple matter to
+
+241
+00:12:58.800 --> 00:13:02.500
+just translate this into code and
+get a linear time of notation
+
+242
+00:13:02.500 --> 00:13:06.090
+of a sub routine that both emerges and
+counts the number of split inversions.
+
+243
+00:13:06.090 --> 00:13:09.790
+Which then in the overall course of the
+algorithm we'll have n log n running time
+
+244
+00:13:09.790 --> 00:13:11.250
+just as in merge sort.
+
+245
+00:13:11.250 --> 00:13:13.990
+So, let's just spend a quick
+minute filling in those details.
+
+246
+00:13:13.990 --> 00:13:16.000
+So, I'm not going to
+write up the pseudo code.
+
+247
+00:13:16.000 --> 00:13:19.740
+I'm just going to write what you need
+to augment the merge pseudo code
+
+248
+00:13:19.740 --> 00:13:22.640
+discussed a few slides ago by in order to
+
+249
+00:13:22.640 --> 00:13:24.450
+count split inversion as
+you're doing the merging.
+
+250
+00:13:24.450 --> 00:13:28.360
+And this will follow immediately from
+the previous plan which indicated
+
+251
+00:13:28.360 --> 00:13:32.730
+how split version relate to the number
+of elements remaining in the left array
+
+252
+00:13:32.730 --> 00:13:34.090
+as you're doing the merge.
+
+253
+00:13:34.090 --> 00:13:37.080
+So the idea is the natural one,
+as you're doing the merging,
+
+254
+00:13:37.080 --> 00:13:40.020
+according to the previous pseudo code,
+of the two sorted subarrays you
+
+255
+00:13:40.020 --> 00:13:43.480
+just keep a running total of the number
+of split inversions that you encounter.
+
+256
+00:13:43.480 --> 00:13:48.420
+And so you've got your sorted subarray B,
+you've got your sorted subarray C.
+
+257
+00:13:48.420 --> 00:13:51.510
+You're merging these into
+an output array D, and
+
+258
+00:13:51.510 --> 00:13:55.650
+as you traverse through D and k goes from
+1 to n, you just start out at zero and
+
+259
+00:13:55.650 --> 00:13:59.580
+increment it by something each time
+you copy over from either B or C.
+
+260
+00:13:59.580 --> 00:14:00.540
+So, what's the increment?
+
+261
+00:14:00.540 --> 00:14:04.670
+Well, what did we just see,
+we saw the copies involving B don't count,
+
+262
+00:14:04.670 --> 00:14:07.140
+we're not going to look at split
+inversions when to copy over from B,
+
+263
+00:14:07.140 --> 00:14:08.900
+only when we look at them from C, right?
+
+264
+00:14:08.900 --> 00:14:11.940
+Every split inversion involves exactly
+one element from each of B and C.
+
+265
+00:14:11.940 --> 00:14:15.500
+So, I may as well count them
+via the elements in C and
+
+266
+00:14:15.500 --> 00:14:17.960
+how many split inversions are involved
+with the given element of C,
+
+267
+00:14:17.960 --> 00:14:21.580
+well it's exactly how many elements
+of B remain when it gets copied over.
+
+268
+00:14:21.580 --> 00:14:23.860
+So, that tells us how to
+increment this running count.
+
+269
+00:14:23.860 --> 00:14:27.900
+And, it follows immediately from
+the claim on the previous slide that this
+
+270
+00:14:27.900 --> 00:14:31.120
+implementation of this running
+total counts precisely the number
+
+271
+00:14:31.120 --> 00:14:35.650
+of split inversions that the original
+input array A possesses.
+
+272
+00:14:35.650 --> 00:14:38.300
+And we'll call that the left inversions
+are counted by the first recursive
+
+273
+00:14:38.300 --> 00:14:41.240
+call of the right inversions are counted
+by the second recursive call.
+
+274
+00:14:41.240 --> 00:14:43.935
+Every inversion is either at left or
+right or
+
+275
+00:14:43.935 --> 00:14:46.570
+splitt that's exactly one
+of those three types.
+
+276
+00:14:46.570 --> 00:14:50.700
+So, with our three different subroutines,
+the two recursive ones and this one here,
+
+277
+00:14:50.700 --> 00:14:54.150
+we successfully count of all the
+inversions of the original input array.
+
+278
+00:14:54.150 --> 00:14:55.780
+So that's the correctness
+of the algorithm.
+
+279
+00:14:55.780 --> 00:14:56.990
+What's the running time?
+
+280
+00:14:56.990 --> 00:15:00.880
+We'll recall in mergesort, we began just
+by analyzing the running time of merge and
+
+281
+00:15:00.880 --> 00:15:03.600
+then we discussed the running time
+of the entire mergesort algorithm.
+
+282
+00:15:03.600 --> 00:15:05.690
+Let's do the same thing here briefly.
+
+283
+00:15:05.690 --> 00:15:09.020
+So what's the running time of
+the subroutine for this merging and
+
+284
+00:15:09.020 --> 00:15:11.670
+simultaneously counting
+the number of split inversions?
+
+285
+00:15:11.670 --> 00:15:13.480
+Well there's the work that
+we do in the merging, and
+
+286
+00:15:13.480 --> 00:15:15.120
+we already know that that's linear.
+
+287
+00:15:15.120 --> 00:15:18.738
+And then the only additional work here
+is incrementing this running count,
+
+288
+00:15:18.738 --> 00:15:21.463
+and that's constant time for
+each element of D, right?
+
+289
+00:15:21.463 --> 00:15:25.360
+Each time we do a copy over we do some
+single addition to our running count.
+
+290
+00:15:25.360 --> 00:15:28.990
+So constant time for element of D,
+or linear time over all.
+
+291
+00:15:28.990 --> 00:15:30.300
+So, I'm being a little sloppy here.
+
+292
+00:15:30.300 --> 00:15:32.490
+Sloppy in a very conventional way but
+
+293
+00:15:32.490 --> 00:15:35.870
+it is a little sloppy by
+writing O(n) + O(n) = O(n).
+
+294
+00:15:35.870 --> 00:15:37.900
+Be careful when you make
+statements like that.
+
+295
+00:15:37.900 --> 00:15:41.170
+Right, so, if you added O(n) to
+itself n times, it would not be O(n),
+
+296
+00:15:41.170 --> 00:15:45.490
+but if you add O(n) to itself a constant
+number of times, it is still O(n).
+
+297
+00:15:45.490 --> 00:15:46.540
+So you might, as an exercise,
+
+298
+00:15:46.540 --> 00:15:49.090
+want to write out a formal
+version of what this means.
+
+299
+00:15:49.090 --> 00:15:53.770
+Basically there's some constant c1 so that
+the merge steps takes at most c1 n steps.
+
+300
+00:15:53.770 --> 00:15:57.780
+There's a constant c2 so that the rest
+of the work is at most c2 times n steps.
+
+301
+00:15:57.780 --> 00:16:02.220
+So when you add them, we get it's at
+most quantity c1 plus c2 times n steps,
+
+302
+00:16:02.220 --> 00:16:06.740
+which is still big O(n),
+because c1 plus c2 Is a constant, okay?
+
+303
+00:16:06.740 --> 00:16:09.497
+So, linear work for merge,
+linear work for the running count, so
+
+304
+00:16:09.497 --> 00:16:11.710
+does linear work in
+the subroutine overall.
+
+305
+00:16:11.710 --> 00:16:13.710
+And now, by exactly the same argument,
+
+306
+00:16:13.710 --> 00:16:17.780
+we'll use in merge sort because we have
+two reversing calls in half the size.
+
+307
+00:16:17.780 --> 00:16:20.240
+And with your linear work
+outside the recursive calls,
+
+308
+00:16:20.240 --> 00:16:22.160
+the overall running time is O(n) log n.
+
+309
+00:16:22.160 --> 00:16:24.828
+So, it really just piggybacked
+on merge sort upped to
+
+310
+00:16:24.828 --> 00:16:28.268
+the constant factor a little bit to
+do the counting along the way, but
+
+311
+00:16:28.268 --> 00:16:30.603
+the running time remains
+the big O(n log n).
