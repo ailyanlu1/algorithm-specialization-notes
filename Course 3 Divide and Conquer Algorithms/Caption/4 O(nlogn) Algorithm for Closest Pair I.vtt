@@ -1,0 +1,2310 @@
+WEBVTT
+
+1
+00:00:00.012 --> 00:00:03.350
+So in this video and the next, we're going
+to study a very cool divide and conquer
+
+2
+00:00:03.362 --> 00:00:06.835
+algorithm for the closest pair problem.
+this is a problem where you're given n
+
+3
+00:00:06.847 --> 00:00:10.230
+points in the plane and you want to figure
+out which pair of points are closest to
+
+4
+00:00:10.242 --> 00:00:13.240
+each other. So this would be the first
+taste we get of an application in
+
+5
+00:00:13.252 --> 00:00:17.229
+computational geometry, which is the part
+of algorithms which studies how to reason
+
+6
+00:00:17.241 --> 00:00:21.251
+and manipulate geometric objects. So those
+algorithms are important in, among other
+
+7
+00:00:21.263 --> 00:00:25.424
+areas robotics, computer vision and
+computer graphics. So this is relatively
+
+8
+00:00:25.436 --> 00:00:29.013
+advanced material, it's a bit more
+difficult than the other applications of
+
+9
+00:00:29.025 --> 00:00:32.881
+divide and conquer that we've seen. The
+algorithm's a little bit tricky and it has
+
+10
+00:00:32.893 --> 00:00:36.596
+a quite nontrivial proof of correctness,
+so just be ready for that and also be
+
+11
+00:00:36.608 --> 00:00:41.073
+warned that because it's more advanced I'm
+going to talk about the material in at a
+
+12
+00:00:41.085 --> 00:00:44.797
+slightly faster pace tha I do in most of
+the other videos. So let's begin now by
+
+13
+00:00:44.809 --> 00:00:48.279
+defining the problem formally, so we're
+given as imput endpoints in the plane, so
+
+14
+00:00:48.291 --> 00:00:51.811
+each one just define by its x coordinate
+and ist y coordinate. And when we talk
+
+15
+00:00:51.823 --> 00:00:54.988
+about the distance between two points in
+this problem, we're going to focus on
+
+16
+00:00:55.000 --> 00:00:58.378
+Euclidean distance. So, let me remind you
+what that is briefly, but we're going to
+
+17
+00:00:58.390 --> 00:01:01.651
+introduce some simple notation for that,
+which we'll use for the rest of the
+
+18
+00:01:01.663 --> 00:01:05.532
+lecture. So we're just going to note the
+Euclidean distance between two points, pi
+
+19
+00:01:05.544 --> 00:01:09.368
+and pj, by d of pi pj. So in terms of the
+x and y coordinates of these two points,
+
+20
+00:01:09.458 --> 00:01:13.528
+we just look at the squared differences in
+each coordinate, sum them up, and take the
+
+21
+00:01:13.540 --> 00:01:17.342
+square root. And now as the name of the
+problem would suggest, the goal is to
+
+22
+00:01:17.354 --> 00:01:20.900
+identify among all pairs of points that
+pair which has the smallest distance
+
+23
+00:01:20.900 --> 00:01:23.860
+between them.
+Next, let's start getting a feel for the
+
+24
+00:01:23.872 --> 00:01:27.479
+problem by making some preliminary
+observations. First, I want to make an
+
+25
+00:01:27.491 --> 00:01:31.497
+assumption purely for convenience that
+there's no ties. So that is I'm going to
+
+26
+00:01:31.509 --> 00:01:35.436
+assume all endpoints have distinct x
+coordinat es, and also all endpoints have
+
+27
+00:01:35.448 --> 00:01:38.909
+distinct y coordinates.
+It's not difficult to extend the algorithm
+
+28
+00:01:38.921 --> 00:01:42.648
+to accommodate ties. I'll leave it to you
+to think about how to do that. So next,
+
+29
+00:01:42.660 --> 00:01:46.364
+let's draw some parallels with the problem
+of counting inversions, which was a
+
+30
+00:01:46.376 --> 00:01:50.029
+earlier application of divide and conquer
+that we saw. The first parallel I want,
+
+31
+00:01:50.168 --> 00:01:54.280
+want to out is that, if we're comfortable
+with the quadratic time algorithm, then
+
+32
+00:01:54.292 --> 00:01:57.930
+this is not a hard problem, we can simply
+solve this by brute-force search. And
+
+33
+00:01:57.942 --> 00:02:01.355
+again, by brute-force search, I just mean
+we set up a double for loop, which
+
+34
+00:02:01.367 --> 00:02:04.955
+iterates over all distinct pairs of
+points. We compute the distance for each
+
+35
+00:02:04.967 --> 00:02:08.880
+such pair and we remember the smallest.
+That's clearly a correct algorithm, it has
+
+36
+00:02:08.892 --> 00:02:12.964
+to iterate over a quadratic number of
+pairs, so its running time is going to be
+
+37
+00:02:13.191 --> 00:02:17.314
+theta of n squared. And, as always, the
+question is can we apply some algorithmic
+
+38
+00:02:17.326 --> 00:02:21.344
+ingenuity to do better? Can we have a
+better algorithm than this naive one which
+
+39
+00:02:21.356 --> 00:02:25.264
+iterates over all pairs of points? You
+might have a, an initial instinct that
+
+40
+00:02:25.276 --> 00:02:29.167
+because the problem asks about a quadratic
+number of different objects, perhaps we
+
+41
+00:02:29.179 --> 00:02:32.589
+fundamentally need to do quadratic work.
+But again, recall back in counting
+
+42
+00:02:32.601 --> 00:02:36.278
+inversions, using divide and conquer, we
+were able to get an n log n algorithm
+
+43
+00:02:36.363 --> 00:02:40.316
+despite the fact that there might be as
+many as a quadratic number of inversions
+
+44
+00:02:40.328 --> 00:02:44.330
+in an array. So the question is, can we do
+something similar here for the closest
+
+45
+00:02:44.342 --> 00:02:47.941
+pair problem? Now, one of the keys to
+getting an n log n time algorithm for
+
+46
+00:02:47.953 --> 00:02:51.722
+counting inversions was to leverage a
+sorting subroutine. Recall that we
+
+47
+00:02:51.734 --> 00:02:55.790
+piggybacked on merge sort to count the
+number of inversions in n log n time. So
+
+48
+00:02:55.802 --> 00:02:59.874
+the question is, here, with the closest
+pair problem, perhaps, sorting again can
+
+49
+00:02:59.886 --> 00:03:03.342
+be useful in some way to beat the
+quadratic barrier. So, to develop some
+
+50
+00:03:03.354 --> 00:03:07.278
+evidence that sorting will indeed help us
+compute the closest pair of points
+
+51
+00:03:07.290 --> 00:03:11.239
+embedded in quadratic time, let's look at
+a special case of the problem, really, an
+
+52
+00:03:11.251 --> 00:03:15.123
+easier version of t he problem, which is
+when the points are just in one dimension,
+
+53
+00:03:15.212 --> 00:03:18.654
+so on the line rather that in two
+dimensions in the plane. So in the 1D
+
+54
+00:03:18.666 --> 00:03:23.277
+version, all the points just lie on a line
+like this one, and we're given the points
+
+55
+00:03:23.289 --> 00:03:27.753
+in some arbitrary order not necessarily in
+sorted order. So, a way to solve the
+
+56
+00:03:27.765 --> 00:03:32.204
+closest pair problem in one dimension, is
+to simply sort the points, and then of
+
+57
+00:03:32.216 --> 00:03:36.300
+course, the closest pair better be
+adjacent in this ordering, so you just
+
+58
+00:03:36.312 --> 00:03:40.665
+iterate through the n minus 1 consecutive
+pairs and see which one is closest to each
+
+59
+00:03:40.677 --> 00:03:44.385
+other So, more formally, here's how you
+solve the one-dimensional version of the
+
+60
+00:03:44.397 --> 00:03:47.785
+problem. You sort the points according to
+their only coordinate, because you're
+
+61
+00:03:47.797 --> 00:03:51.510
+going to remember, this is one dimension.
+So as we've seen, using merge sort, we can
+
+62
+00:03:51.522 --> 00:03:55.335
+sort the points in n log n time and then
+we just do a scan through the points, so
+
+63
+00:03:55.347 --> 00:03:58.685
+this takes linear time. And for each
+consecutive pair, we compute their
+
+64
+00:03:58.697 --> 00:04:02.310
+distance and we remember the smallest of
+those consecutive pairs and we return
+
+65
+00:04:02.322 --> 00:04:06.078
+that. That's gotta be the closest pair.
+So, in this picture here on the right, I'm
+
+66
+00:04:06.090 --> 00:04:09.334
+just going to circle here in green the
+closest pair of points. So this is
+
+67
+00:04:09.346 --> 00:04:12.862
+something we discover by sorting and then
+doing a linear scan. Now, needless to say,
+
+68
+00:04:12.945 --> 00:04:16.440
+this isn't directly useful, this is not
+the problem I started out with. We wanted
+
+69
+00:04:16.452 --> 00:04:19.600
+to find out the closest pair among of
+points in the plane not points in the
+
+70
+00:04:19.612 --> 00:04:23.044
+line. But, I want to point out that, this,
+even in the line, there are a quadratic
+
+71
+00:04:23.056 --> 00:04:26.915
+number of different pairs, so brute-force
+search is still a quadratic time algorythm
+
+72
+00:04:27.422 --> 00:04:31.690
+even in the 1D case. So at least, with one
+dimension, we can use sorting, piggyback
+
+73
+00:04:31.702 --> 00:04:35.704
+on it, to beat the naive brute-force
+search bound and solve the problem in n
+
+74
+00:04:35.716 --> 00:04:39.635
+log n time. So our goal for this lecture
+is going to be to devise an equally good
+
+75
+00:04:39.647 --> 00:04:43.761
+algorithm for the two-dimensional case, so
+we want to solve closest pair of points in
+
+76
+00:04:43.773 --> 00:04:47.558
+the plane, again, in n log n, n time.
+So we will succeed in this goal. I'm going
+
+77
+00:04:47.558 --> 00:04:51.136
+to show you an n log n time algo rithm for
+2D closest pair. It's going to take us a
+
+78
+00:04:51.148 --> 00:04:54.779
+couple steps. So let me begin with a high
+level approach. Alright. So the first I
+
+79
+00:04:54.791 --> 00:04:58.374
+need to try is just to copy what worked
+for us in the one-dimensional case. So the
+
+80
+00:04:58.555 --> 00:05:02.134
+one-dimensional case, we first sorted the
+points by their coordinate and that was
+
+81
+00:05:02.146 --> 00:05:06.017
+really useful. Now, in the 2D case, points
+have two coordinates, x coordinates and y
+
+82
+00:05:06.029 --> 00:05:09.610
+coordinates, so there's two ways to sort
+them. So let's just sort them both ways,
+
+83
+00:05:10.102 --> 00:05:13.612
+that is, the first step of our algorithm,
+which you should really think of as a
+
+84
+00:05:13.624 --> 00:05:17.082
+preprocessing step. We're going to take
+the input points. We invoke merge sort
+
+85
+00:05:17.094 --> 00:05:20.385
+once to sort them according to x
+coordinate, that's one copy of the points.
+
+86
+00:05:20.470 --> 00:05:24.039
+And then we make a second copy of the
+points where they're sorted by y
+
+87
+00:05:24.051 --> 00:05:27.754
+coordinates. So we're going to call those
+copies of points px, that's an array of
+
+88
+00:05:27.766 --> 00:05:31.646
+the points sorted by x coordinate, and py
+for them sorted by y coordinate. Now, we
+
+89
+00:05:31.658 --> 00:05:35.513
+know merge short takes n log n times, so
+this preprocessing step only takes o of n
+
+90
+00:05:35.525 --> 00:05:39.228
+log n time. And again, given that we're
+shooting for an algorithm with running
+
+91
+00:05:39.240 --> 00:05:42.953
+time big O of n log n, why not sort the
+points? We don't even know how we're going
+
+92
+00:05:42.953 --> 00:05:46.660
+to use this fact right now, but it's sort
+of harmless. It's not going to effect our
+
+93
+00:05:46.672 --> 00:05:50.610
+goal of getting a big of O n log n time
+algorithm. And indeed, this illustrates a
+
+94
+00:05:50.622 --> 00:05:54.410
+broader point, which is one of the themes
+of this course. So recall, I hope one of
+
+95
+00:05:54.422 --> 00:05:57.985
+the things you take away from this course
+is a sense for what are the four free
+
+96
+00:05:57.997 --> 00:06:01.771
+primitives, what are manipulations or
+operations you can do on data which
+
+97
+00:06:01.783 --> 00:06:05.273
+basically are costless. Meaning that if
+your data set fits in the main memory of
+
+98
+00:06:05.285 --> 00:06:08.750
+your computer, you can basically invoke
+the primitive and it's just going to run
+
+99
+00:06:08.762 --> 00:06:12.139
+blazingly fast, and you can just do it
+even if you don't know why. And again,
+
+100
+00:06:12.223 --> 00:06:15.450
+sorting is the canonical for free
+primitive, although, we'll see some more
+
+101
+00:06:15.462 --> 00:06:18.953
+later in the course and so, here, we're
+using exactly that principle.
+
+102
+00:06:18.962 --> 00:06:22.689
+So we don't even understand why yet we
+might wa nt the points to be sorted. It
+
+103
+00:06:22.701 --> 00:06:27.066
+just seems like it's probably going to be
+useful, motivated by the 1D case, so let's
+
+104
+00:06:27.078 --> 00:06:31.085
+go ahead and make assorted copies of the
+points by x and y coordinate upfront. So
+
+105
+00:06:31.097 --> 00:06:35.438
+reasoning by analogy with the 1D suggests
+that sorting the points might be useful,
+
+106
+00:06:35.526 --> 00:06:39.228
+but we can't carry this analogy too far.
+So in particular, we're not going to be
+
+107
+00:06:39.240 --> 00:06:43.147
+able to get away with just a simple linear
+scan through these arrays to identify the
+
+108
+00:06:43.159 --> 00:06:47.156
+closest pair of points. So, to see that,
+consider the following example.
+
+109
+00:06:47.168 --> 00:06:51.424
+So we're going to look at a point set
+which has six points. There's going to be
+
+110
+00:06:51.436 --> 00:06:56.120
+two points, which I'll put in blue which
+are very close in x coordinate, but very
+
+111
+00:06:56.132 --> 00:07:00.829
+far away in y coordinate. And then there's
+going to be another pair of points which
+
+112
+00:07:00.841 --> 00:07:05.210
+I'll do in green, which are very close in
+y coordinate, but very far away in x
+
+113
+00:07:05.222 --> 00:07:09.463
+coordinate. And then there's going to be a
+red pair of points, which are not too far
+
+114
+00:07:09.475 --> 00:07:13.423
+away in either the x coordinate or the y
+coordinate. So in this set of six points,
+
+115
+00:07:13.514 --> 00:07:17.142
+the closest pair is the pair of red
+points. They're not even going to show up
+
+116
+00:07:17.154 --> 00:07:21.027
+consecutively on either of the two arrays,
+right? So in the array that's sorted by x
+
+117
+00:07:21.039 --> 00:07:24.829
+coordinate, this blue point here is going
+to be wedged in between the two red
+
+118
+00:07:24.841 --> 00:07:28.893
+points, they won't be consecutive. And
+similarly in the, in py, which is sort of
+
+119
+00:07:28.905 --> 00:07:32.724
+by y coordinate, this green coordinate is
+going to be wedged between the two red
+
+120
+00:07:32.736 --> 00:07:37.026
+points. So you won't even notice these red
+point if you just do a linear scan if your
+
+121
+00:07:37.038 --> 00:07:40.238
+px and py, or py look at the consecutive
+pairs of points. So, following our
+
+122
+00:07:40.250 --> 00:07:44.323
+preprocessing step where we just invert,
+invoke merge sort twice we're going to do
+
+123
+00:07:44.335 --> 00:07:48.289
+a quite nontrivial divide and conquer
+algorithm to compute the closest pair. So
+
+124
+00:07:48.301 --> 00:07:52.227
+really, in this algorithm, we're applying
+the divide and conquer algorithm twice.
+
+125
+00:07:52.316 --> 00:07:56.111
+First, internal to the sorting subroutine,
+assuming that we use the merge sort
+
+126
+00:07:56.123 --> 00:08:00.045
+algorithm to sort. Divide and conquer is
+being used there to get an n log n running
+
+127
+00:08:00.057 --> 00:08:04.058
+time in this preprocessing step, and the
+n, we're going to use it again on sorted
+
+128
+00:08:04.070 --> 00:08:07.760
+arrays in a new way and that's what I'm
+going to tell you about next. So let's
+
+129
+00:08:07.772 --> 00:08:11.685
+just briefly review the divide and conquer
+algorithm design paradigm before we apply
+
+130
+00:08:11.697 --> 00:08:15.335
+it to the closest pair problem. So, as
+usual, the first step is to figure out a
+
+131
+00:08:15.347 --> 00:08:18.760
+way to divide your problem into smaller
+subproblems. Sometimes this has a
+
+132
+00:08:18.772 --> 00:08:22.375
+reasonable amount of ingenuity, but it's
+not going to. Here in the closest pair
+
+133
+00:08:22.387 --> 00:08:25.438
+problem, we're going to proceed exactly as
+we did in the merge sort and counting
+
+134
+00:08:25.450 --> 00:08:28.652
+inversions problems, where we took the
+array and broke it into its left and right
+
+135
+00:08:28.664 --> 00:08:31.748
+half. So here, we're going to take the
+input point set, and again, just recurse
+
+136
+00:08:31.760 --> 00:08:34.693
+on the left half of the points, and
+recurse on the right half of the points.
+
+137
+00:08:34.772 --> 00:08:37.936
+So here, by left and right, I mean with
+respect to the points x coordinates.
+
+138
+00:08:38.017 --> 00:08:41.529
+There's pretty much never any ingenuity in
+the conquer step, that just means you take
+
+139
+00:08:41.541 --> 00:08:44.406
+the sub-problems you identified in the
+first step, and you solve them
+
+140
+00:08:44.418 --> 00:08:47.723
+recursively. That's what we'll do here,
+we'll recursively complete the closest
+
+141
+00:08:47.735 --> 00:08:51.058
+pair in the left half of the points, and
+the closest pair in the right half of the
+
+142
+00:08:51.070 --> 00:08:54.517
+points. So where all the creativity in
+divide and conquer algorithms is in the
+
+143
+00:08:54.529 --> 00:08:58.208
+combined step. Given the solutions to your
+sub problems, how do you somehow recover a
+
+144
+00:08:58.220 --> 00:09:01.598
+solution to the original problem? The one
+that you actually care about. So for
+
+145
+00:09:01.819 --> 00:09:05.310
+closest pair, the questionis going to be,
+given that you've computed the closest
+
+146
+00:09:05.322 --> 00:09:08.775
+pair on the left half of the points, and
+the closest pair on the right half of the
+
+147
+00:09:08.787 --> 00:09:12.383
+points, how do you then quickly recover
+the closest pair for the whole point set?
+
+148
+00:09:12.392 --> 00:09:15.800
+That's a tricky problem, that's what we're
+going to spend most of our time on. So
+
+149
+00:09:15.812 --> 00:09:18.870
+let's make this divide and conquer
+approach for closest pair a little bit
+
+150
+00:09:18.882 --> 00:09:22.325
+more precise, so let's now actually start
+spelling out our closest pair algorithm.
+
+151
+00:09:22.407 --> 00:09:26.240
+The input we're given, it's, this follows
+the preprocessing steps or recall that we
+
+152
+00:09:26.252 --> 00:09:30.626
+invoke, merge sort, we get our two sorted
+copies of the poin t set Px, sorted by x
+
+153
+00:09:30.638 --> 00:09:34.778
+coordinate, and py sorted by y coordinate.
+So the first dividend is the division
+
+154
+00:09:34.790 --> 00:09:38.837
+step. So given that we have a copy of the
+points px sorted by x coordinate, it's
+
+155
+00:09:38.849 --> 00:09:42.952
+easy to identify the leftmost half of the
+points, those with the, those n over two
+
+156
+00:09:43.318 --> 00:09:47.244
+smallest x coordinates and in the right
+half, those were the n over two largest x
+
+157
+00:09:47.256 --> 00:09:51.232
+coordinates. We're going to call those Q
+and R respectively. One thing I'm skipping
+
+158
+00:09:51.244 --> 00:09:54.829
+over is the base case. I'm not going to
+bother writing that down, so base case
+
+159
+00:09:54.841 --> 00:09:58.659
+omitted, but it's what you would think it
+would be. So basically once you have a
+
+160
+00:09:58.671 --> 00:10:02.374
+small number point, say two points or
+three points, then you can just solve the
+
+161
+00:10:02.386 --> 00:10:06.368
+problem in constant time by a brute-force
+search. You just look at all the pairs and
+
+162
+00:10:06.380 --> 00:10:09.955
+you return the closest pair. So think of
+it being at least four points in the
+
+163
+00:10:09.967 --> 00:10:13.567
+input. Now, in order to recurse, to call
+clo pair again, in the left and right
+
+164
+00:10:13.579 --> 00:10:17.408
+halves, we need sorted version of Q and R,
+both by x coordinate and by y coordinate,
+
+165
+00:10:17.496 --> 00:10:21.301
+so we're just going to form those by doing
+suitable linear scans through px and py.
+
+166
+00:10:21.702 --> 00:10:26.202
+And so one thing I encourage you to think
+through carefully or maybe even code up
+
+167
+00:10:26.447 --> 00:10:31.366
+after the video is how would you form Qx,
+Qy, Rx and Ry given that you already have
+
+168
+00:10:31.378 --> 00:10:35.843
+Px and Py. And if you think about it,
+because Px and Py are already sorted just
+
+169
+00:10:35.855 --> 00:10:39.392
+producing these sorted sublists takes
+linear time. It's in some sense the
+
+170
+00:10:39.404 --> 00:10:43.380
+opposite of the merge subroutine used in
+merge sort. Here, we're sort of splitting
+
+171
+00:10:43.392 --> 00:10:47.341
+rather than merging. But again, this can
+be done in linear time, that's something
+
+172
+00:10:47.353 --> 00:10:51.329
+you should think through carefully later.
+So that's the division step, now we just
+
+173
+00:10:51.341 --> 00:10:54.489
+conquer, meaning we recursively call
+closest pair line on each of the two
+
+174
+00:10:54.501 --> 00:10:59.275
+subproblems, so when we invoke closest
+pair on the left half of the points on Q
+
+175
+00:10:59.662 --> 00:11:05.175
+we're going to get back what are indeed,
+the closest pair of points amongst those
+
+176
+00:11:05.187 --> 00:11:10.475
+in Q. So we're going to call those P1 and
+Pq, So among all pairs of points that both
+
+177
+00:11:10.487 --> 00:11:15.775
+lie in Q, P1 and Q1 minimize the distance
+between them. Similarly, we're going to
+
+178
+00:11:15.787 --> 00:11:20.739
+call Q2Q2 the results of the second
+recursive call, that is, P2 and Q2 are
+
+179
+00:11:20.751 --> 00:11:25.628
+amongst all pairs of points that both lie
+in R, the pair that has the minimum
+
+180
+00:11:25.640 --> 00:11:30.755
+Euclidean distance. Now, conceptually,
+there's two cases. There's a lucky case
+
+181
+00:11:30.864 --> 00:11:35.935
+and there's an unlucky case. In the
+original point set P, if we're lucky, the
+
+182
+00:11:35.947 --> 00:11:41.081
+closest pair of points in all of P,
+actually, both of them lie in Q or both of
+
+183
+00:11:41.093 --> 00:11:45.797
+them lie in R. In this lucky case, we'd
+already be done if the closest pair in the
+
+184
+00:11:45.809 --> 00:11:50.314
+entire point set they happen to both lie
+in Q, then this first recursive call is
+
+185
+00:11:50.326 --> 00:11:55.260
+going to recover them and we just have
+them in our hands P1Q1. Similarly, if both
+
+186
+00:11:55.272 --> 00:12:00.502
+of the closest pair of points in all of P
+lies on the right side in R, then they get
+
+187
+00:12:00.514 --> 00:12:05.525
+handed to us on a silver platter by the
+second recursive call that just operate on
+
+188
+00:12:05.537 --> 00:12:10.594
+R. So in the unlucky case, the closest
+pair of point in P happens to be split.
+
+189
+00:12:10.705 --> 00:12:15.880
+That is, one of the points lies in the
+left half, in Q, and the other point lies
+
+190
+00:12:15.892 --> 00:12:20.672
+in the right half, in R. Notice, if the
+closest pair of points in all of P is
+
+191
+00:12:20.684 --> 00:12:25.285
+split, is half in Q and half in R, neither
+recursive call is going to find it. Okay?
+
+192
+00:12:25.381 --> 00:12:29.713
+The pair of points is not passed to either
+of the two recursive calls, so there's no
+
+193
+00:12:29.725 --> 00:12:34.116
+way it's going to be returned to us. Okay?
+So we have not identified the closest pair
+
+194
+00:12:34.128 --> 00:12:38.114
+after these two recursive calls, if the
+closest pair happens to be split.
+
+195
+00:12:38.114 --> 00:12:41.648
+This is exactly analagous to what happened
+when we were counting inversions. The
+
+196
+00:12:41.660 --> 00:12:45.031
+recursive call on the left half of the
+array counted the left inversions. The
+
+197
+00:12:45.043 --> 00:12:48.627
+recursive call on the right half of the
+array counted the right inversions. But we
+
+198
+00:12:48.639 --> 00:12:52.082
+still had to count the split inversions,
+so in this closest pair algorithm, we
+
+199
+00:12:52.094 --> 00:12:55.509
+still need a special purpose subroutine
+that computes the closest pair for the
+
+200
+00:12:55.521 --> 00:12:59.110
+case in which it is split, in which there
+is one point in Q and one point in R. So
+
+201
+00:12:59.122 --> 00:13:02.572
+just like in counting inversions, I'm
+going to write down that subroutine and
+
+202
+00:13:02.584 --> 00:13:06.132
+I'm going to leave it unimplemented for
+now, we'll figur e out how to implement it
+
+203
+00:13:06.341 --> 00:13:10.310
+quickly in the rest of the lecture. Now,
+if we have a correct implementation of
+
+204
+00:13:10.322 --> 00:13:14.811
+closest split pair, so that takes us input
+the original point set sort of the x and y
+
+205
+00:13:14.823 --> 00:13:19.100
+coordinate, and returns the smallest pair
+that's split or one points in Q and one
+
+206
+00:13:19.112 --> 00:13:23.464
+points in R, then we're done. So then, the
+split, then the closest pair has to either
+
+207
+00:13:23.476 --> 00:13:27.180
+be on the lef or onm the right or it has
+to be split. Steps two through four
+
+208
+00:13:27.192 --> 00:13:31.430
+compute the closest pair in each of those
+categories, so those are the only possible
+
+209
+00:13:31.442 --> 00:13:35.540
+candidates for the closest pair and we
+just returned the best of them. So that's
+
+210
+00:13:35.552 --> 00:13:39.578
+an argument for y, if we have a correct
+implementation of the closest split para
+
+211
+00:13:39.578 --> 00:13:43.915
+subroutine, then that implies a correct
+implementation of closest pair. Now, what
+
+212
+00:13:43.927 --> 00:13:47.785
+about the running time? So the running
+time of the closest para algorithm is
+
+213
+00:13:47.797 --> 00:13:52.901
+going to be in part determined by the
+running time of closest split pair. So in
+
+214
+00:13:52.913 --> 00:13:58.013
+the next quiz, I want you to think about
+what kind of running time we should be
+
+215
+00:13:58.025 --> 00:14:03.173
+shooting for with a closest split pair
+subroutine. So the correct response of
+
+216
+00:14:03.185 --> 00:14:07.435
+this quiz is the second one, and the
+reasoning is just by analogy with our
+
+217
+00:14:07.447 --> 00:14:11.285
+previous algorithms for merge sort and for
+counting inversions. So, what is all of
+
+218
+00:14:11.297 --> 00:14:14.985
+the work that we would do in this
+algorithm or we do have this preprocessing
+
+219
+00:14:14.997 --> 00:14:18.485
+step we call merge sort twice, we know
+that's n log n, so we're not going to have
+
+220
+00:14:18.497 --> 00:14:22.035
+a running time better than n log n cause
+we sort at the beginning. And then, we
+
+221
+00:14:22.047 --> 00:14:25.610
+have a recursive algorithm with the
+following flavor, it makes two recursive
+
+222
+00:14:25.610 --> 00:14:28.393
+calls.
+Each recursive call is on a problem of
+
+223
+00:14:28.405 --> 00:14:32.771
+exactly half the size with half the points
+of the original one. And outside of the
+
+224
+00:14:32.783 --> 00:14:36.947
+recursive calls, by assumption, by, in the
+problem, we do a linear amount of work in
+
+225
+00:14:36.959 --> 00:14:41.250
+computing the closest split pair. So we,
+the exact same recursion tree which proves
+
+226
+00:14:41.262 --> 00:14:45.226
+an n log n bound for merge sort, proves an
+n log n bound for how much work we do
+
+227
+00:14:45.238 --> 00:14:48.967
+after the preprocessing step, so that
+gives us an overall running time bound of
+
+228
+00:14:48.979 --> 00:14:52.731
+n log n. Remem ber, that's what we were
+shooting for. We were working n log n
+
+229
+00:14:52.743 --> 00:14:56.268
+already to solve the one-dimensional
+version of closest pair and the goal of
+
+230
+00:14:56.280 --> 00:14:59.916
+these lectures is to have an n log n
+algorithm for the 2D versions. So this
+
+231
+00:14:59.928 --> 00:15:04.209
+would be great. So in other words, the
+goal should be to have a correct linear
+
+232
+00:15:04.221 --> 00:15:08.879
+time implementation of the closest split
+pair subroutine. If we can do that, we're
+
+233
+00:15:09.160 --> 00:15:12.989
+home-free, we get the desired n log
+algorithm. Now, I'm going to proceed in a
+
+234
+00:15:13.001 --> 00:15:17.379
+little bit to show you how to implement
+closest split pair, but before I do that,
+
+235
+00:15:17.477 --> 00:15:21.608
+I want to point out one subtle, the key
+idea, which is going to allow us to get
+
+236
+00:15:21.620 --> 00:15:26.336
+this linear time correct implementation.
+So, let me just put that on the slide. So,
+
+237
+00:15:26.435 --> 00:15:30.865
+the key idea is that we don't actually
+need a full-blown correct implementation
+
+238
+00:15:30.877 --> 00:15:35.258
+of the closets split pair subroutine. So,
+I'm not actually going to show you a
+
+239
+00:15:35.270 --> 00:15:39.625
+linear time subroutine that always
+correctly computes the closets split pair
+
+240
+00:15:39.637 --> 00:15:44.502
+of a point set. The reason I'm going to do
+that is that's actually a strictly harder
+
+241
+00:15:44.514 --> 00:15:49.018
+problem than what we need to have a
+correct recursive algorithm. We do not
+
+242
+00:15:49.030 --> 00:15:54.259
+actually need a subroutine that, for every
+point sets, always correctly computes the
+
+243
+00:15:54.271 --> 00:15:58.855
+closest split pair of points. Remember,
+there's a lucky case and there's an
+
+244
+00:15:58.867 --> 00:16:03.568
+unlucky case. The lucky case is where the
+closest pair in the whole point set P
+
+245
+00:16:03.580 --> 00:16:08.192
+happens to lie entirely in the left half
+of the points Q or in the right half of
+
+246
+00:16:08.204 --> 00:16:12.797
+the points R In that lucky case, we, one
+of our recursive calls will identify this
+
+247
+00:16:12.809 --> 00:16:17.082
+closest pair and hand it over to us on a
+silver platter. We could care less about
+
+248
+00:16:17.094 --> 00:16:21.435
+the split pairs in that case. We get the
+right answer without even looking at the
+
+249
+00:16:21.447 --> 00:16:25.427
+split pair, pairs. Now, there's this
+unlucky case where the split pairs happens
+
+250
+00:16:25.439 --> 00:16:29.805
+to be the closest pair of points. That is
+when we need this linear time subroutine,
+
+251
+00:16:29.901 --> 00:16:34.414
+and only. then, only in the unlucky case
+where the closest pair of points happens
+
+252
+00:16:34.426 --> 00:16:38.753
+to be split. Now, that's in some sense, a
+fairly trivial observation, but, there's a
+
+253
+00:16:38.765 --> 00:16:42.986
+lot of ingenuity here i n figuring out how
+to use that observation. The fact that we
+
+254
+00:16:42.998 --> 00:16:46.945
+only need to solve a strictly easier
+problem and that will enable the linear
+
+255
+00:16:46.957 --> 00:16:51.265
+time implementation that I'm going to show
+you next. So now, let's rewrite the high
+
+256
+00:16:51.277 --> 00:16:55.791
+level recursive algorithm slightly to make
+use of this observation that the closest
+
+257
+00:16:55.803 --> 00:17:00.027
+split pair subroutine only has to operate
+correctly in the regime of the unlucky
+
+258
+00:17:00.039 --> 00:17:04.164
+case, when in fact, the closest split pair
+is closer than the result of either
+
+259
+00:17:04.176 --> 00:17:08.206
+recursive call. So I've erased the
+previous steps 4 and 5, that, but we're
+
+260
+00:17:08.218 --> 00:17:12.310
+going to rewrite them in a second. So,
+before we invoke close split pair, what
+
+261
+00:17:12.322 --> 00:17:16.472
+we're going to do is we're going to see
+how well did our recursive calls do. That
+
+262
+00:17:16.484 --> 00:17:20.378
+is, we're going to define a parameter
+little delta, which is going to be the
+
+263
+00:17:20.390 --> 00:17:24.957
+closest pair that we found or the distance
+of the closest pair we found by either
+
+264
+00:17:24.969 --> 00:17:29.325
+recursive call. So the minimum of the
+distance between P1 and Q1, the closest
+
+265
+00:17:29.337 --> 00:17:34.078
+pair that lies entirely on the left, and
+P2Q2, the closest pair that lies entirely
+
+266
+00:17:34.090 --> 00:17:38.631
+on the right. Now, we're going to pass
+this delta information as a parameter into
+
+267
+00:17:38.643 --> 00:17:42.849
+our closest split pair subroutine. We're
+going to have to see why on earth that
+
+268
+00:17:42.861 --> 00:17:47.117
+would be useful and I still owe you that
+information, but, for now, we're just
+
+269
+00:17:47.129 --> 00:17:51.385
+going to pass delta as a parameter for use
+in the closest split pair. And then, as
+
+270
+00:17:51.397 --> 00:17:56.133
+before we just do a comparison between the
+three candidate closest pairs and return
+
+271
+00:17:56.145 --> 00:18:00.331
+the best of the, of the trio. And so, just
+so we're all clear on, on where things
+
+272
+00:18:00.343 --> 00:18:04.721
+stand, so what remains is to describe the
+implementation of closest split pair, and
+
+273
+00:18:04.733 --> 00:18:08.566
+before I describe it, let me just be
+crystal clear on what it is that we're
+
+274
+00:18:08.578 --> 00:18:13.778
+going to demand of the subroutine. What do
+we need to have a correct in o of n log n
+
+275
+00:18:13.216 --> 00:18:18.046
+time closest pair algorithm. Well, as you
+saw on the quiz, we want the running time
+
+276
+00:18:18.058 --> 00:18:22.475
+to be o of n always, and for correctness,
+what do we need? Again, we don't need it
+
+277
+00:18:22.487 --> 00:18:26.840
+to always compute the closest split pair,
+but we need it to compute the closest
+
+278
+00:18:26.852 --> 00:18:31.962
+split pair in the events that there is a
+split pair of distance strictly less than
+
+279
+00:18:31.974 --> 00:18:36.422
+delta, strictly better than the outcome of
+either recursive call. So now that we're
+
+280
+00:18:36.434 --> 00:18:40.874
+clear on what we want, let's go ahead and
+go through the pseudocode for this closest
+
+281
+00:18:40.886 --> 00:18:44.928
+split pair subroutine. And I'm going to
+tell you upfront, iIt's going to be fairly
+
+282
+00:18:44.940 --> 00:18:49.015
+straightforward to figure out that the
+subroutine runs in linear time, o of n
+
+283
+00:18:49.027 --> 00:18:52.527
+time. The correctness requirement of
+closest split pair will be highly
+
+284
+00:18:52.539 --> 00:18:56.148
+non-obvious. In fact, after I show you
+this pseudo you're not going to believe
+
+285
+00:18:56.160 --> 00:19:00.007
+me. You're going to look at the pseudocode
+and you'd be like, what are you talking
+
+286
+00:19:00.019 --> 00:19:03.512
+about? But in the second video, on the
+closest pair lecture, we will in fact show
+
+287
+00:19:03.524 --> 00:19:07.211
+that this is a correct sub-routine. So,
+how does it work? Well, let's look at a
+
+288
+00:19:07.223 --> 00:19:11.500
+point set. So, the first thing we're going
+to do is a filtering step. We're going to
+
+289
+00:19:11.512 --> 00:19:15.790
+prune a bunch of the points away and so to
+zoom in on a subset of the points. And the
+
+290
+00:19:15.612 --> 00:19:19.710
+subset of the points we're going to look
+at is those that lie in a vertical strip,
+
+291
+00:19:19.802 --> 00:19:24.030
+which is roughly centered in the middle of
+the point set. So, here's what I mean. By
+
+292
+00:19:24.042 --> 00:19:27.915
+center dot, we're going to look at the
+middle x coordinate. So, let x bar be the
+
+293
+00:19:27.927 --> 00:19:32.020
+biggest x coordinate in the left half, so
+that is in the sorted version of the
+
+294
+00:19:32.032 --> 00:19:37.362
+points by x coordinate, we look at the n
+over two smallest ex-coordinate. So, in
+
+295
+00:19:37.374 --> 00:19:42.971
+this example where we have six points, all
+this means is we draw, we imagine drawing
+
+296
+00:19:42.983 --> 00:19:48.630
+a line between the third points, so that's
+going to be x bar, the x coordinate of the
+
+297
+00:19:48.642 --> 00:19:52.807
+third point from the left. Now, since
+we're passed as input, a copy of the
+
+298
+00:19:52.819 --> 00:19:56.304
+points sorted by x coordinate, we can
+figure out what x bar is in constant time.
+
+299
+00:19:56.389 --> 00:20:00.068
+Just by accessing the relevant entry of
+the array, px. Now, the way we're going to
+
+300
+00:20:00.080 --> 00:20:03.371
+use this parameter delta that we're
+passed, so remember what delta is. So
+
+301
+00:20:03.383 --> 00:20:07.033
+before we invoke the closest split pair
+subroutine in the recursive algorithm, we
+
+302
+00:20:07.045 --> 00:20:10.699
+make our two recursive calls, we find the
+closest pair on the left, the closest pair
+
+303
+00:20:10.711 --> 00:20:14.169
+on the right, and delta is whatever the
+smaller of those two distances are. So
+
+304
+00:20:14.181 --> 00:20:17.899
+delta is the parameter that controls
+whether or not we actually care about the
+
+305
+00:20:17.911 --> 00:20:22.037
+closest split pair or not, we care if and
+only if there is a split pair at distance
+
+306
+00:20:22.049 --> 00:20:25.944
+less than delta. So, how do we use delta?
+Well, that's going to determine the width
+
+307
+00:20:25.956 --> 00:20:29.514
+of our strip, so the strip's going to have
+width 2 delta, and it's going to be
+
+308
+00:20:29.526 --> 00:20:33.034
+centered around x. And the first thing
+we're going to do is we're going to
+
+309
+00:20:33.046 --> 00:20:36.859
+ignore, forevermore, points which do not
+line in this vertical strip.
+
+310
+00:20:36.873 --> 00:20:40.954
+So the rest of the algorithm will operate
+only on the subset of p, the subset of the
+
+311
+00:20:40.966 --> 00:20:44.752
+points that lie on the strip, and we're
+going to keep track of them sorted by y
+
+312
+00:20:44.764 --> 00:20:48.791
+coordinate. So the formal way to say that
+they line the strip, is that they have x
+
+313
+00:20:48.803 --> 00:20:53.199
+coordinate in the interval with lower
+endpoint x bar minus delta and upper
+
+314
+00:20:53.449 --> 00:20:57.896
+endpoint x bar plus delta. Now, how long
+does it take to construct this set Sy
+
+315
+00:20:58.063 --> 00:21:02.945
+sorted by y coordinate? Well fortunately,
+we've been passed as input a sorted
+
+316
+00:21:02.957 --> 00:21:07.693
+version of the points Py So to extract Sy
+from Py, all we need to do is a simple
+
+317
+00:21:07.705 --> 00:21:12.712
+linear scan through p y checking for each
+point where its x coordinate is. So this
+
+318
+00:21:12.724 --> 00:21:17.564
+can be done in linear time. Now, I haven't
+yet shown you why it's useful to have this
+
+319
+00:21:17.576 --> 00:21:22.226
+sorted set as y, but if you take it on
+faith that it's useful to have the points
+
+320
+00:21:22.238 --> 00:21:25.974
+in this vertical strip sorted by y
+coordinate. You now see why it was useful
+
+321
+00:21:25.986 --> 00:21:30.017
+that we did this merge sort all the way at
+the beginning of the algorithm before we
+
+322
+00:21:30.029 --> 00:21:34.093
+even underwent any recurssion. Remember,
+what is our running time goal for closest
+
+323
+00:21:34.105 --> 00:21:38.195
+split pair? We want this to run in linear
+time, that means we cannot sort inside the
+
+324
+00:21:38.207 --> 00:21:41.948
+closest split pair subroutine. That would
+take too long. We want this to be in
+
+325
+00:21:41.960 --> 00:21:45.909
+linear time. Fortunately, since we sorted
+once and for all at the beginning of the
+
+326
+00:21:45.921 --> 00:21:50.030
+closest pair algorithm, extracting sorted
+sublists from those sorted lists of points
+
+327
+00:21:50.042 --> 00:21:54.495
+can be done, done in linear time, which is
+within our goals here. Now, it's the rest
+
+328
+00:21:54.507 --> 00:21:58.285
+of t he subroutine where you're never
+going to believe me that it does anything
+
+329
+00:21:58.297 --> 00:22:02.340
+useful. So, I claim that essentially with
+a linear scan through Sy, we're going to
+
+330
+00:22:02.352 --> 00:22:06.645
+be able to identify the closest split pair
+of points in the interesting, unlucky case
+
+331
+00:22:06.657 --> 00:22:11.190
+where there is such a split pair with
+distance less than delta. So here's what I
+
+332
+00:22:11.202 --> 00:22:15.320
+mean by that linear scan through Sy. So as
+we do the scan, we're, we're going to keep
+
+333
+00:22:15.332 --> 00:22:19.240
+track of the closest pair of points of a
+particular type that we've seen so far.
+
+334
+00:22:19.332 --> 00:22:23.135
+So, let me introduce some variables to
+keep track of the best candidate we've
+
+335
+00:22:23.147 --> 00:22:27.080
+seen so far. There's going to be a vary,
+variable best which will initialize to be
+
+336
+00:22:27.092 --> 00:22:30.955
+delta. Remember, we're uninterested in
+split pairs unless they have distance
+
+337
+00:22:30.967 --> 00:22:35.695
+strictly less than delta. So, and then
+we're going to keep track of the points
+
+338
+00:22:35.707 --> 00:22:40.847
+themselves, so we'll initialize the best
+pair to be null. Now, here is the linear
+
+339
+00:22:40.859 --> 00:22:46.218
+scan. So we go through the points of Sy in
+order y coordinate. Okay, well, not quite
+
+340
+00:22:46.230 --> 00:22:51.085
+all the points of Sy. We stop at the
+eighth to last point and you'll see why in
+
+341
+00:22:51.097 --> 00:22:58.523
+a second. And then, for each position I of
+the array Sy, we investigate the seven
+
+342
+00:22:58.535 --> 00:23:06.351
+subsequent points of the same array Sy. So
+for j going from one to seven, we look at
+
+343
+00:23:06.363 --> 00:23:12.837
+the Ith, and I plus jth entry of Sy. So if
+sy looks something like this array here,
+
+344
+00:23:12.945 --> 00:23:18.090
+in any given point in this double for
+loop, we're generally looking at an index
+
+345
+00:23:18.102 --> 00:23:23.940
+I, a point in this, in this of the array,
+and then some really quite nearby point in
+
+346
+00:23:23.952 --> 00:23:28.622
+the array I plus j, because j here's going
+to be at most seven. Okay? So we're
+
+347
+00:23:28.634 --> 00:23:32.221
+constantly looking at pairs in this array,
+but we're not looking at all pairs of all.
+
+348
+00:23:32.304 --> 00:23:35.519
+We're only looking at pairs that are very
+close to each other, within seven
+
+349
+00:23:35.531 --> 00:23:39.034
+positions of each other. And what do we do
+for each choice of i and j? Well, we just
+
+350
+00:23:39.046 --> 00:23:42.357
+look at those points, we compute the
+distance, we see if it's better than all
+
+351
+00:23:42.369 --> 00:23:45.801
+of the pairs of points of this form that
+we've looked at in the past and if it is
+
+352
+00:23:45.813 --> 00:23:49.788
+better, then we remember it. So we just
+remember the best, ie c losest pair of
+
+353
+00:23:49.800 --> 00:23:53.660
+points, of this particular type for
+choices of i and j of this form. So in
+
+354
+00:23:53.672 --> 00:23:57.598
+more detail, if the distance between the
+current pair of points of p and q is
+
+355
+00:23:57.610 --> 00:24:01.959
+better than the best we've seen so far, we
+reset the best pair of points to be equal
+
+356
+00:24:01.971 --> 00:24:05.864
+to p and q, and we reset the best
+distance, the closest distance seemed so
+
+357
+00:24:05.876 --> 00:24:10.402
+far to be the distance between p and q and
+that's it. Then, once this double for loop
+
+358
+00:24:10.414 --> 00:24:14.610
+terminates, we just return it the best
+pair. So one possible execution of closest
+
+359
+00:24:14.622 --> 00:24:18.750
+split pair is that it never finds a pair
+of points, p and q, at distance less than
+
+360
+00:24:18.762 --> 00:24:22.862
+delta. In that case, this is going to
+return null and then in the outer call. In
+
+361
+00:24:22.874 --> 00:24:26.944
+the closet pair, obviously, you interpret
+a null pair of points to have an infinite
+
+362
+00:24:26.956 --> 00:24:30.736
+distance. So if you call closest split
+pair, and it doesn't return any points,
+
+363
+00:24:30.826 --> 00:24:34.952
+then the interpretation is that there's no
+interesting split pair of points and you
+
+364
+00:24:34.964 --> 00:24:39.106
+just return the better of the results of
+the two recursive calls p1Q1 or P2Q2. Now,
+
+365
+00:24:39.196 --> 00:24:43.305
+as far as the running time of the
+subroutine, what happens here? Well, we do
+
+366
+00:24:43.317 --> 00:24:47.751
+constant work just initializing the
+variables. Then notice that the number of
+
+367
+00:24:47.763 --> 00:24:51.959
+points in Sy, well in the worst case, you
+have all of the points of P. So, it's
+
+368
+00:24:51.971 --> 00:24:55.983
+going to be the most endpoints, and so,
+you do a linear number of iterations in
+
+369
+00:24:55.995 --> 00:24:59.737
+the outer for loop. But here is the key
+point, in the inner for loop, right,
+
+370
+00:24:59.833 --> 00:25:03.895
+normally double for loops give rise to
+quadratic running time, but in this inner
+
+371
+00:25:03.907 --> 00:25:07.701
+for loop we only look at a constant number
+of other positions. We only look at seven
+
+372
+00:25:07.713 --> 00:25:11.237
+other positions and for each of those
+seven positions, we only do a constant
+
+373
+00:25:11.249 --> 00:25:14.970
+number of work. Right? We just, we want to
+compare distance and make a couple other
+
+374
+00:25:14.982 --> 00:25:18.653
+comparisons, and reset some variables. So
+for each of the linear number of outer
+
+375
+00:25:18.665 --> 00:25:22.313
+iterations, we do a constant amount of
+work, so that gives us a running time of o
+
+376
+00:25:22.325 --> 00:25:26.753
+of n for this part of the algorithm. So as
+I promised, analyzing the running time of
+
+377
+00:25:26.765 --> 00:25:30.409
+this closest split pair subroutine was not
+challenging. We just , in a
+
+378
+00:25:30.421 --> 00:25:34.489
+straightforward way, looked at all the
+operations. Again, because in the key
+
+379
+00:25:34.501 --> 00:25:38.758
+linear scan, we only do constant work per
+index, the overall running time is big O
+
+380
+00:25:38.770 --> 00:25:43.027
+of n, just as we wanted. So this does mean
+that our overall recursive algorithm will
+
+381
+00:25:43.039 --> 00:25:46.703
+have running time o of n log n. What is
+totally not obvious and perhaps even
+
+382
+00:25:46.715 --> 00:25:51.005
+unbelievable, is that this subroutine
+satifies the correctness requirements that
+
+383
+00:25:51.017 --> 00:25:54.889
+we wanted. Remember, what we needed, we
+needed that whenever we're in the unlucky
+
+384
+00:25:54.901 --> 00:25:58.900
+case, whenever, in fact, the closest pair
+of points in the whole point set is split,
+
+385
+00:25:58.989 --> 00:26:03.812
+this subroutine better find it. So, but it
+does, and that's being precise in the
+
+386
+00:26:03.824 --> 00:26:08.122
+following correctness claim. So let me
+rephrase the claim in terms of an
+
+387
+00:26:08.134 --> 00:26:12.828
+arbitrary split pair, which has distance
+less than delta, not necessarily the
+
+388
+00:26:12.840 --> 00:26:17.354
+closest such pair. So suppose, there
+exists, a p on the left, a point on the
+
+389
+00:26:17.366 --> 00:26:22.398
+left side and a point on the right side so
+that is a split pair and suppose the
+
+390
+00:26:22.410 --> 00:26:28.319
+distance of this pair is less than Q. Now,
+there may or may not be such a pair of
+
+391
+00:26:28.331 --> 00:26:33.847
+points, PQ.. Don't forget what this
+parameter delta means. What delta is, by
+
+392
+00:26:33.859 --> 00:26:39.643
+definition, is the minimum of d of p1q1,
+for p1q1 is the closest pair of points
+
+393
+00:26:39.655 --> 00:26:45.734
+that lie entirely in the left half of the
+point set Q and d of p2q2, or similarly,
+
+394
+00:26:45.746 --> 00:26:50.199
+p2Q2 is the closest pair of points that
+entirely on the right inside of R. So, if
+
+395
+00:26:50.211 --> 00:26:54.600
+there's a split pair with distance less
+than delta, this is exactly the unlucky
+
+396
+00:26:54.612 --> 00:26:59.134
+case of the algorithm. This is exactly
+where neither recursive call successfully
+
+397
+00:26:59.146 --> 00:27:03.596
+identifies the closest pair of points,
+instead that closest pair is a split pair.
+
+398
+00:27:03.694 --> 00:27:07.991
+On the other hand, if we are in the lucky
+case, then there will not be any split
+
+399
+00:27:08.003 --> 00:27:11.981
+pairs with distance less than delta,
+because the closest pair lies either all
+
+400
+00:27:11.993 --> 00:27:16.208
+on the left or on the right, and it's not
+split. But remember, we're interested in
+
+401
+00:27:16.220 --> 00:27:20.740
+the case where there is a split pair that
+has a distance less than delta where there
+
+402
+00:27:20.752 --> 00:27:24.743
+is a split pair that is the closest pair.
+So the claim has two parts. The first
+
+403
+00:27:24.755 --> 00:27:28.908
+part, part A, says the following. It says
+that if there's a split pair p and, and q
+
+404
+00:27:28.920 --> 00:27:34.439
+of this type, then p and q are members of
+Sy. And let me just sort of redraw the
+
+405
+00:27:34.451 --> 00:27:40.681
+cartoon. So remember what Sy is. Sy is
+that vertical strip. And again, the way we
+
+406
+00:27:40.693 --> 00:27:46.587
+got that is we drew a line through a
+median x coordinate and then we fattened
+
+407
+00:27:46.599 --> 00:27:52.543
+it by delta on either side, and then, we
+focused only on points that lie in the
+
+408
+00:27:52.555 --> 00:27:57.962
+vertical strip. Now, notice our counts
+split pair subroutine, if it ever returns
+
+409
+00:27:57.974 --> 00:28:02.323
+a pair of points, it's going to return a
+pair of points pq that belong to Sy.
+
+410
+00:28:02.427 --> 00:28:07.188
+First, it filters down to Sy, then it does
+a linear search through Sy. So if we want
+
+411
+00:28:07.188 --> 00:28:12.300
+to believe that our subroutine identifies
+best split pairs of points, then, in
+
+412
+00:28:12.312 --> 00:28:16.720
+particular, such split pairs of points
+better show up in Sy, they better survive
+
+413
+00:28:16.732 --> 00:28:21.190
+the filtering step. So that's precisely
+what part A of the claim is. Here's part B
+
+414
+00:28:21.202 --> 00:28:25.155
+of the claim and this is the more
+remarkable part of the claim, which is
+
+415
+00:28:25.167 --> 00:28:29.615
+that p and q are almost next to each other
+in this sorted array, Sy. So they're not
+
+416
+00:28:29.627 --> 00:28:34.055
+necessarily adjacent, but they're very
+close, they're within seven positions away
+
+417
+00:28:34.067 --> 00:28:38.190
+from each other. So, this is really the
+remarkable part of the algorithm. This is
+
+418
+00:28:38.202 --> 00:28:42.600
+really what's surprising and what makes
+the whole algorithm work. So, just to make
+
+419
+00:28:42.612 --> 00:28:46.575
+sure that we're all clear on everything,
+let's show that if we prove this claim,
+
+420
+00:28:46.667 --> 00:28:50.250
+then we're done, then we have a correct
+fast implementation of a closest pair
+
+421
+00:28:50.262 --> 00:28:54.360
+algorithm. I certainly owe you the proof
+of the claim, that's what the next video
+
+422
+00:28:54.372 --> 00:28:58.395
+is going to be all about, but let's show
+that if the claim is true, then, we're
+
+423
+00:28:58.668 --> 00:29:02.941
+home-free. So if this claim is true, then
+so is the following corollary, which I'll
+
+424
+00:29:02.953 --> 00:29:07.235
+call corollaryl 1. So corollary 1 says, if
+we're in the unlucky case that we
+
+425
+00:29:07.247 --> 00:29:11.386
+discussed earlier, if we're in the case
+where the closest point and the whole
+
+426
+00:29:11.398 --> 00:29:15.864
+points of p does not lie both on the left,
+does not lie both on the right, but rather
+
+427
+00:29:15.876 --> 00:29:20.112
+has one point on the left and one on the
+right but as it's a split pair, th en in
+
+428
+00:29:20.124 --> 00:29:25.162
+fact, the count split pair subroutine will
+correctly identify the closest split pair
+
+429
+00:29:24.901 --> 00:29:29.468
+and therefore the closest pair overall.
+Why is this true? Well what does count
+
+430
+00:29:29.480 --> 00:29:34.270
+split pair do? Okay, so it has this double
+for loop, and thereby, explicitly examines
+
+431
+00:29:34.282 --> 00:29:38.415
+a bunch of pairs of points and it
+remembers the closest pair of all of the
+
+432
+00:29:38.427 --> 00:29:42.870
+pairs of points that it examines. What
+does this, so what are the criteria that
+
+433
+00:29:42.882 --> 00:29:48.061
+are necessary for count split pair to
+examine a pair point? Well, first of all,
+
+434
+00:29:48.161 --> 00:29:52.631
+the points p and q both have to survive
+the filtering step and make it into the
+
+435
+00:29:52.643 --> 00:29:57.390
+array Sy. Right? So count split pair only
+searches over the array Sy. Secondly, it
+
+436
+00:29:57.402 --> 00:30:01.948
+only searches over pairs of points that
+are almost adjacent in Sy, that are only
+
+437
+00:30:01.960 --> 00:30:06.253
+seven positions apart, but amongst pairs
+of points that satisfy those two criteria,
+
+438
+00:30:06.346 --> 00:30:10.293
+counts but pair will certainly compute the
+closest such pair, right? It just
+
+439
+00:30:10.305 --> 00:30:14.196
+explicitly remembers the best of them.
+Now, what's the content of the claim?
+
+440
+00:30:14.289 --> 00:30:18.466
+Well, the claim is guaranteeing that every
+potentially interesting split pair of
+
+441
+00:30:18.478 --> 00:30:22.960
+points and every split pair of points with
+distance less than delta meets both of the
+
+442
+00:30:22.972 --> 00:30:26.403
+criteria which are necessary to be
+examined by the count split pair
+
+443
+00:30:26.403 --> 00:30:30.461
+subroutine. So first of all, and this is
+the content of part A, if you have an
+
+444
+00:30:30.473 --> 00:30:34.507
+interesting split pair of points with
+distance less than delta, then they'll
+
+445
+00:30:34.519 --> 00:30:38.920
+both survive the filtering step. They'll
+both make it into the array Sy., part A
+
+446
+00:30:38.932 --> 00:30:42.651
+says that. Part B says they're almost
+adjacent in Sy. So if you have an
+
+447
+00:30:42.663 --> 00:30:47.169
+interesting split pair of points, meaning
+it has distance less than delta, then they
+
+448
+00:30:47.181 --> 00:30:51.563
+will, in fact, be at most seven positions
+apart. Therefore, count split pair will
+
+449
+00:30:51.575 --> 00:30:55.849
+examine all such split pairs, all split
+pairs with distance less than delta, and
+
+450
+00:30:55.861 --> 00:31:00.268
+just by construction, it will compute the
+closest pair of all of them. So again, in
+
+451
+00:31:00.280 --> 00:31:04.646
+the unlucky case where the best pair of
+points is a split pair, then this claim
+
+452
+00:31:04.658 --> 00:31:08.619
+guarantees that the count split pair will
+compute the closest pair of points.
+
+453
+00:31:08.619 --> 00:31:12.984
+Therefore, having h andled correctness, we
+can just combine that with our earlier
+
+454
+00:31:12.996 --> 00:31:17.146
+observations about running time and
+corollary 2 just says, if we can prove the
+
+455
+00:31:17.158 --> 00:31:20.845
+claim, then we have everything we wanted.
+We have a correct O of n log n
+
+456
+00:31:20.857 --> 00:31:24.950
+implementation for the closest pair of
+points. So with further work and a lot
+
+457
+00:31:24.962 --> 00:31:29.062
+more ingenuity, we've replicated the
+guarantee that we got just by sorting for
+
+458
+00:31:29.074 --> 00:31:33.516
+the one-dimensional case. Now again, these
+corrollaries hold only if this claim is,
+
+459
+00:31:33.606 --> 00:31:37.567
+in fact, true and I have given you no
+justification for this claim. And even the
+
+460
+00:31:37.579 --> 00:31:41.300
+statement of the claim, I think, is a
+little bit shocking. So if I were you I
+
+461
+00:31:41.312 --> 00:31:45.112
+would demand an explanation for why this
+claim is true, and that's what I'm going
+
+462
+00:31:45.112 --> 00:31:46.514
+to give you in the next video.
