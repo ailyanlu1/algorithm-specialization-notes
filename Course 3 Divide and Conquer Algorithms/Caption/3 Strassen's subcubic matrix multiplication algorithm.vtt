@@ -1,0 +1,1793 @@
+WEBVTT
+
+1
+00:00:00.380 --> 00:00:01.870
+In this video, we'll apply the divide and
+
+2
+00:00:01.870 --> 00:00:05.490
+conquer algorithm design paradigm to
+the problem of multiplying matrices.
+
+3
+00:00:05.490 --> 00:00:09.408
+This will culminate in the study of
+Strassen matrix multiplication algorithm.
+
+4
+00:00:09.408 --> 00:00:12.290
+And this is a super cool algorithm for
+two reasons.
+
+5
+00:00:12.290 --> 00:00:15.193
+First of all, Strassen's algorithm
+is completely non-trivial.
+
+6
+00:00:15.193 --> 00:00:17.207
+It's totally non-obvious, very clever,
+
+7
+00:00:17.207 --> 00:00:19.880
+not at all clear how Strassen
+ever came up with it.
+
+8
+00:00:19.880 --> 00:00:22.890
+The second cool feature is it's for
+such a fundamental problem.
+
+9
+00:00:22.890 --> 00:00:25.580
+So computers as long as they've
+been in use from the time they
+
+10
+00:00:25.580 --> 00:00:30.060
+were invented up til today a lot of their
+cycles is spent multiplying matrices.
+
+11
+00:00:30.060 --> 00:00:33.010
+It just comes up all the time
+in important applications.
+
+12
+00:00:33.010 --> 00:00:37.150
+So let me first just make sure we're
+all clear on what the problem is of
+
+13
+00:00:37.150 --> 00:00:38.299
+multiplying two matrices.
+
+14
+00:00:40.040 --> 00:00:43.380
+So we're going to be interested
+in three matrices x, y and z.
+
+15
+00:00:43.380 --> 00:00:47.268
+I'm going to assume they all
+have the same dimensions, n x n.
+
+16
+00:00:48.938 --> 00:00:51.603
+The ideas we'll talk about
+are also relevant for
+
+17
+00:00:51.603 --> 00:00:56.510
+multiplying non square matrices but we're
+not going to discuss it in this video.
+
+18
+00:00:56.510 --> 00:00:59.690
+The entries in these matrices, you
+could think of it as whatever you want.
+
+19
+00:00:59.690 --> 00:01:01.520
+Maybe they're integers,
+maybe they're rationals.
+
+20
+00:01:01.520 --> 00:01:03.010
+Maybe they're from some finite field.
+
+21
+00:01:03.010 --> 00:01:04.681
+It depends on the application but
+
+22
+00:01:04.681 --> 00:01:07.673
+the point is they're entries
+that we can add and multiply.
+
+23
+00:01:09.065 --> 00:01:13.065
+So how is it that you take two
+n x n matrices x and y and
+
+24
+00:01:13.065 --> 00:01:16.600
+multiply them producing
+a new n x n matrix z?
+
+25
+00:01:18.460 --> 00:01:23.010
+Well recall that the ij entry of z, that
+means the entry in the ith row and the jth
+
+26
+00:01:23.010 --> 00:01:27.950
+column, is simply the dot product of
+the ith row of x with the jth column of y.
+
+27
+00:01:30.440 --> 00:01:35.213
+So if ij was this red square,
+this red entry over in the z matrix that
+
+28
+00:01:35.213 --> 00:01:39.647
+would be derived from the corresponding
+row of the x matrix and
+
+29
+00:01:39.647 --> 00:01:42.733
+the corresponding column of the y matrix.
+
+30
+00:01:42.733 --> 00:01:47.092
+And recall what I mean by dot product,
+that just means you take the products of
+
+31
+00:01:47.092 --> 00:01:50.260
+the individual components and
+then add up the results.
+
+32
+00:01:51.823 --> 00:01:56.381
+So ultimately the zij entry boils
+down to a sum over n things
+
+33
+00:01:56.381 --> 00:02:01.219
+where each of the constituent
+products is just the xik entry,
+
+34
+00:02:01.219 --> 00:02:05.765
+the ik entry of the matrix x
+with a kj entry of the matrix y.
+
+35
+00:02:05.765 --> 00:02:08.462
+Where your k is ranging from 1 to n.
+
+36
+00:02:08.462 --> 00:02:13.540
+So that's how zij is defined for
+a given pair of indices i and j.
+
+37
+00:02:15.630 --> 00:02:19.220
+One thing to note is that where we
+often use n to denote the input size,
+
+38
+00:02:19.220 --> 00:02:22.600
+here we're using n to denote
+the dimension of each of these matrices.
+
+39
+00:02:22.600 --> 00:02:25.720
+The input size is not n, the input
+size is quite a bit bigger than n.
+
+40
+00:02:25.720 --> 00:02:30.430
+Specifically, each of these are n x n
+matrices that contains n squared entries.
+
+41
+00:02:32.620 --> 00:02:36.370
+So since presumably we have to read
+the input, which has size n squared, and
+
+42
+00:02:36.370 --> 00:02:39.330
+we have to produce the output,
+which also has size n squared.
+
+43
+00:02:39.330 --> 00:02:42.290
+The best we could really hope for
+a matrix multiplication algorithm would be
+
+44
+00:02:42.290 --> 00:02:46.270
+a running time of n squared, so the
+question is how close can we get to it.
+
+45
+00:02:47.950 --> 00:02:51.380
+Before we talk about algorithms for matrix
+multiplication let me just make sure we're
+
+46
+00:02:51.380 --> 00:02:54.900
+all crystal clear on exactly what the
+problem is so let's just actually spell
+
+47
+00:02:54.900 --> 00:02:59.540
+out what would be the result of
+multiplying two different 2 x 2 matrices.
+
+48
+00:02:59.540 --> 00:03:04.359
+So we can parameterize two generic 2 x
+2 matrices by just giving the first one
+
+49
+00:03:04.359 --> 00:03:06.350
+entries a, b, c, and d.
+
+50
+00:03:06.350 --> 00:03:08.700
+Or these four entries
+could all be anything.
+
+51
+00:03:08.700 --> 00:03:11.330
+And then, we're multiplying
+by a second 2 x 2 matrix.
+
+52
+00:03:11.330 --> 00:03:15.260
+Let's call its entries e, f, g, and h.
+
+53
+00:03:15.260 --> 00:03:16.900
+Now what's the result
+of multiplying these?
+
+54
+00:03:16.900 --> 00:03:20.770
+Where again, it's going to be a 2 x
+2 matrix where each entry is just
+
+55
+00:03:20.770 --> 00:03:24.700
+the corresponding dot product of
+the relevant row of the first matrix and
+
+56
+00:03:24.700 --> 00:03:26.590
+column of the second matrix.
+
+57
+00:03:26.590 --> 00:03:31.190
+So to get the upper left entry we take the
+dot product of the upper row of the first
+
+58
+00:03:31.190 --> 00:03:36.480
+matrix and the first column of the left
+column of the second matrix so
+
+59
+00:03:36.480 --> 00:03:42.370
+that results in ae + bg.
+
+60
+00:03:42.370 --> 00:03:47.270
+To get the upper right entry we take
+the dot product of the top row of
+
+61
+00:03:47.270 --> 00:03:52.340
+the left matrix with the right
+column of the second matrix, so
+
+62
+00:03:52.340 --> 00:03:58.460
+that gives us af + bh and then filling
+in the other entries in the same way,
+
+63
+00:03:58.460 --> 00:04:03.294
+we get ce + dg and cf + dh.
+
+64
+00:04:03.294 --> 00:04:06.771
+Okay, so
+that's multiplying two matrices, and
+
+65
+00:04:06.771 --> 00:04:10.596
+we've already discussed
+the definition in general.
+
+66
+00:04:10.596 --> 00:04:15.431
+Now, suppose you had to write a program
+to actually compute the result of
+
+67
+00:04:15.431 --> 00:04:17.590
+multiplying two n x n matrices.
+
+68
+00:04:17.590 --> 00:04:20.960
+One natural way to do that would
+just be to return to the definition,
+
+69
+00:04:20.960 --> 00:04:25.190
+which defines each of the n squared
+entries in the z matrix as a suitable sum
+
+70
+00:04:25.190 --> 00:04:29.220
+of products of entries of the x and
+y matrices.
+
+71
+00:04:29.220 --> 00:04:34.790
+So in the next quiz I'd like you to figure
+out exactly what would be the running time
+
+72
+00:04:34.790 --> 00:04:38.600
+of that algorithm as a function
+of the matrix dimension n.
+
+73
+00:04:38.600 --> 00:04:43.353
+Where, as usual, we count the additional
+multiplication of two individual entries
+
+74
+00:04:43.353 --> 00:04:45.076
+as a constant time operation.
+
+75
+00:04:47.423 --> 00:04:50.840
+So the correct response to
+this quiz is the third answer.
+
+76
+00:04:50.840 --> 00:04:54.050
+That the running time of
+the straightforward iterative algorithm
+
+77
+00:04:54.050 --> 00:04:57.830
+runs in cubic time relative
+to the matrix dimension n.
+
+78
+00:04:57.830 --> 00:05:00.490
+To see this just recall what
+the definition of the matrix
+
+79
+00:05:00.490 --> 00:05:01.930
+multiplication was.
+
+80
+00:05:01.930 --> 00:05:07.102
+The definition tells us
+that each entry zij of
+
+81
+00:05:07.102 --> 00:05:15.278
+the output matrix z is defined as the sum
+from k = 1 to n of xik times ykj.
+
+82
+00:05:15.278 --> 00:05:18.997
+That is the dot product of
+the ith row of the x matrix and
+
+83
+00:05:18.997 --> 00:05:21.730
+the jth column of the y matrix.
+
+84
+00:05:21.730 --> 00:05:24.248
+I'm certainly assuming that we
+have the matrices represented
+
+85
+00:05:24.248 --> 00:05:27.150
+in a way that we could access
+a given entry in a constant time.
+
+86
+00:05:27.150 --> 00:05:32.460
+And under that assumption remember each of
+these products only takes constant time.
+
+87
+00:05:32.460 --> 00:05:36.524
+And so then to compute zij we just
+have to add up these n products so
+
+88
+00:05:36.524 --> 00:05:40.214
+that's going to be theta of n
+time to compute a given zij and
+
+89
+00:05:40.214 --> 00:05:44.010
+then there's an n squared
+entries that we have to compute.
+
+90
+00:05:44.010 --> 00:05:46.480
+There's n choices for i, n choices for j.
+
+91
+00:05:46.480 --> 00:05:51.710
+So that gives us n squared times n or
+cubic running time overall.
+
+92
+00:05:51.710 --> 00:05:55.740
+For the natural algorithm, which is really
+just a triple for loop which computes
+
+93
+00:05:55.740 --> 00:05:59.210
+each entry of the output array
+separately using the dot product.
+
+94
+00:05:59.210 --> 00:06:04.270
+So the question as always for the keen
+algorithm designer is, can we do better.
+
+95
+00:06:04.270 --> 00:06:08.317
+Can we beat n cube time for
+multiplying two matrices.
+
+96
+00:06:09.922 --> 00:06:14.036
+And we might be especially emboldened with
+the progress that we've already seen in
+
+97
+00:06:14.036 --> 00:06:15.870
+terms of multiplying two integers.
+
+98
+00:06:15.870 --> 00:06:17.840
+We apply the divide and
+
+99
+00:06:17.840 --> 00:06:21.500
+conquer algorithm to the problem
+of multiplying two integers.
+
+100
+00:06:21.500 --> 00:06:24.520
+And we had both a naive
+recursive algorithm and
+
+101
+00:06:24.520 --> 00:06:28.905
+a seemingly better algorithm due to Gauss,
+which made only three recursive calls.
+
+102
+00:06:28.905 --> 00:06:31.330
+Now we haven't yet analyzed
+the running time of that algorithm.
+
+103
+00:06:31.330 --> 00:06:34.150
+But as we'll see later,
+that does indeed beat
+
+104
+00:06:34.150 --> 00:06:36.280
+the quadratic running time of
+the grade school algorithm.
+
+105
+00:06:36.280 --> 00:06:39.530
+So it's very natural to ask,
+can we do exactly the same thing here?
+
+106
+00:06:39.530 --> 00:06:41.930
+There's the obvious n cubed algorithm
+which follows straight from
+
+107
+00:06:41.930 --> 00:06:45.720
+the definition, perhaps analogous to Gauss
+we could have some clever divide and
+
+108
+00:06:45.720 --> 00:06:47.790
+conquer method which beats cubic time.
+
+109
+00:06:47.790 --> 00:06:49.587
+So that's what we're
+going to explore next.
+
+110
+00:06:50.979 --> 00:06:54.280
+Let's recall the divide and conquer
+paradigm, what does it mean to use it?
+
+111
+00:06:54.280 --> 00:06:57.120
+Well we first have to identify
+smaller subproblems, so
+
+112
+00:06:57.120 --> 00:06:59.480
+if we want to multiple two n x n matrices.
+
+113
+00:06:59.480 --> 00:07:03.150
+We have to identify multiplications
+of smaller matrices that we can solve
+
+114
+00:07:03.150 --> 00:07:04.288
+recursively.
+
+115
+00:07:04.288 --> 00:07:07.900
+Once we figured out how we want to divide
+the given problem into smaller ones.
+
+116
+00:07:07.900 --> 00:07:11.550
+Then the conquer step, we simply
+invoke our own algorithm recursively.
+
+117
+00:07:11.550 --> 00:07:15.572
+That's going to recursively multiply
+the smaller matrices together.
+
+118
+00:07:15.572 --> 00:07:18.570
+And then in general, we'll have to combine
+the results of the recursive cause to
+
+119
+00:07:18.570 --> 00:07:20.590
+get the solution for the original problem.
+
+120
+00:07:20.590 --> 00:07:23.800
+In our case, to get the product
+of the original two matrices
+
+121
+00:07:23.800 --> 00:07:26.550
+from the product of whatever
+submatrices we identify.
+
+122
+00:07:26.550 --> 00:07:32.975
+So how would we apply the divide and
+conquer paradigm to matrices?
+
+123
+00:07:32.975 --> 00:07:36.620
+So we're given two n x n matrices,
+and we have to somehow identify
+
+124
+00:07:36.620 --> 00:07:40.339
+smaller pairs of square matrices
+that we can multiply recursively.
+
+125
+00:07:41.560 --> 00:07:44.210
+So the idea I think is fairly natural.
+
+126
+00:07:44.210 --> 00:07:49.850
+So we start with a big n by n matrix x,
+right, so there's n rows and n columns.
+
+127
+00:07:49.850 --> 00:07:52.770
+And we have to somehow divide
+it into smaller pieces.
+
+128
+00:07:52.770 --> 00:07:55.650
+Now the first thing you might think about
+is you put it into it's left half and
+
+129
+00:07:55.650 --> 00:07:57.950
+it's right half analogous
+to what we've been doing.
+
+130
+00:07:57.950 --> 00:07:59.040
+With arrays, but
+
+131
+00:07:59.040 --> 00:08:02.800
+then we're going to break X into two
+matrices which are no longer square,
+
+132
+00:08:02.800 --> 00:08:06.470
+which are n over 2 in one dimension, and
+have length n in the other dimension.
+
+133
+00:08:06.470 --> 00:08:09.300
+And we want to recursively call
+a subroutine that multiplies
+
+134
+00:08:09.300 --> 00:08:10.860
+square matrices.
+
+135
+00:08:10.860 --> 00:08:15.370
+So what seems like the clear thing to do,
+is to divide X into quadrants.
+
+136
+00:08:15.370 --> 00:08:19.314
+Okay, so we have four pieces of X,
+each is going to be n over 2 by n over 2
+
+137
+00:08:19.314 --> 00:08:23.320
+corresponding to the different
+quarters of this matrix.
+
+138
+00:08:23.320 --> 00:08:28.040
+So let's call these different quadrants or
+blocks in matrix terminology A, B, C,
+
+139
+00:08:28.040 --> 00:08:29.740
+and D.
+
+140
+00:08:29.740 --> 00:08:32.500
+All of these are n over
+2 by n over 2 matrices.
+
+141
+00:08:32.500 --> 00:08:35.007
+As usual for simplicity,
+I'm assuming that n is even.
+
+142
+00:08:35.007 --> 00:08:38.470
+And as usual it doesn't really matter and
+we can do the same trick with Y.
+
+143
+00:08:40.670 --> 00:08:42.413
+So, we'll divide Y into quadrants.
+
+144
+00:08:45.130 --> 00:08:50.900
+N over 2 by n over 2 matrices,
+which we'll call E, F, G, and H.
+
+145
+00:08:53.334 --> 00:08:57.105
+So one thing that's cool about matrices
+is when you split them into blocks and
+
+146
+00:08:57.105 --> 00:09:00.834
+you multiply them, the blocks just
+behave as if they were atomic elements.
+
+147
+00:09:03.170 --> 00:09:04.720
+So what I mean by that,
+
+148
+00:09:04.720 --> 00:09:08.870
+is that the product of X and Y can be
+expressed in terms of its quadrants.
+
+149
+00:09:08.870 --> 00:09:11.810
+And each of its four quadrants,
+each of its four corners
+
+150
+00:09:11.810 --> 00:09:16.520
+can be written as a suitable arithmetic
+expression of the quadrants of X and Y.
+
+151
+00:09:16.520 --> 00:09:19.290
+So here's exactly what those formulas are.
+
+152
+00:09:19.290 --> 00:09:23.654
+They're exactly analogous to when we just
+multiplied a pair of 2 by 2 matrices.
+
+153
+00:09:26.100 --> 00:09:28.260
+So I'm not going to
+formally prove this fact.
+
+154
+00:09:28.260 --> 00:09:31.270
+I'm sure many of you have seen
+it before or familiar with it.
+
+155
+00:09:31.270 --> 00:09:33.106
+And if you haven't,
+it's actually quite easy to prove.
+
+156
+00:09:33.106 --> 00:09:35.829
+It's not obvious since you can't see it
+off the top of your head necessarily.
+
+157
+00:09:35.829 --> 00:09:38.419
+But if you go back to the definition,
+it's quite easy to verify.
+
+158
+00:09:38.419 --> 00:09:40.372
+But indeed when you multiply X and Y,
+
+159
+00:09:40.372 --> 00:09:44.287
+you can express its quadrants into blocks
+in terms of the blocks of X and Y.
+
+160
+00:09:46.635 --> 00:09:49.929
+So what we just did is completely
+analogous to when talking about
+
+161
+00:09:49.929 --> 00:09:54.016
+integer multiplication, and we wanted
+to multiply two integers, x and y, and
+
+162
+00:09:54.016 --> 00:09:56.280
+we broke them into pairs
+of n over 2 digits.
+
+163
+00:09:56.280 --> 00:09:59.410
+And then we just took the expansion, and
+we've observed how that expansion could be
+
+164
+00:09:59.410 --> 00:10:02.620
+written in terms of products
+of n over 2 digit numbers.
+
+165
+00:10:02.620 --> 00:10:06.010
+It's the same thing going on here,
+except with matrices.
+
+166
+00:10:06.010 --> 00:10:08.590
+So now we're in business as
+far as a recursive approach.
+
+167
+00:10:08.590 --> 00:10:09.900
+We want to multiply x and y.
+
+168
+00:10:09.900 --> 00:10:11.430
+They're n by n matrices.
+
+169
+00:10:11.430 --> 00:10:14.278
+We recognize, we going to
+express that product, x times y.
+
+170
+00:10:14.278 --> 00:10:17.710
+In terms of the products of n
+over 2 by n over 2 matrices.
+
+171
+00:10:17.710 --> 00:10:20.780
+Things were able to multiply recursively,
+plus additions.
+
+172
+00:10:20.780 --> 00:10:24.630
+And additions, it's clearly easy to
+multiply two different matrices with,
+
+173
+00:10:24.630 --> 00:10:26.630
+say, n squared entries each.
+
+174
+00:10:26.630 --> 00:10:28.120
+It's going to be linear
+in the number of entries.
+
+175
+00:10:28.120 --> 00:10:31.783
+So it's going to be n squared time
+to add two matrices that are n by n.
+
+176
+00:10:31.783 --> 00:10:35.590
+So this immediately leads us to
+our first recursive algorithm.
+
+177
+00:10:37.110 --> 00:10:37.876
+To describe it,
+
+178
+00:10:37.876 --> 00:10:41.281
+let me quickly rewrite that expression
+we just saw on the previous slide.
+
+179
+00:10:43.451 --> 00:10:46.511
+And now our first recursive algorithm
+is simply to evaluate all of these
+
+180
+00:10:46.511 --> 00:10:48.640
+expressions in the obvious way.
+
+181
+00:10:48.640 --> 00:10:50.790
+So specifically in step one,
+
+182
+00:10:50.790 --> 00:10:53.220
+we recursively compute all
+of the necessary products.
+
+183
+00:10:54.670 --> 00:10:57.790
+And observe that there are eight
+products that we have to compute.
+
+184
+00:10:57.790 --> 00:11:00.320
+Eight products with n over
+2 by n over 2 matrices.
+
+185
+00:11:00.320 --> 00:11:03.713
+There are four entries in
+this expansion of x times y.
+
+186
+00:11:03.713 --> 00:11:05.843
+Each of the blocks is
+the sum of two products and
+
+187
+00:11:05.843 --> 00:11:07.460
+none of the products reoccurred.
+
+188
+00:11:07.460 --> 00:11:08.960
+They're all distinct.
+
+189
+00:11:08.960 --> 00:11:10.990
+So naively, if you want to evaluate this,
+
+190
+00:11:10.990 --> 00:11:14.740
+we have to do eight different products
+of n over 2 by n over 2 matrices.
+
+191
+00:11:16.050 --> 00:11:17.520
+Once those recursive calls complete,
+
+192
+00:11:17.520 --> 00:11:21.350
+then all we do is do
+the necessary four additions.
+
+193
+00:11:22.590 --> 00:11:23.359
+As we discussed, so
+
+194
+00:11:23.359 --> 00:11:26.002
+that takes time proportional to
+the number of entries in the matrix.
+
+195
+00:11:26.002 --> 00:11:29.930
+So this is going to take a quadratic
+time overall, quadratic in n.
+
+196
+00:11:29.930 --> 00:11:30.970
+Linear in the number of entries.
+
+197
+00:11:33.768 --> 00:11:37.550
+Now the question you should be asking is,
+is this a good algorithm?
+
+198
+00:11:37.550 --> 00:11:38.540
+Was this good for anything?
+
+199
+00:11:38.540 --> 00:11:39.430
+This recursive approach.
+
+200
+00:11:39.430 --> 00:11:41.330
+Splitting x and y into these blocks.
+
+201
+00:11:41.330 --> 00:11:44.290
+Expanding the product in terms
+of these blocks then recursively
+
+202
+00:11:44.290 --> 00:11:45.760
+computing each of the blocks.
+
+203
+00:11:45.760 --> 00:11:47.740
+And I want to say it's
+totally not obvious.
+
+204
+00:11:47.740 --> 00:11:50.888
+It is not clear what the running
+time of this recursive algorithm is.
+
+205
+00:11:50.888 --> 00:11:54.210
+I'm going to go ahead and give you
+a spoiler which is going to follow from
+
+206
+00:11:54.210 --> 00:11:57.620
+the master method that we'll
+talk about in the next lecture.
+
+207
+00:11:57.620 --> 00:11:58.494
+But it turns out,
+
+208
+00:11:58.494 --> 00:12:02.182
+with this kind of recursive algorithm
+where you do eight recursive calls.
+
+209
+00:12:02.182 --> 00:12:06.875
+Each on a problem with dimension half
+as much as what you started with, and
+
+210
+00:12:06.875 --> 00:12:11.436
+then do quadratic time outside,
+the running time is going to be cubic.
+
+211
+00:12:11.436 --> 00:12:15.286
+So exactly the same as with the
+straightforward iterative algorithm that
+
+212
+00:12:15.286 --> 00:12:17.160
+follows from the definition.
+
+213
+00:12:17.160 --> 00:12:20.620
+That was cubic, it turns out,
+and that was clearly cubic.
+
+214
+00:12:20.620 --> 00:12:23.820
+This one, although it's not obvious,
+is cubic as well.
+
+215
+00:12:23.820 --> 00:12:27.215
+So no better, no worse than
+the straightforward iterative algorithm.
+
+216
+00:12:29.544 --> 00:12:32.788
+So in case you're feeling disappointed
+that we went through all this work in this
+
+217
+00:12:32.788 --> 00:12:36.033
+sort of seemingly clever divide and
+conquer approach for matrix multiplication
+
+218
+00:12:36.033 --> 00:12:38.920
+and came out at the end no better
+than the iterative algorithm.
+
+219
+00:12:38.920 --> 00:12:40.555
+Well, there's really no reason to despair.
+
+220
+00:12:40.555 --> 00:12:42.402
+because remember back in
+integer multiplication,
+
+221
+00:12:42.402 --> 00:12:44.302
+we had a straightforward
+recursive algorithm.
+
+222
+00:12:44.302 --> 00:12:46.170
+Where we have to do four recursive calls.
+
+223
+00:12:46.170 --> 00:12:47.930
+Products of n over 2 digit numbers.
+
+224
+00:12:47.930 --> 00:12:52.050
+But then we had Gauss' trick, which said
+if we only did more clever products and
+
+225
+00:12:52.050 --> 00:12:53.967
+more clever additions and subtractions,
+
+226
+00:12:53.967 --> 00:12:56.670
+then we can get away with
+only three recursive calls.
+
+227
+00:12:56.670 --> 00:13:00.510
+And we'll see later if that is indeed a
+significant savings in the time we did for
+
+228
+00:13:00.510 --> 00:13:01.850
+integer multiplication.
+
+229
+00:13:01.850 --> 00:13:04.440
+And we've done nothing analogously
+clever to Gauss' trick for
+
+230
+00:13:04.440 --> 00:13:06.080
+this matrix multiplication problem.
+
+231
+00:13:06.080 --> 00:13:09.370
+All we did is the naive expansion,
+in terms of submatrices, and
+
+232
+00:13:09.370 --> 00:13:11.606
+the naive evaluation of
+the resulting expressions.
+
+233
+00:13:11.606 --> 00:13:16.670
+So, the $64,000 question is then,
+can we do something clever,
+
+234
+00:13:16.670 --> 00:13:22.680
+to reduce the number of recursive calls,
+from 8 down to something lower?
+
+235
+00:13:22.680 --> 00:13:25.109
+And that is where
+Strassen's Algorithm comes in.
+
+236
+00:13:27.852 --> 00:13:30.701
+So the high level
+Strassen's Algorithm has two steps,
+
+237
+00:13:30.701 --> 00:13:34.190
+just like the first recursive
+algorithm that we discussed.
+
+238
+00:13:34.190 --> 00:13:37.024
+It recursively computes some
+products of smaller matrices and
+
+239
+00:13:37.024 --> 00:13:39.167
+over to a roughly n over
+2 by n over 2 matrices.
+
+240
+00:13:42.128 --> 00:13:43.839
+But there's only going to
+be seven of them.
+
+241
+00:13:46.099 --> 00:13:48.026
+But they will be much
+less straightforward,
+
+242
+00:13:48.026 --> 00:13:51.382
+they will be much more cleverly chosen
+than in the first recursive algorithm.
+
+243
+00:13:54.343 --> 00:13:58.179
+In step two then is to actually
+produce the product of x and y.
+
+244
+00:13:58.179 --> 00:14:01.040
+Produce each of those
+four blocks that we saw.
+
+245
+00:14:01.040 --> 00:14:05.520
+With suitable additions and
+subtractions of these seven products.
+
+246
+00:14:05.520 --> 00:14:08.203
+And again, these are much less
+straightforward than in the first
+
+247
+00:14:08.203 --> 00:14:09.194
+recursive algorithm.
+
+248
+00:14:12.245 --> 00:14:15.696
+And so, while the additions and
+subtractions involved will be a little bit
+
+249
+00:14:15.696 --> 00:14:18.676
+more numerous than they were in
+the naive recursive algorithm.
+
+250
+00:14:18.676 --> 00:14:21.414
+It's only going to change the work
+in that part of the algorithm by
+
+251
+00:14:21.414 --> 00:14:22.300
+a constant factor.
+
+252
+00:14:22.300 --> 00:14:25.310
+So we'll still spend only theta
+(n squared) work adding and
+
+253
+00:14:25.310 --> 00:14:26.770
+subtracting things, and
+
+254
+00:14:26.770 --> 00:14:30.800
+we get a huge win in decreasing the number
+of recursive calls from 8 to 7.
+
+255
+00:14:30.800 --> 00:14:34.050
+Now just in case you have the intuition
+that shaving off one of eight
+
+256
+00:14:34.050 --> 00:14:37.460
+recursive calls should only decrease
+the running time of an algorithm
+
+257
+00:14:37.460 --> 00:14:38.530
+by one-eighth by 12.5%.
+
+258
+00:14:38.530 --> 00:14:42.880
+In fact it has a tremendously
+more amplified effect.
+
+259
+00:14:42.880 --> 00:14:46.270
+Because we do one less recursive
+call over and over and
+
+260
+00:14:46.270 --> 00:14:48.350
+over again as we keep
+recursing in the algorithm.
+
+261
+00:14:48.350 --> 00:14:52.200
+So it makes a fundamental difference in
+the eventual running time of the algorithm
+
+262
+00:14:52.200 --> 00:14:54.650
+as we'll explore in detail
+in the next set of lectures
+
+263
+00:14:54.650 --> 00:14:56.340
+when we discuss the master method.
+
+264
+00:14:56.340 --> 00:14:58.979
+So again a bit of a spoiler alert.
+
+265
+00:14:58.979 --> 00:15:02.502
+What you're going to see in the next
+set of lectures that indeed
+
+266
+00:15:02.502 --> 00:15:05.390
+Strassen's Algorithm does beat cubic time.
+
+267
+00:15:05.390 --> 00:15:06.820
+It's better than n cubed time.
+
+268
+00:15:06.820 --> 00:15:09.600
+You'll have to watch the next set of
+lectures if you want to know just what
+
+269
+00:15:09.600 --> 00:15:10.460
+the running time is.
+
+270
+00:15:10.460 --> 00:15:14.782
+But I'm going to tell you now that savings
+of the eighth recursive call is what
+
+271
+00:15:14.782 --> 00:15:17.538
+changes the algorithm
+from cubic to subcubic.
+
+272
+00:15:20.126 --> 00:15:23.610
+Now, 1969 was, obviously,
+quite a bit before my time.
+
+273
+00:15:23.610 --> 00:15:28.050
+But by all accounts, from people I've
+talked to who were around then and from
+
+274
+00:15:28.050 --> 00:15:33.318
+what the books say, Strassen's Algorithm
+totally blew people's minds at the time.
+
+275
+00:15:33.318 --> 00:15:35.940
+Everybody was just assuming that
+there's no way you could do better than
+
+276
+00:15:35.940 --> 00:15:37.840
+the iterative algorithm,
+the cubic algorithm.
+
+277
+00:15:37.840 --> 00:15:41.990
+It just seemed that matrix multiplication
+intuitively fundamentally required
+
+278
+00:15:41.990 --> 00:15:44.345
+all of the calculations that
+are spelled out in the definition.
+
+279
+00:15:44.345 --> 00:15:48.221
+So Strassen's Algorithm is
+an early glimpse of the magic and
+
+280
+00:15:48.221 --> 00:15:50.885
+of the power of clever algorithm design.
+
+281
+00:15:50.885 --> 00:15:53.317
+But if you really have
+a serious ingenuity, even for
+
+282
+00:15:53.317 --> 00:15:54.755
+super fundamental problems,
+
+283
+00:15:54.755 --> 00:15:58.600
+you can come up with fundamental savings
+over the more straightforward solution.
+
+284
+00:15:58.600 --> 00:15:59.250
+Solutions.
+So
+
+285
+00:16:01.080 --> 00:16:03.830
+those are the main points I wanted
+to talk about Strassen's algorithm.
+
+286
+00:16:03.830 --> 00:16:07.610
+How you can beat cubic time by saving
+a recursive call with suitably chosen
+
+287
+00:16:07.610 --> 00:16:10.340
+clever products and
+clever additions and subtractions.
+
+288
+00:16:10.340 --> 00:16:14.880
+Maybe a few of you are wondering what
+are these cleverly chosen products,
+
+289
+00:16:14.880 --> 00:16:16.140
+can you really do this?
+
+290
+00:16:16.140 --> 00:16:16.820
+And I don't blame you.
+
+291
+00:16:16.820 --> 00:16:19.530
+There's no reason to believe me just
+because I sort of spelled out this high
+
+292
+00:16:19.530 --> 00:16:20.490
+level idea.
+
+293
+00:16:20.490 --> 00:16:22.190
+It's not obvious this should work.
+
+294
+00:16:22.190 --> 00:16:24.230
+You might want to actually
+see the products.
+
+295
+00:16:24.230 --> 00:16:27.810
+So for those of you like that,
+this last slide is for you.
+
+296
+00:16:30.160 --> 00:16:33.910
+So here is Strassen's Algorithm
+in it's somewhat gory detail.
+
+297
+00:16:33.910 --> 00:16:37.571
+So let me tell you what the seven
+products are that we're going to form.
+
+298
+00:16:37.571 --> 00:16:41.920
+I'm going to label them P1 through P7 and
+they're
+
+299
+00:16:41.920 --> 00:16:45.900
+all going to be defined in terms of
+the blocks of the input matrices x and y.
+
+300
+00:16:45.900 --> 00:16:51.431
+So let me just remind you that we
+think of x in terms of its blocks A,
+
+301
+00:16:51.431 --> 00:16:56.277
+B, C, D and we think of y in
+terms its blocks E, F, G, H.
+
+302
+00:16:56.277 --> 00:17:02.550
+And remember a through h are all n
+over 2 by n over 2 sub-matrices.
+
+303
+00:17:02.550 --> 00:17:03.253
+So here are the seven
+products P1 though P7.
+
+304
+00:17:03.253 --> 00:17:06.968
+P1 = A(F-H),
+
+305
+00:17:09.171 --> 00:17:13.256
+P2 = (A+B)H,
+
+306
+00:17:13.256 --> 00:17:17.346
+P3 = (C+D)E.
+
+307
+00:17:20.987 --> 00:17:24.250
+P4 = D(G-E).
+
+308
+00:17:26.050 --> 00:17:31.722
+P5 = (A+D)(E+H).
+
+309
+00:17:34.929 --> 00:17:40.634
+P6 = (B-D)(G+H) and
+
+310
+00:17:40.634 --> 00:17:47.770
+finally P7 = (A-C)(E+F).
+
+311
+00:17:49.460 --> 00:17:52.620
+So I hope you'll agree that these
+are indeed only seven products.
+
+312
+00:17:52.620 --> 00:17:55.190
+And we could compute these
+with seven recursive calls.
+
+313
+00:17:55.190 --> 00:17:58.020
+So we've pre-processed with a little
+bit of additions and subtractions.
+
+314
+00:17:58.020 --> 00:18:01.430
+We have to compute F minus H,
+A plus B, C plus D, and so on.
+
+315
+00:18:01.430 --> 00:18:04.210
+We compute all these new
+matrices from the blocks.
+
+316
+00:18:04.210 --> 00:18:07.265
+And then we can recursively,
+with seven recursive calls.
+
+317
+00:18:07.265 --> 00:18:11.710
+Do the seven products that operate
+on n over 2 by n over 2 matrices.
+
+318
+00:18:11.710 --> 00:18:13.950
+Now the question is why is this useful,
+
+319
+00:18:13.950 --> 00:18:17.200
+why on earth would we want to know
+the values of these seven products.
+
+320
+00:18:17.200 --> 00:18:20.950
+So the amazing other part of the algorithm
+is that from just these seven
+
+321
+00:18:20.950 --> 00:18:23.440
+products we can using only addition and
+
+322
+00:18:23.440 --> 00:18:29.192
+subtraction recover all four
+of the blocks of x times y.
+
+323
+00:18:29.192 --> 00:18:34.780
+So x times y you recall we
+solved it in terms of blocks.
+
+324
+00:18:36.630 --> 00:18:40.480
+So we previously computed this to be
+AE+BG in the upper left corner and
+
+325
+00:18:40.480 --> 00:18:45.290
+similarly expressions for the upper right,
+lower left or lower right blocks.
+
+326
+00:18:45.290 --> 00:18:46.330
+So this we already know.
+
+327
+00:18:46.330 --> 00:18:51.126
+So the content of the claim is
+that these four blocks also arise
+
+328
+00:18:51.126 --> 00:18:54.736
+from the seven products
+in the following way.
+
+329
+00:18:57.024 --> 00:19:00.039
+So the claim here is that these
+two different expressions for
+
+330
+00:19:00.039 --> 00:19:03.930
+x times y are exactly the same, and
+they're the same block by block.
+
+331
+00:19:03.930 --> 00:19:08.787
+So in the other words, what the claim
+is that this crazy expression
+
+332
+00:19:08.787 --> 00:19:13.298
+P5+P4-P2+P6 where those
+are four of the products that
+
+333
+00:19:13.298 --> 00:19:16.952
+we have listed above,
+that is precisely AE+BG.
+
+334
+00:19:16.952 --> 00:19:21.725
+Similarly we're claiming
+the P1+P2 as exactly
+
+335
+00:19:21.725 --> 00:19:27.055
+AF+BH that's actually easy
+to see P3+P4 is CE+DG.
+
+336
+00:19:27.055 --> 00:19:28.670
+That's also easy to see.
+
+337
+00:19:28.670 --> 00:19:33.050
+And then the other complicated
+one is the P1+P5-P3-P7 is exactly
+
+338
+00:19:33.050 --> 00:19:38.980
+the same as CF+DH, so
+all four of those hold.
+
+339
+00:19:38.980 --> 00:19:42.598
+So, let me, just so you believe me because
+I don't know why you'd believe me unless
+
+340
+00:19:42.598 --> 00:19:44.230
+I showed you some this derivation.
+
+341
+00:19:45.450 --> 00:19:48.430
+Let's just look at the proof of one of
+the cases of the upper left corner.
+
+342
+00:19:48.430 --> 00:19:56.950
+So that is let's just expand out
+this crazy expression, P5+P4-P2+P6.
+
+343
+00:19:56.950 --> 00:19:58.290
+What do we get?
+
+344
+00:19:58.290 --> 00:20:07.558
+Well, from P5 we get, AE+AH+DE+DH,
+
+345
+00:20:07.558 --> 00:20:12.045
+then we add P4, so
+that's going to give us,
+
+346
+00:20:12.045 --> 00:20:18.540
++DG-DE, then we subtract P2,
+
+347
+00:20:18.540 --> 00:20:25.630
+so that gives us a -AH-BH,
+and then we add in P6, so
+
+348
+00:20:25.630 --> 00:20:34.718
+that gives us a BG+BH-DG-DH.
+
+349
+00:20:34.718 --> 00:20:39.386
+Okay so what happens next,
+well now we look for
+
+350
+00:20:39.386 --> 00:20:45.490
+cancellations, so
+we cancel the AH's we cancel the DE's,
+
+351
+00:20:45.490 --> 00:20:49.798
+we cancel the DH's, we cancel the DG's,
+
+352
+00:20:49.798 --> 00:20:55.308
+we cancel the BH's and
+holy cow, what do we get?
+
+353
+00:20:55.308 --> 00:21:00.770
+We get AE+BG, that is we get exactly
+
+354
+00:21:00.770 --> 00:21:06.390
+what we were supposed to in
+the upper left block of x times y.
+
+355
+00:21:06.390 --> 00:21:10.310
+So we just actually verified that this
+equation holds for the upper left block.
+
+356
+00:21:10.310 --> 00:21:13.870
+It's quite easy to see that it holds for
+the upper right and lower left blocks.
+
+357
+00:21:13.870 --> 00:21:18.830
+And then a comparable calculation verifies
+it for the lower right blocks of the two.
+
+358
+00:21:18.830 --> 00:21:23.820
+So summarizing, because this claim holds,
+because actually we can recover the four
+
+359
+00:21:23.820 --> 00:21:26.050
+blocks of x times y from
+these seven products.
+
+360
+00:21:26.050 --> 00:21:28.850
+Strassen's algorithm works
+in the following way.
+
+361
+00:21:28.850 --> 00:21:33.580
+You compute the seven products P1
+through P7 using seven recursive calls.
+
+362
+00:21:33.580 --> 00:21:37.530
+Then you just compute the four blocks
+using some extra additions and
+
+363
+00:21:37.530 --> 00:21:39.880
+subtractions as shown in the claim.
+
+364
+00:21:39.880 --> 00:21:43.620
+So it's seven recursive calls on
+n over 2 by n over 2 matrices.
+
+365
+00:21:43.620 --> 00:21:47.110
+Plus n squared work due to
+the necessary additions and as you'll
+
+366
+00:21:47.110 --> 00:21:51.895
+see in the master method lecture that is
+actually sufficient for subcubic time.
+
+367
+00:21:54.880 --> 00:21:57.870
+Now, I sympathize with you if
+you have the following question,
+
+368
+00:22:00.770 --> 00:22:03.274
+which is how on earth did
+Strassen come up with this.
+
+369
+00:22:05.780 --> 00:22:07.690
+And indeed this sort of illustrates,
+
+370
+00:22:07.690 --> 00:22:11.210
+the difference between checking somebody's
+proof and coming up with a proof.
+
+371
+00:22:11.210 --> 00:22:14.414
+Given that I told you
+the magical seven products and
+
+372
+00:22:14.414 --> 00:22:18.751
+how you from them you can recover
+the four desired blocks of x times y.
+
+373
+00:22:18.751 --> 00:22:20.630
+It's really just mechanical
+to see that it works.
+
+374
+00:22:20.630 --> 00:22:23.230
+It's a totally different story of how
+do you come up with P1 through P7 in
+
+375
+00:22:23.230 --> 00:22:25.000
+the first place.
+
+376
+00:22:25.000 --> 00:22:27.150
+So how did Strassen come up with them?
+
+377
+00:22:27.150 --> 00:22:29.480
+Honestly, your guess is as good as mine.
