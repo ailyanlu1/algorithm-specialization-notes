@@ -1,0 +1,887 @@
+WEBVTT
+
+1
+00:00:00.200 --> 00:00:03.360
+So having motivated and hyped up
+the generality of the master method and
+
+2
+00:00:03.360 --> 00:00:04.150
+its use for
+
+3
+00:00:04.150 --> 00:00:09.170
+analyzing recursive algorithms, let's move
+on to its precise mathematical statement.
+
+4
+00:00:09.170 --> 00:00:11.880
+Now, the master method is,
+in some sense, exactly what you want.
+
+5
+00:00:11.880 --> 00:00:14.740
+It's what I'm going to call a black
+box for solving recurrences.
+
+6
+00:00:14.740 --> 00:00:18.480
+Basically, it takes an input
+a recurrence in a particular format and
+
+7
+00:00:18.480 --> 00:00:21.190
+it spits out as output
+a solution to that recurrence,
+
+8
+00:00:21.190 --> 00:00:23.380
+an upper bound on the running
+time of your recursive algorithm.
+
+9
+00:00:24.550 --> 00:00:27.710
+That is, you just plug in a few parameters
+of your recursive algorithm, and
+
+10
+00:00:27.710 --> 00:00:30.340
+boom, out pops its running time.
+
+11
+00:00:30.340 --> 00:00:32.470
+Now, the master method does
+require a few assumptions,
+
+12
+00:00:32.470 --> 00:00:35.290
+and let me be explicit about
+one of them right now.
+
+13
+00:00:35.290 --> 00:00:37.380
+Namely, the master method,
+at least the one I'm going to give you,
+
+14
+00:00:37.380 --> 00:00:38.910
+is only going to be relevant for
+
+15
+00:00:38.910 --> 00:00:42.580
+problems in which all of the subproblems
+have exactly the same size.
+
+16
+00:00:42.580 --> 00:00:45.812
+So for example, in merge sort,
+there are two recursive calls, and
+
+17
+00:00:45.812 --> 00:00:47.749
+each is on exactly one half of the array.
+
+18
+00:00:47.749 --> 00:00:52.580
+So merge sort satisfies this assumption,
+both subproblems have equal size.
+
+19
+00:00:52.580 --> 00:00:55.510
+Similarly, in both of our integer
+multiplication algorithms,
+
+20
+00:00:55.510 --> 00:00:58.470
+all subproblems were on
+integers with n over 2 digits,
+
+21
+00:00:58.470 --> 00:01:02.200
+with half as many digits, so
+those will all also obey this assumption.
+
+22
+00:01:02.200 --> 00:01:04.960
+If for some reason you had a recursive
+algorithm that recursed on
+
+23
+00:01:04.960 --> 00:01:08.090
+a third of the array and
+then on the other two-thirds of the array,
+
+24
+00:01:08.090 --> 00:01:10.560
+the master method that I'm going to
+give you will not apply to it.
+
+25
+00:01:11.790 --> 00:01:14.610
+There are generalizations of the master
+method that I'm going to show you
+
+26
+00:01:14.610 --> 00:01:17.960
+which can accommodate unbalanced
+subproblem sizes, but
+
+27
+00:01:17.960 --> 00:01:19.900
+those are outside
+the scope of this course.
+
+28
+00:01:19.900 --> 00:01:23.000
+This will be sufficient for almost all
+of the examples we're going to see.
+
+29
+00:01:23.000 --> 00:01:25.875
+One notable exception, for those of
+you that watched the optional video on
+
+30
+00:01:25.875 --> 00:01:29.780
+a deterministic algorithm for
+linear time selection, that will be
+
+31
+00:01:29.780 --> 00:01:33.272
+one algorithm which has two recursive
+calls on different subproblem sizes.
+
+32
+00:01:33.272 --> 00:01:34.706
+So to analyze that recurrence,
+
+33
+00:01:34.706 --> 00:01:37.529
+we'll have to use a different method,
+not the master method.
+
+34
+00:01:38.620 --> 00:01:42.570
+Next I'm going to describe the format
+of the recurrences to which the master
+
+35
+00:01:42.570 --> 00:01:43.700
+method applies.
+
+36
+00:01:43.700 --> 00:01:46.960
+As I said, there are more general versions
+of the master method which apply to even
+
+37
+00:01:46.960 --> 00:01:48.200
+more recurrences.
+
+38
+00:01:48.200 --> 00:01:51.090
+But the one I'm going to give you is
+going to be reasonably simple, and
+
+39
+00:01:51.090 --> 00:01:53.910
+it will cover pretty much all the cases
+you're likely to ever encounter.
+
+40
+00:01:55.090 --> 00:01:56.680
+So recurrences have two ingredients.
+
+41
+00:01:56.680 --> 00:02:01.250
+There's the relatively unimportant,
+but still necessary, base case step.
+
+42
+00:02:01.250 --> 00:02:04.020
+And we're going to make the obvious
+assumption, which is just satisfied by
+
+43
+00:02:04.020 --> 00:02:07.870
+every example we're ever going to see in
+this course, which is that at some point,
+
+44
+00:02:07.870 --> 00:02:10.880
+once the input size drops to
+a sufficiently small amount,
+
+45
+00:02:10.880 --> 00:02:16.440
+then the recursion stops, and
+the subproblem is solved in constant time.
+
+46
+00:02:16.440 --> 00:02:19.200
+Since this assumption is pretty much
+always satisfied in every problem
+
+47
+00:02:19.200 --> 00:02:22.070
+we're going to see,
+I'm not going to discuss it much further.
+
+48
+00:02:22.070 --> 00:02:25.460
+Let's move on to the general case
+where there are recursive calls.
+
+49
+00:02:25.460 --> 00:02:28.540
+So we assume the recurrence is
+given in the following format.
+
+50
+00:02:28.540 --> 00:02:33.438
+The running time on an input of length
+n is bounded above by some number
+
+51
+00:02:33.438 --> 00:02:38.181
+of recursive calls,
+let's call it a different recursive calls.
+
+52
+00:02:38.181 --> 00:02:41.959
+And then each of these subproblems
+has exactly the same size, and
+
+53
+00:02:41.959 --> 00:02:45.210
+it's 1 over b fraction of
+the original input size.
+
+54
+00:02:45.210 --> 00:02:49.918
+So there's a recursive calls,
+each on an input of size n over b.
+
+55
+00:02:49.918 --> 00:02:55.920
+Now, as usual, there's the case where n
+over b is a fraction and not an integer.
+
+56
+00:02:55.920 --> 00:02:58.429
+And as usual,
+I'm going to be sloppy and ignore it.
+
+57
+00:02:58.429 --> 00:03:03.320
+And as usual, that sloppiness has no
+implications for the final conclusion.
+
+58
+00:03:03.320 --> 00:03:05.840
+Everything that we're
+going to discuss is true for
+
+59
+00:03:05.840 --> 00:03:09.730
+the same reasons in the general case
+where n over b is not an integer.
+
+60
+00:03:09.730 --> 00:03:12.440
+Now, outside the recursive calls,
+we do some extra work.
+
+61
+00:03:12.440 --> 00:03:16.270
+And let's say that it's O(n to the d) for
+some parameter d.
+
+62
+00:03:16.270 --> 00:03:18.460
+So in addition to the input size n,
+
+63
+00:03:18.460 --> 00:03:22.900
+there are three letters here which we need
+to be very clear on what their meaning is.
+
+64
+00:03:22.900 --> 00:03:26.230
+So first of all, there's a,
+which is the number of subproblems,
+
+65
+00:03:26.230 --> 00:03:27.550
+the number of recursive calls.
+
+66
+00:03:28.730 --> 00:03:31.840
+So a could be as small as 1 or
+it might be some larger integer.
+
+67
+00:03:32.940 --> 00:03:34.400
+Then there's b.
+
+68
+00:03:34.400 --> 00:03:39.244
+b is the factor by which the input size
+shrinks before a recursive call is
+
+69
+00:03:39.244 --> 00:03:39.980
+applied.
+
+70
+00:03:41.080 --> 00:03:43.250
+b is some constant
+strictly greater than 1.
+
+71
+00:03:43.250 --> 00:03:43.990
+So for example,
+
+72
+00:03:43.990 --> 00:03:47.940
+if you recurse on half of the original
+problem, then b would be equal to 2.
+
+73
+00:03:47.940 --> 00:03:51.450
+It better be strictly bigger than 1 so
+that eventually you stop recursion, so
+
+74
+00:03:51.450 --> 00:03:53.620
+that eventually then you terminate.
+
+75
+00:03:53.620 --> 00:03:57.270
+Finally, there's d, which is simply
+the exponent in the running time of the,
+
+76
+00:03:57.270 --> 00:03:59.280
+quote, unquote combine step, that is,
+
+77
+00:03:59.280 --> 00:04:03.180
+the amount of work which is done
+outside of the recursive calls.
+
+78
+00:04:03.180 --> 00:04:04.491
+And d could be as small as 0,
+
+79
+00:04:04.491 --> 00:04:08.129
+which would indicate constant amount
+of work outside of the recursive calls.
+
+80
+00:04:09.690 --> 00:04:13.920
+One point to emphasize is that a,
+b, and d are all constants.
+
+81
+00:04:13.920 --> 00:04:16.690
+They're all numbers that
+are independent of n.
+
+82
+00:04:16.690 --> 00:04:20.276
+So a, b, and d are going to be
+numbers like 1, 2, 3, or 4.
+
+83
+00:04:20.276 --> 00:04:23.040
+They do not depend on the input size n.
+
+84
+00:04:24.460 --> 00:04:28.167
+And in fact, let me just redraw the d so
+that you don't confuse it with the a.
+
+85
+00:04:28.167 --> 00:04:32.426
+So again, a is the number of recursive
+calls and d is the exponent and
+
+86
+00:04:32.426 --> 00:04:37.470
+the running time governing the work
+done outside of the recursive calls.
+
+87
+00:04:37.470 --> 00:04:41.210
+Now, one comment about that final term,
+that big O(n to the d).
+
+88
+00:04:41.210 --> 00:04:42.910
+On the one hand, I'm being sort of sloppy.
+
+89
+00:04:42.910 --> 00:04:46.750
+I'm not keeping track of the constant
+that's hidden inside the big-O notation.
+
+90
+00:04:46.750 --> 00:04:49.990
+I'll be explicit with that constant when
+we actually prove the master method.
+
+91
+00:04:49.990 --> 00:04:51.050
+But it's really not going to matter.
+
+92
+00:04:51.050 --> 00:04:54.392
+It's just going to carry through
+the analysis without affecting anything.
+
+93
+00:04:54.392 --> 00:04:57.350
+So you can go ahead and
+ignore that constant inside the big-O.
+
+94
+00:04:57.350 --> 00:05:01.729
+Obviously, the constant in the exponent,
+namely d, is very important.
+
+95
+00:05:01.729 --> 00:05:05.338
+So depending on what d is, depends on
+whether that amount of time is constant,
+
+96
+00:05:05.338 --> 00:05:07.110
+linear, quadratic, or so on.
+
+97
+00:05:07.110 --> 00:05:08.719
+So certainly we care about the constant d.
+
+98
+00:05:09.900 --> 00:05:11.660
+So that's the input to the master method.
+
+99
+00:05:11.660 --> 00:05:13.590
+It is a recurrence of this form.
+
+100
+00:05:13.590 --> 00:05:17.344
+So you can think of it as a recursive
+algorithm which makes a recursive calls,
+
+101
+00:05:17.344 --> 00:05:20.114
+each on subproblems of equal size,
+each of size n over b,
+
+102
+00:05:20.114 --> 00:05:23.850
+plus it does n to the d work
+outside of the recursive calls.
+
+103
+00:05:23.850 --> 00:05:27.640
+So having set up the notation, I can now
+precisely state the master method for you.
+
+104
+00:05:28.940 --> 00:05:32.580
+So given such a recurrence, we're going to
+get an upper bound on the running time.
+
+105
+00:05:32.580 --> 00:05:37.380
+So the running time on inputs of size
+n is going to be upper bounded by
+
+106
+00:05:37.380 --> 00:05:39.470
+one of three things.
+
+107
+00:05:39.470 --> 00:05:42.580
+So somewhat famously,
+the master method has three cases.
+
+108
+00:05:42.580 --> 00:05:44.380
+So let me tell you about each of them.
+
+109
+00:05:44.380 --> 00:05:45.090
+The trigger,
+
+110
+00:05:45.090 --> 00:05:49.700
+which determines which case you're in,
+is a comparison between two numbers.
+
+111
+00:05:49.700 --> 00:05:54.571
+First of all, a, recall,
+a is the number of recursive calls made.
+
+112
+00:05:54.571 --> 00:05:57.629
+And b raised to the d power.
+
+113
+00:05:57.629 --> 00:06:01.850
+Recall, b is the factor by which the input
+size shrinks before you recurse.
+
+114
+00:06:01.850 --> 00:06:05.748
+d is the exponent in the amount of work
+done outside of the recursive call.
+
+115
+00:06:05.748 --> 00:06:08.830
+So we're going to have one case for
+when they're equal,
+
+116
+00:06:08.830 --> 00:06:12.992
+we're going to have one case for when
+a is strictly smaller than b to the d.
+
+117
+00:06:12.992 --> 00:06:17.389
+And the third case is when a is
+strictly bigger than b of the d.
+
+118
+00:06:17.389 --> 00:06:22.990
+And in the first case, we got a running
+time of big O of n to the d times log n.
+
+119
+00:06:25.310 --> 00:06:29.700
+And again, this is d, the same d that
+was in the final term of the recurrence.
+
+120
+00:06:29.700 --> 00:06:32.050
+Okay, the work done outside
+of the recursive calls.
+
+121
+00:06:32.050 --> 00:06:32.980
+So the first case,
+
+122
+00:06:32.980 --> 00:06:36.410
+the running time is the same as
+the running time in the recurrence,
+
+123
+00:06:36.410 --> 00:06:40.730
+outside of the recursive calls, but
+we pick up an extra log n factor.
+
+124
+00:06:40.730 --> 00:06:44.335
+In the second case,
+where a is smaller than b to the d,
+
+125
+00:06:44.335 --> 00:06:47.472
+the running time is merely
+big-O of n to the d.
+
+126
+00:06:47.472 --> 00:06:50.268
+And this case might be somewhat
+stunning that this could ever occur,
+
+127
+00:06:50.268 --> 00:06:52.400
+because of course,
+in recurrence, what do you do?
+
+128
+00:06:52.400 --> 00:06:56.180
+You do some recursion, plus you do n
+to the d work outside of the recursion.
+
+129
+00:06:56.180 --> 00:06:59.500
+So in the second case, it actually
+says that the work is dominated by
+
+130
+00:06:59.500 --> 00:07:03.200
+just what's done outside
+the recursion in the outermost call.
+
+131
+00:07:03.200 --> 00:07:05.820
+The third case will initially
+seem the most mysterious.
+
+132
+00:07:05.820 --> 00:07:10.289
+When a is strictly bigger than b to the d,
+
+133
+00:07:10.289 --> 00:07:17.533
+we're going to get a running time of
+big-O of n to the log base b of a.
+
+134
+00:07:17.533 --> 00:07:21.043
+Where, again, recall,
+a is the number of recursive calls and
+
+135
+00:07:21.043 --> 00:07:25.310
+b is the factor by which the input
+size shrinks before you recurse.
+
+136
+00:07:25.310 --> 00:07:28.270
+So that's the master method
+with its three cases.
+
+137
+00:07:28.270 --> 00:07:32.850
+Let me give this to you in a cleaner
+slide to make sure there's no
+
+138
+00:07:32.850 --> 00:07:35.300
+ambiguity in my handwriting.
+
+139
+00:07:35.300 --> 00:07:37.820
+So here's the exact same statement,
+the master method
+
+140
+00:07:37.820 --> 00:07:41.860
+once again with its three cases,
+depending on how a compares to b to the d.
+
+141
+00:07:44.980 --> 00:07:47.880
+So one thing you'll notice about this
+version of the master method is that it
+
+142
+00:07:47.880 --> 00:07:48.860
+only gives upper bounds.
+
+143
+00:07:48.860 --> 00:07:52.190
+So we only say that the solution to
+the recurrence is big-O of some function.
+
+144
+00:07:52.190 --> 00:07:54.499
+And that's because if you
+go back to our recurrence,
+
+145
+00:07:54.499 --> 00:07:57.030
+we used big-O rather than
+theta in the recurrence.
+
+146
+00:07:57.030 --> 00:07:59.833
+And this is in the spirit of the course,
+where as algorithm designers,
+
+147
+00:07:59.833 --> 00:08:02.029
+our natural focus is on upper bounds,
+on guarantees for
+
+148
+00:08:02.029 --> 00:08:03.822
+the worst case running
+time of an algorithm.
+
+149
+00:08:03.822 --> 00:08:08.160
+And we're not going to focus too much most
+of the time on proving stronger bounds in
+
+150
+00:08:08.160 --> 00:08:09.595
+terms of theta notation.
+
+151
+00:08:09.595 --> 00:08:11.029
+Now, a good exercise for
+
+152
+00:08:11.029 --> 00:08:15.605
+you, to check if you really understand
+the proof of the master method after we go
+
+153
+00:08:15.605 --> 00:08:19.429
+through it will be to show that if
+you strengthen the hypothesis and
+
+154
+00:08:19.429 --> 00:08:23.594
+you assume the recurrence has the form T
+of n equals a times T of n over b plus
+
+155
+00:08:23.594 --> 00:08:28.235
+theta of n to the d, then in fact, all
+three of these big-O's in the statement of
+
+156
+00:08:28.235 --> 00:08:33.010
+the master method become thetas and
+the solution becomes asymptotically exact.
+
+157
+00:08:33.010 --> 00:08:34.097
+So one final comment.
+
+158
+00:08:34.097 --> 00:08:37.865
+You'll notice that I'm being
+asymmetrically sloppy with the two
+
+159
+00:08:37.865 --> 00:08:40.361
+logarithms that appear in these formulas.
+
+160
+00:08:40.361 --> 00:08:42.630
+So let me just explain why.
+
+161
+00:08:42.630 --> 00:08:45.150
+In particular, you'll notice that
+in case one, with the logarithm,
+
+162
+00:08:45.150 --> 00:08:47.220
+I'm not specifying the base.
+
+163
+00:08:47.220 --> 00:08:48.430
+Why is that true?
+
+164
+00:08:48.430 --> 00:08:51.870
+Well, it's because the the logarithm,
+with respect to any two different bases,
+
+165
+00:08:51.870 --> 00:08:53.950
+differs by a constant factor.
+
+166
+00:08:53.950 --> 00:08:58.115
+So the logarithm base e, that is, the
+natural logarithm, and the logarithm base
+
+167
+00:08:58.115 --> 00:09:03.360
+2, for example, differ by only a constant
+factor independent of the argument n.
+
+168
+00:09:03.360 --> 00:09:06.555
+So you can switch this logarithm to
+whatever constant base you like,
+
+169
+00:09:06.555 --> 00:09:08.325
+it only changes the leading
+constant factor,
+
+170
+00:09:08.325 --> 00:09:11.875
+which of course is being suppressed
+in the big-O notation anyways.
+
+171
+00:09:11.875 --> 00:09:15.505
+On the other hand, in case three,
+where we have a logarithm in the exponent,
+
+172
+00:09:15.505 --> 00:09:18.205
+once it's in the exponent,
+we definitely care about that constant.
+
+173
+00:09:18.205 --> 00:09:21.962
+Constants is the difference between,
+say, linear time and quadratic time.
+
+174
+00:09:21.962 --> 00:09:25.012
+So we need to keep careful
+track of the logarithm base
+
+175
+00:09:25.012 --> 00:09:29.512
+in the exponent in case three,
+and that base is precisely b,
+
+176
+00:09:29.512 --> 00:09:33.602
+the factor by which the input
+shrinks with each recursive call.
+
+177
+00:09:33.602 --> 00:09:35.652
+So that's the precise statement
+of the master method,
+
+178
+00:09:35.652 --> 00:09:39.830
+and the rest of this lecture will work
+toward understanding the master method.
+
+179
+00:09:39.830 --> 00:09:43.680
+So first, in the next video, we'll look at
+a number of examples, including resolving
+
+180
+00:09:43.680 --> 00:09:47.620
+the running time of Gauss's recursive
+algorithm for integer multiplication.
+
+181
+00:09:47.620 --> 00:09:50.661
+Following those several examples,
+we'll prove the master method.
+
+182
+00:09:50.661 --> 00:09:53.949
+And I know now these three cases
+probably look super mysterious,
+
+183
+00:09:53.949 --> 00:09:56.215
+but if I do my job,
+by the end of the analysis,
+
+184
+00:09:56.215 --> 00:09:59.800
+these three cases will seem like
+the most natural thing in the world, as
+
+185
+00:09:59.800 --> 00:10:03.969
+will these somewhat exotic looking formula
+for exactly what the running time is.

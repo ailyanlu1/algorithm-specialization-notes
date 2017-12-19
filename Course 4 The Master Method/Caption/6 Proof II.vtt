@@ -1,0 +1,1051 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.574
+Let's complete the proof of the master
+method. Let me remind you about the story
+
+2
+00:00:04.574 --> 00:00:08.754
+so far, the first thing we did is we
+analyzed the work done by a recursive
+
+3
+00:00:08.754 --> 00:00:12.764
+algorithm using a recursion tree. So we
+zoomed in on a given level J, we
+
+4
+00:00:12.764 --> 00:00:17.451
+identified the total amount of work done
+at level J and then we summed up over all
+
+5
+00:00:17.451 --> 00:00:22.026
+of the levels resulting in this rather
+intimidating expression star. C into the D
+
+6
+00:00:22.026 --> 00:00:26.714
+times a sum over the levels J from zero to
+log base B of N of quantity A over B to
+
+7
+00:00:26.714 --> 00:00:31.345
+the B raised to the J. Having derived this
+expression star we then spent some time
+
+8
+00:00:31.345 --> 00:00:35.691
+interpreting it, attaching to it some
+semantics Sticks. And we realize that the
+
+9
+00:00:35.691 --> 00:00:40.221
+roll of this ratio A to the B over D, is
+to distinguish between three fundamentally
+
+10
+00:00:40.221 --> 00:00:44.696
+different types of recursion trees. Those
+in which A = B to the D and the amount of
+
+11
+00:00:44.696 --> 00:00:48.898
+work is the same at every level. Those in
+which A is less than B to the D and
+
+12
+00:00:48.898 --> 00:00:53.210
+therefore the amount of work is going down
+with the level. And those where A is
+
+13
+00:00:53.210 --> 00:00:57.685
+bigger than B to the D in which case the
+amount of work is growing with the level.
+
+14
+00:00:57.685 --> 00:01:02.051
+This gave us intuition about the three
+cases of the master method and even gave
+
+15
+00:01:02.051 --> 00:01:06.471
+us predictions f or the running times we
+might see. So what remains to do is turn
+
+16
+00:01:06.471 --> 00:01:10.773
+this hopeful intuition into. A rigorous
+proof. So we need to verify that in fact
+
+17
+00:01:10.773 --> 00:01:15.171
+the simplest possible scenarios outlined
+in the previous video. Actually occur. In
+
+18
+00:01:15.171 --> 00:01:19.489
+addition, we need to demystify the third
+case and understand what the expression
+
+19
+00:01:19.489 --> 00:01:23.798
+has to do with the number of leaves of the
+recursion tree. Let's begin with the
+
+20
+00:01:23.798 --> 00:01:28.119
+simplest case, which is case one. We're
+calling case one, we're assuming that A
+
+21
+00:01:28.119 --> 00:01:32.777
+equals B to the D. This is the case where
+we have a perfect equilibrium between the
+
+22
+00:01:32.777 --> 00:01:37.210
+forces of good and evil. Where the rate of
+the sub problem proliferation exactly
+
+23
+00:01:37.210 --> 00:01:41.250
+cancels out with a rate at which we do
+less work per sub problem. And now,
+
+24
+00:01:41.250 --> 00:01:45.908
+examining the expression, star, we can see
+how easy our lives get when A equals B to
+
+25
+00:01:45.908 --> 00:01:50.824
+the D. In that case, this ratio is equal
+to one. So naturally this ratio raised to
+
+26
+00:01:50.824 --> 00:01:56.179
+the J is also equal to one for all J. And
+then of course this sum evaluates to
+
+27
+00:01:56.179 --> 00:02:03.136
+something very simple. Namely one summed
+with itself log base B of N plus one
+
+28
+00:02:03.136 --> 00:02:10.816
+times. So the sum simply equals log base B
+of N. Plus one, and that's going to get
+
+29
+00:02:10.816 --> 00:02:18.629
+multiplied by. This CN to the D term which
+is independent of the sum. So summarizing,
+
+30
+00:02:18.629 --> 00:02:26.105
+when A equals B to the D, we find that
+star equals CN to the D times log base B
+
+31
+00:02:26.105 --> 00:02:32.896
+of N plus one. Writing this in big o
+notation, we would write big o of end of a
+
+32
+00:02:32.896 --> 00:02:37.555
+d login. And again, I'm going to suppress
+the base of the logarithms. Since all
+
+33
+00:02:37.555 --> 00:02:42.232
+logarithms differ only by a constant
+factor we don't have to specify the base.
+
+34
+00:02:42.232 --> 00:02:47.142
+That's just suppressed by the constant
+hidden in the big O notation. So that's it
+
+35
+00:02:47.142 --> 00:02:51.702
+for case one. Like I said, this is the
+easy case. So what do we do when A is not
+
+36
+00:02:51.702 --> 00:02:56.437
+equal to B to the D? And remember A could
+be either less than or bigger than B to
+
+37
+00:02:56.437 --> 00:03:01.231
+the D. To answer that question, let's take
+a short detour into geometric series. For
+
+38
+00:03:01.231 --> 00:03:05.850
+this single slide detour we're going to
+think about a single constant number R.
+
+39
+00:03:05.850 --> 00:03:10.664
+Now, what you want to think about is R.
+Representing that ratio A. Over B. To the
+
+40
+00:03:10.664 --> 00:03:15.601
+D. From the previous slot. But for this
+slide only let's just call it R. This is a
+
+41
+00:03:15.601 --> 00:03:20.992
+constant. It's bigger than zero, and it's
+not equal to one. Now, suppose we sum up
+
+42
+00:03:20.992 --> 00:03:27.518
+powers of R stopping, let's say, at the
+Kth power of R. I claim that this sum has
+
+43
+00:03:27.518 --> 00:03:33.492
+a nice closed form formula. Specifically
+it is exactly, R. To the K. Plus one,
+
+44
+00:03:33.492 --> 00:03:38.875
+minus one. Divided by or a minus one. Now,
+whenever you see a general formula like
+
+45
+00:03:38.875 --> 00:03:44.430
+this, it's useful to keep in mind a couple
+of canonical values of the parameters that
+
+46
+00:03:44.430 --> 00:03:49.855
+you can plug in to develop intuition. And
+for this expression, you might wanna think
+
+47
+00:03:49.855 --> 00:03:54.037
+canonically about the cases, R=2, and
+R=1/2. So when R=2, or something that
+
+48
+00:03:54.037 --> 00:03:58.678
+powers a two. One+2+4+8+16, and so on. One
+hour's a half, [inaudible] have one, plus
+
+49
+00:03:58.678 --> 00:04:03.295
+a half, plus a quarter, plus an eighth,
+and so on. Now I'm not gonna prove this
+
+50
+00:04:03.295 --> 00:04:07.481
+for you, I'd like you to prove this
+yourself. If you don't already know this
+
+51
+00:04:07.481 --> 00:04:12.118
+fact. So the way to prove this is simply
+by induction. And I will leave this an, an
+
+52
+00:04:12.118 --> 00:04:16.584
+exercise. What I wanna focus on instead is
+what this fact can do for us. The way that
+
+53
+00:04:16.584 --> 00:04:20.891
+we use this fact is to formalize the idea
+that, that in recursion trees where the
+
+54
+00:04:20.891 --> 00:04:24.878
+amount of work is increasing in the
+levels, the leaves dominate the overall
+
+55
+00:04:24.878 --> 00:04:29.184
+running time. And where recursion trees,
+where the amount of work is decreasing in
+
+56
+00:04:29.184 --> 00:04:33.544
+the level, the root dominates the running
+time. In the sense that we can ignore all
+
+57
+00:04:33.544 --> 00:04:37.797
+of the other levels of the recursion tree.
+So, and in the vision in this slide, we
+
+58
+00:04:37.797 --> 00:04:42.118
+have two upshots. First of all, for the
+case when R is less than one. And in this
+
+59
+00:04:42.118 --> 00:04:47.241
+case, this expression on the right-hand
+side. R to the Q plus one minus one over R
+
+60
+00:04:47.241 --> 00:04:52.192
+minus one can be upper bounded by one over
+one minus R. So again, remember, you might
+
+61
+00:04:52.192 --> 00:04:56.398
+want to have a canonical value of r in
+mind here, namely, one half. So what we're
+
+62
+00:04:56.398 --> 00:05:00.848
+claiming here is that the right hand side
+is nor more than two for the case of
+
+63
+00:05:00.848 --> 00:05:05.354
+R=1/2. And that's easy to see if you think
+about one plus one-half plus a one-fourth
+
+64
+00:05:05.354 --> 00:05:09.804
+plus one-eighth and so on. That sum is
+converging to, to as k grows large.
+
+65
+00:05:09.804 --> 00:05:14.142
+So in general, for our less than one
+constant, the sum is divided by one minus
+
+66
+00:05:14.142 --> 00:05:18.535
+one over R. Now, we're not actually gonna
+care about this formula, one minus one
+
+67
+00:05:18.535 --> 00:05:23.026
+over R. The point for us is just that this
+is a constant. And by constant, I mean
+
+68
+00:05:23.026 --> 00:05:27.732
+independent of K, independent of how many
+terms we sum up. Obviously, it depends on
+
+69
+00:05:27.732 --> 00:05:32.555
+R of the ratio, but it does not depend on
+how many things we sum up on K. So the way
+
+70
+00:05:32.555 --> 00:05:37.204
+to think about this is, when we sum up a
+bunch of terms where R is less than one,
+
+71
+00:05:37.204 --> 00:05:41.736
+then the very first term dominates. The
+first term is with a one. And no matter
+
+72
+00:05:41.736 --> 00:05:46.036
+how many terms we sum up, we never get,
+grow bigger than the sum constant. A
+
+73
+00:05:46.036 --> 00:05:50.992
+similar situation holds for the case where
+r is a constant bigger than one. When r is
+
+74
+00:05:50.992 --> 00:05:55.540
+bigger than one. A tiny bit of algebra
+shows that we can upper bound the right
+
+75
+00:05:55.540 --> 00:06:00.754
+hand side by r to the k. Times something
+which is constant, independent of K. So
+
+76
+00:06:00.754 --> 00:06:04.863
+again, let's interpret the second upshot
+in terms of a canonical value of R.
+
+77
+00:06:04.863 --> 00:06:08.973
+Namely, R equals two. Then our sum is one
+plus two plus four plus eight plus
+
+78
+00:06:08.973 --> 00:06:13.246
+sixteen, and so on. And what this is
+saying is that no matter how many terms we
+
+79
+00:06:13.246 --> 00:06:17.914
+sum up, the overall sum is never gonna be
+more than twice. The largest and final
+
+80
+00:06:17.914 --> 00:06:23.390
+term. So if we sum up to say 128, the sum,
+you'll notice, will be 255, which is, at
+
+81
+00:06:23.390 --> 00:06:28.865
+most, twice that largest term, 128. And
+that saying is true for any K. The entire
+
+82
+00:06:28.865 --> 00:06:34.271
+sum is no more than twice that of the
+largest term. In this sense, the largest
+
+83
+00:06:34.271 --> 00:06:39.533
+term in the series dominates the whole
+thing. So to summarize this slide in just
+
+84
+00:06:39.533 --> 00:06:44.402
+into one sentence we sum up powers of a
+constant R when R is bigger than one the
+
+85
+00:06:44.402 --> 00:06:49.390
+largest power of that constant dominate to
+the sun when R is smaller than one then
+
+86
+00:06:49.390 --> 00:06:54.199
+the sun is just a constant. Let's now
+apply this to prove case two of the master
+
+87
+00:06:54.199 --> 00:06:58.851
+method. In case two of the master method,
+we assume that A is less than B to the D.
+
+88
+00:06:58.851 --> 00:07:03.368
+That is, the rate at which sub problems
+are proliferating is drowned out by the
+
+89
+00:07:03.368 --> 00:07:07.714
+rate at which we do less work per sub
+problem. So this is the case where the
+
+90
+00:07:07.714 --> 00:07:12.002
+amount of work is decreasing with each
+level of the recursion tree. And our
+
+91
+00:07:12.002 --> 00:07:16.691
+intuition said that, well, in the simplest
+possible scenario, we might hope that all
+
+92
+00:07:16.691 --> 00:07:21.323
+of the work, up to a constant factor, is
+being done at the root. So let's make that
+
+93
+00:07:21.323 --> 00:07:25.668
+intuition precise by using the basic
+Sums fact on the previous slide.
+
+94
+00:07:25.668 --> 00:07:31.440
+So, since A is less than B to the D. This
+ration is less than one. So let's call
+
+95
+00:07:31.440 --> 00:07:36.251
+this ratio equal to R. So R, you'll
+notice, does depend on the three
+
+96
+00:07:36.251 --> 00:07:41.031
+parameters, A, B and D. But R is a
+constant, it does not depend on N. So what
+
+97
+00:07:41.031 --> 00:07:46.007
+is this sum? The sum is just, we're just
+summing up powers of this constant R,
+
+98
+00:07:46.007 --> 00:07:51.377
+where R is less than one. What did we just
+learn? We just learned that any such sum
+
+99
+00:07:51.377 --> 00:07:56.026
+is bounded above by a constant,
+independent of the number of terms that
+
+100
+00:07:56.026 --> 00:08:01.199
+you sum up. So therefore, what is this
+expression star evaluates to. It evaluates
+
+101
+00:08:01.199 --> 00:08:06.445
+to C, which is a constant, times N to the
+D. Times another constant. So suppressing
+
+102
+00:08:06.445 --> 00:08:11.961
+the product of these two constants in Big
+O notation we can say that the expression
+
+103
+00:08:11.961 --> 00:08:16.991
+starts upper bounded by Big O(n to the d).
+And this makes precise our intuition that
+
+104
+00:08:16.991 --> 00:08:21.317
+indeed the overall running time of the
+algorithm, in this type of recursion tree
+
+105
+00:08:21.317 --> 00:08:25.374
+with decreasing work per level, is
+dominated by the root. The overall amount
+
+106
+00:08:25.374 --> 00:08:29.700
+of work is only a constant factor larger
+than the work done and merely at level
+
+107
+00:08:29.700 --> 00:08:35.968
+zero of the tree. Let's move on to the
+final and most challenging part of the
+
+108
+00:08:35.968 --> 00:08:41.570
+proof, the final case. In case three we
+assume that A is bigger than B to the D.
+
+109
+00:08:41.570 --> 00:08:46.197
+So in conceptual terms, we're assuming the
+rate at which sub problems proliferate is
+
+110
+00:08:46.197 --> 00:08:50.212
+exceeding the rate at which we do less
+work per sub problem. So these are
+
+111
+00:08:50.212 --> 00:08:54.672
+recursion trees where the amount of work
+is increasing with each level, with the
+
+112
+00:08:54.672 --> 00:08:59.077
+most work being done at the leaves. And
+once again, using the basic sums fact, we
+
+113
+00:08:59.077 --> 00:09:03.594
+can make precise the hope that, in fact,
+we only have to worry about the leaves. We
+
+114
+00:09:03.594 --> 00:09:07.887
+can throw away the rest of work, losing
+only a constant factor. So to see that,
+
+115
+00:09:07.887 --> 00:09:12.979
+you will again denote this ratio between A
+and B to the D as R. And in this case R is
+
+116
+00:09:12.979 --> 00:09:17.845
+bigger that one. So this sum is a sum of a
+bunch of powers of R were R is bigger than
+
+117
+00:09:17.845 --> 00:09:22.425
+one, what did we just learn about that two
+slides ago in the basic sums facts, we
+
+118
+00:09:22.425 --> 00:09:27.120
+learned that such sums are dominated by
+the largest and last term of the sum. Okay
+
+119
+00:09:27.120 --> 00:09:31.527
+so the bounded it by a constant factor
+times the largest term. Therefore, we can
+
+120
+00:09:31.527 --> 00:09:35.009
+we can simplify the
+expression star to the following. I'm
+
+121
+00:09:35.009 --> 00:09:39.096
+gonna write it in terms of big O notation.
+And, like, on the last slide, I'll use it
+
+122
+00:09:39.096 --> 00:09:43.184
+to suppress two different constants. On
+the one hand, I'm gonna be suppressing the
+
+123
+00:09:43.184 --> 00:09:47.221
+constant C, which we inherited way back
+when from the original recurrence. And on
+
+124
+00:09:47.221 --> 00:09:51.409
+the other hand, I'm gonna use it to also
+suppress this constant that comes from the
+
+125
+00:09:51.409 --> 00:09:55.395
+basic sums fact. So ignoring those two
+constants, what do we have left? We have N
+
+126
+00:09:55.395 --> 00:10:00.066
+to the D. Times the largest term of the
+sum. So what is the largest term of the
+
+127
+00:10:00.066 --> 00:10:04.955
+sum? Well, it's the last one so we plug in
+the biggest value of J that we're ever
+
+128
+00:10:04.955 --> 00:10:09.905
+going to see. So what's the biggest value
+of J that we're ever going to see? We'll
+
+129
+00:10:09.905 --> 00:10:18.040
+it's just this. Log base B of N. So, we
+get the ratio A over B to the D, raised to
+
+130
+00:10:18.040 --> 00:10:26.452
+the log base B of N. Power. Now don't
+despair how messy this looks. We can do
+
+131
+00:10:26.452 --> 00:10:33.136
+some remarkable simplifications. So what I
+want to do next is I want to focus just on
+
+132
+00:10:33.136 --> 00:10:39.348
+this one over B to the D, raised to the
+log base B of N term. So that's going to
+
+133
+00:10:39.348 --> 00:10:45.717
+be. You can write that as B to the minus D
+log base B of N. Which if I factor this
+
+134
+00:10:45.717 --> 00:10:52.117
+exponent into two successive parts I can
+write this as B Raise to the log base B of
+
+135
+00:10:52.117 --> 00:10:58.011
+N power. And only then raised to the minus
+D. And now of course what happens is that
+
+136
+00:10:58.011 --> 00:11:03.763
+taking the logarithm of N base B, followed
+by taking, raising it to the B power,
+
+137
+00:11:03.763 --> 00:11:09.678
+those are inverse operations that cancel,
+so that leaves us just with the N. So this
+
+138
+00:11:09.678 --> 00:11:15.785
+results in a end to the minus D. And now
+remarkably this end to the minus D is just
+
+139
+00:11:15.785 --> 00:11:21.518
+gonna cancel out with this end to the D.
+Leaving us with merely. A, raise the log
+
+140
+00:11:21.518 --> 00:11:26.939
+based B event. And thus, out of this crazy
+sea of letters, rises a formula we can
+
+141
+00:11:26.939 --> 00:11:32.429
+actually understand. So A to the log based
+B of N, if we step back and pick for a
+
+142
+00:11:32.429 --> 00:11:37.302
+minute, is actually a supernatural
+quantity. Describe something about the
+
+143
+00:11:37.302 --> 00:11:42.861
+recursion trees that we already knew was
+supposed to pop up in the analysis. I'll
+
+144
+00:11:42.861 --> 00:11:49.699
+let, I'll let you think through exactly
+what that is in the following quiz. So the
+
+145
+00:11:49.699 --> 00:11:53.915
+correct answer to this quiz is the fourth
+response. A raised to the logarithm event
+
+146
+00:11:53.915 --> 00:11:57.822
+is precisely the number of leaves of the
+recursion tree. And remember in our
+
+147
+00:11:57.822 --> 00:12:02.089
+intuition for case three, recursion trees
+where the amount of work is increasing per
+
+148
+00:12:02.089 --> 00:12:06.254
+level, we thought that perhaps the work
+would be dominated by the work done at the
+
+149
+00:12:06.254 --> 00:12:10.109
+leaves which is as proportional as the
+number of leaves. So why is this the
+
+150
+00:12:10.109 --> 00:12:14.394
+answer? Well just remember what recursion
+trees look like at level zero. We have a
+
+151
+00:12:14.394 --> 00:12:19.530
+single node, and then with each level we
+have eight times as many nodes as before.
+
+152
+00:12:19.530 --> 00:12:24.108
+That is, with each level of the recursion
+tree, the number of nodes goes up by a
+
+153
+00:12:24.108 --> 00:12:28.686
+factor of A. How far does this, how long
+does this process go on? Well, it goes on
+
+154
+00:12:28.686 --> 00:12:33.148
+until we reach down the, the leaves.
+Recall that in the input size starts at N
+
+155
+00:12:33.148 --> 00:12:37.552
+up at the root. It gets divided by a
+factor of B each time, and it terminates
+
+156
+00:12:37.552 --> 00:12:42.130
+once we get down to one. So the leaves
+preside at precisely level log base B of
+
+157
+00:12:42.130 --> 00:12:46.685
+N. So therefore. The number of leaves is
+just a branching factor which is A raised
+
+158
+00:12:46.685 --> 00:12:51.264
+to the number of times that we actually
+multiply by A which is just the number of
+
+159
+00:12:51.264 --> 00:12:55.473
+levels which is log base b n.
+So each time we go down a level we
+
+160
+00:12:55.473 --> 00:12:59.893
+increase the number of nodes by a factor
+of A and we go down a level log base B of
+
+161
+00:12:59.893 --> 00:13:04.099
+N times. Leaving us with a number of
+leaves equal to A raised to the log base B
+
+162
+00:13:04.099 --> 00:13:07.986
+of N. So what we've done is we've
+mathematically confirmed, in a very cool
+
+163
+00:13:07.986 --> 00:13:12.140
+way, our intuition about what case three
+should look like in the master method.
+
+164
+00:13:12.140 --> 00:13:18.109
+We've proven that in case three when A is.
+Bigger than b to the d. The running time
+
+165
+00:13:18.109 --> 00:13:21.831
+is, o of the number of leaves in the
+recursion tree, just as the intuition
+
+166
+00:13:21.831 --> 00:13:25.605
+predicted. But, this leaves us with one
+final mystery. If you go back to the
+
+167
+00:13:25.605 --> 00:13:29.582
+statement of the master method, we didn't
+say, a to the log base b of n. In case
+
+168
+00:13:29.582 --> 00:13:33.508
+three, it says the running time is, n to
+the log base b of a. And, not only that,
+
+169
+00:13:33.508 --> 00:13:37.333
+we've used this case three formula over
+and over again, to evaluate Gauss's
+
+170
+00:13:37.333 --> 00:13:41.106
+recursive algorithm for integer
+multiplication, to evaluate the Strassen's
+
+171
+00:13:41.106 --> 00:13:45.032
+matrix multiplication algorithm, and so
+on. So, what's the story? How come we're
+
+172
+00:13:45.032 --> 00:13:48.800
+not getting the same thing, as in the
+statement of the master method? Well
+
+173
+00:13:48.800 --> 00:13:53.758
+there's a very simple explanation, which
+is simply that, believe it or not. A log
+
+174
+00:13:53.758 --> 00:13:59.549
+base B of N, and N to the log base B of A.
+Are exactly the same thing. This looks
+
+175
+00:13:59.549 --> 00:14:03.229
+like the kind of mistake you'd make in
+freshmen algebra. But actually, if you
+
+176
+00:14:03.229 --> 00:14:07.054
+think about it, these are simply the same
+quantity. If you don't believe me, just
+
+177
+00:14:07.054 --> 00:14:10.830
+take the logarithm base B of both sides,
+and it'll give the same thing in both
+
+178
+00:14:10.830 --> 00:14:14.510
+sides. Now, you might well be wondering
+why I didn't just state in the master
+
+179
+00:14:14.510 --> 00:14:18.383
+method that the running time of case three
+is this very sensible and meaningful
+
+180
+00:14:18.383 --> 00:14:21.966
+expression, a raised log based b of n,
+i.e., the number of leaves in the
+
+181
+00:14:21.966 --> 00:14:25.694
+recursion tree. Well, it turns out that
+while this expression on the left hand
+
+182
+00:14:25.694 --> 00:14:29.606
+side is the more meaningful conceptually.
+The right hand side. N. To the log base B.
+
+183
+00:14:29.606 --> 00:14:33.314
+Of A. Is the easiest one to apply. So
+recall when we worked through a bunch of
+
+184
+00:14:33.314 --> 00:14:37.166
+examples, of the master method, this right
+hand side was super convenient, when we
+
+185
+00:14:37.166 --> 00:14:40.874
+evaluated the running times of out
+rhythms. When we plugged in the numbers of
+
+186
+00:14:40.874 --> 00:14:44.872
+A. And B. In any case, whether or not you
+want to think about the running time in
+
+187
+00:14:44.872 --> 00:14:49.044
+case three as proportional to the number
+of leaves in the tree or as proportional
+
+188
+00:14:49.044 --> 00:14:53.064
+at the end of the log base B of A, we're
+done. We've proved it. That's case three.
+
+189
+00:14:53.064 --> 00:14:57.155
+That was the last one. So we're done with
+the master method. Qed. So that was a lot
+
+190
+00:14:57.155 --> 00:15:01.092
+of hard work for doing the master method
+and I would never expect someone to be
+
+191
+00:15:01.092 --> 00:15:05.226
+able to regurgitate all of the details of
+this proof you know it's something like a
+
+192
+00:15:05.226 --> 00:15:09.114
+cocktail party well maybe except the
+nerdiest of all cocktail parties but I do
+
+193
+00:15:09.114 --> 00:15:12.952
+think there's a few high level conceptual
+points of this proof that are worth
+
+194
+00:15:12.952 --> 00:15:16.692
+remembering in the long term, so we
+started by just writing down a recursion
+
+195
+00:15:16.692 --> 00:15:20.615
+tree for the recursive algorithm and in a
+generic way. And going level by level, we
+
+196
+00:15:20.615 --> 00:15:24.411
+counted up the work done by the algorithm.
+And this part of the proof had nothing to
+
+197
+00:15:24.411 --> 00:15:28.071
+with how A and B  related to
+each other. Then we recognized that there
+
+198
+00:15:28.071 --> 00:15:31.642
+are three fundamentally different types of
+recursion trees. Those with the same
+
+199
+00:15:31.642 --> 00:15:35.302
+amount of work per level, those where it
+increases with the level, and those where
+
+200
+00:15:35.302 --> 00:15:38.917
+it decreases with the level. If you can
+remember that, you can even remember what
+
+201
+00:15:38.917 --> 00:15:42.352
+the running times of the three cases
+should be. In the case where you do the
+
+202
+00:15:42.352 --> 00:15:46.053
+same amount of every work at each level.
+We know there's a logarithmic number of
+
+203
+00:15:46.053 --> 00:15:50.131
+levels. We know we do end in D work at the
+root. So that gives us the running time in
+
+204
+00:15:50.131 --> 00:15:54.064
+case one had ended the day you log in.
+When the amount of work is decreasing with
+
+205
+00:15:54.064 --> 00:15:57.850
+the levels, we now know that the route
+dominates. Up to a constant, we can throw
+
+206
+00:15:57.850 --> 00:16:01.686
+out the rest of the levels, and we know
+end of the D work gets done at the root,
+
+207
+00:16:01.686 --> 00:16:05.667
+so that's the overall running time. And in
+the third case, where it's increasing in
+
+208
+00:16:05.667 --> 00:16:09.308
+the levels, the leaves dominate. The
+number of leaves is A raised to the log
+
+209
+00:16:09.308 --> 00:16:12.852
+based of B of N, and that's the same as N,
+the log based B of A. And that's
+
+210
+00:16:12.852 --> 00:16:15.960
+proportional to running time in case three
+of the master method.

@@ -1,0 +1,744 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.305
+This video is the second of three that
+describes the proof of the Master Method.
+
+2
+00:00:04.305 --> 00:00:08.448
+In the first of these three videos we
+mimicked the analysis of merge sort. We
+
+3
+00:00:08.448 --> 00:00:12.861
+used a recursion tree approach which gave
+us an upper bound of running time of an
+
+4
+00:00:12.861 --> 00:00:16.371
+algorithm. Which is governed by a
+recurrence of the specified form.
+
+5
+00:00:16.371 --> 00:00:20.451
+Unfortunately, that video left us with a
+bit of an alphabet soup, this complicated
+
+6
+00:00:20.451 --> 00:00:24.531
+expression. And so in this second video,
+we're not gonna do any computations. We're
+
+7
+00:00:24.531 --> 00:00:28.460
+just going to look at that expression,
+attach some semantics to it, and look at
+
+8
+00:00:28.460 --> 00:00:32.641
+how that interpretation naturally leads to
+three cases, and also give intuition for
+
+9
+00:00:32.641 --> 00:00:36.922
+some of the running times that we see in a
+master method. So recall from the previous
+
+10
+00:00:36.922 --> 00:00:41.103
+video that the way we've bounded the work
+done by the algorithm is resumed in on a
+
+11
+00:00:41.103 --> 00:00:45.284
+particular level J of the recursion tree.
+We did a computation, which was the number
+
+12
+00:00:45.284 --> 00:00:49.001
+of sub problems at that level, a to the j, times the work done per
+
+13
+00:00:49.001 --> 00:00:54.236
+sub-problem, that was the constant C times
+quantity N over B to the J raised to the D
+
+14
+00:00:54.236 --> 00:00:59.287
+and that gave us this expression. Cn to
+the D times the ratio of A over B to the D
+
+15
+00:00:59.287 --> 00:01:03.997
+raised to the J. At a given level. J. The
+expression star that we concluded the
+
+16
+00:01:03.997 --> 00:01:08.501
+previous video with was just the sum of
+these expressions over all of the
+
+17
+00:01:08.501 --> 00:01:12.759
+logarithmic levels, J. Now, as messy as
+this expression might seem, perhaps we're
+
+18
+00:01:12.759 --> 00:01:16.942
+on the right track in the following sense.
+The master method has three different
+
+19
+00:01:16.942 --> 00:01:21.020
+cases, in which case you're in is governed
+by how A compares to B to the D. And
+
+20
+00:01:21.020 --> 00:01:25.045
+hearing this expression, we are seeing
+precisely that ratio. A divided by B to
+
+21
+00:01:25.045 --> 00:01:29.123
+the D. So let's drill down and understand
+why this ratio is fundamental to the
+
+22
+00:01:29.123 --> 00:01:33.592
+performance of the divide and conquer
+[inaudible] algorithm. So really, what's
+
+23
+00:01:33.592 --> 00:01:38.592
+going on in the master method, is a tug of
+war between two opposing forces. One which
+
+24
+00:01:38.592 --> 00:01:43.236
+is forces of good, and one which is forces
+of evil, and those correspond to the
+
+25
+00:01:43.236 --> 00:01:47.939
+quantities B to the D and A, respectively.
+So let me be more precise. Let's start
+
+26
+00:01:47.939 --> 00:01:52.501
+with the parameter A. So A, you'll recall,
+is defined as the number of recursive
+
+27
+00:01:52.501 --> 00:01:57.034
+calls made by the algorithm. So it's the
+number of children that a [inaudible]
+
+28
+00:01:57.034 --> 00:02:01.856
+recursion tree has. So fundamentally, what
+A is, it's the rates at which sub problems
+
+29
+00:02:01.856 --> 00:02:06.388
+proliferate as you pass deeper in the
+recursion tree. It's the factor by which
+
+30
+00:02:06.388 --> 00:02:11.956
+there are more sub problems at the next
+level than the previous one. So let's
+
+31
+00:02:11.956 --> 00:02:18.751
+think of A. In this way. As the rate of
+subpropabifliation, or R.S.P. And when I
+
+32
+00:02:18.751 --> 00:02:23.571
+say rate I mean as a function of the
+recursion level J. So these are the forces
+
+33
+00:02:23.571 --> 00:02:28.514
+of evil. This is why our algorithm might
+slowly, is because as we go down the tree
+
+34
+00:02:28.514 --> 00:02:33.518
+there are more and more sub problems, and
+that's a little scary. The forces of good,
+
+35
+00:02:33.518 --> 00:02:38.522
+what we have going for us, is that with
+each recursion level J we do less work per
+
+36
+00:02:38.522 --> 00:02:45.340
+sub problem and the extent to which we do
+less work is precisely B to the D. So I'll
+
+37
+00:02:45.340 --> 00:02:51.682
+abbreviate this rate of work shrinkage or
+this quantity B. To the D. By R. W. S. Now
+
+38
+00:02:51.682 --> 00:02:57.008
+perhaps you're wondering why is it B of
+the D. Why is it not B? So remember what B
+
+39
+00:02:57.008 --> 00:03:02.071
+denotes. That's the factor by which the
+input size shrinks with the recursion
+
+40
+00:03:02.071 --> 00:03:07.462
+level J. So for example if B equals two,
+then each sub-problem at the next level is
+
+41
+00:03:07.462 --> 00:03:12.266
+only half as big. As that at the previous
+level. But we don't really care about the
+
+42
+00:03:12.266 --> 00:03:16.464
+input size of a subproblem, except
+inasmuch as it determines the amount of
+
+43
+00:03:16.464 --> 00:03:20.945
+work that we do solving that subproblem.
+So that's where this parameter D comes
+
+44
+00:03:20.945 --> 00:03:25.369
+into play. Think, for example, about the
+cases where you have a linear amount of
+
+45
+00:03:25.369 --> 00:03:29.624
+work outside the recursive calls, versus a
+quadratic amount of work that is
+
+46
+00:03:29.624 --> 00:03:35.512
+considered the cases where D equals one or
+two. If B = two and D = one that is if you
+
+47
+00:03:35.512 --> 00:03:40.896
+reverse on half the input. And do linear
+work, then. Not only is the input size
+
+48
+00:03:40.896 --> 00:03:45.691
+dropping by factor two but so is the
+amount of work that you do per sub problem
+
+49
+00:03:45.691 --> 00:03:50.486
+and that's exactly the situation we had in
+merge short where we had linear work
+
+50
+00:03:50.486 --> 00:03:55.101
+outside the recursive calls. The thing
+about D = two, suppose you did quadratic
+
+51
+00:03:55.101 --> 00:03:59.955
+work per sub problem as a function of the
+input size. Then again if B = two if you
+
+52
+00:03:59.955 --> 00:04:04.031
+cut the input in half, the recursive
+call's only gonna do 25 percent as much
+
+53
+00:04:04.031 --> 00:04:08.227
+work as what you did. At the current
+level. The input size goes down by a
+
+54
+00:04:08.227 --> 00:04:13.066
+factor two and that gets squared because
+you do quadratic work as a function of the
+
+55
+00:04:13.066 --> 00:04:17.387
+input size. So that would be B to the D,
+two raised to the two or four. So in
+
+56
+00:04:17.387 --> 00:04:21.823
+general the input size goes down by a
+factor B, but what we really care about,
+
+57
+00:04:21.823 --> 00:04:26.431
+how much less work we do per subproblem,
+goes down by B to the D. That's why B to
+
+58
+00:04:26.431 --> 00:04:31.097
+the D is the fundamental quantity that
+quan, that's governs the forces of good,
+
+59
+00:04:31.097 --> 00:04:35.756
+the extent to which we work less hard with
+each occursion level J. So the question
+
+60
+00:04:35.756 --> 00:04:40.144
+that is just what happens in this tug of
+war between these two opposing forces? So
+
+61
+00:04:40.144 --> 00:04:44.585
+fundamentally, what the three cases of the
+master method correspond to, is the three
+
+62
+00:04:44.585 --> 00:04:48.598
+possible outcomes in this tug of war
+between the forces of good, namely the
+
+63
+00:04:48.598 --> 00:04:52.291
+rate of word shrinkage and the forces of
+evil, namely the sub-problem
+
+64
+00:04:52.291 --> 00:04:56.679
+proliferation. There are three cases one
+for the case of a tie one for the case in
+
+65
+00:04:56.679 --> 00:05:00.960
+which the forces of evil win that is in
+which A is bigger than B to the D and a
+
+66
+00:05:00.960 --> 00:05:05.058
+case in which the forces of good wins,
+that is B to the D is bigger than A. To
+
+67
+00:05:05.058 --> 00:05:08.940
+understand this a little bit better what I
+want you to think about is the following.
+
+68
+00:05:08.940 --> 00:05:13.154
+Think about the recursion tree that we
+drew in the previous slide and as a
+
+69
+00:05:13.154 --> 00:05:17.592
+function of A verses B to the D think
+about the amount of work you've done per
+
+70
+00:05:17.592 --> 00:05:22.535
+level. When is that going up per level?
+When is it going down per level? And when
+
+71
+00:05:22.535 --> 00:05:27.577
+is it exactly the same at each level? So
+the answer is all of these statements are
+
+72
+00:05:27.577 --> 00:05:32.330
+true except for the third one. So let's
+take them one at a time. So first of all
+
+73
+00:05:32.330 --> 00:05:37.444
+let's consider the first one. Suppose that
+the rate of sub problem proliferation A is
+
+74
+00:05:37.444 --> 00:05:41.956
+strictly less than the rate of work
+Shrinkage, B to the D. This is where the
+
+75
+00:05:41.956 --> 00:05:46.649
+forces of good, the rate at which we're
+doing less work per sub problem is out,
+
+76
+00:05:46.649 --> 00:05:51.023
+out pacing the rate of at which sub
+problems are proliferating. And so the
+
+77
+00:05:51.023 --> 00:05:55.216
+number of sub-problems goes up, but the
+savings per sub-problem goes up by even
+
+78
+00:05:55.216 --> 00:05:59.258
+more. So, in this case it means that we're
+gonna be doing less work. With each
+
+79
+00:05:59.258 --> 00:06:03.508
+recursion tree level, the forces of good
+outweigh the forces of evil. The second
+
+80
+00:06:03.508 --> 00:06:07.652
+one is true for exactly the same reason.
+If sub-problems are proliferating so
+
+81
+00:06:07.652 --> 00:06:12.064
+rapidly that it outpaces the savings that
+we get per sub-problem, then we're gonna
+
+82
+00:06:12.064 --> 00:06:16.564
+see an increasing amount of work. As we go
+down the recursion tree, it will increase
+
+83
+00:06:16.564 --> 00:06:20.923
+with the level of J. Given that these two
+are true the third one is false. We can
+
+84
+00:06:20.923 --> 00:06:25.391
+draw conclusions depending on whether the
+rate of sub-problem proliferation is
+
+85
+00:06:25.391 --> 00:06:29.805
+strictly bigger or strictly less than the
+rate of work shrinkage. And finally, the
+
+86
+00:06:29.805 --> 00:06:34.084
+fourth statement is also true. This is the
+perfect equilibrium between the forces of
+
+87
+00:06:34.084 --> 00:06:37.953
+good and the forces of evil. Sub-problems
+are proliferating, but our savings per
+
+88
+00:06:37.953 --> 00:06:42.017
+sub-problem is increasing at exactly the
+same rate. The two forces will then cancel
+
+89
+00:06:42.017 --> 00:06:45.739
+out and we'll get exactly the same amount
+of work done at each level of the
+
+90
+00:06:45.739 --> 00:06:49.510
+recursion tree. This is precisely what
+happened when we analyzed a merd short
+
+91
+00:06:49.510 --> 00:06:53.865
+algorithm. So let's summarize and conclude
+with the interpretation. And even
+
+92
+00:06:53.865 --> 00:06:58.681
+understand how this interpretation lends
+us to forecast some of the running time
+
+93
+00:06:58.681 --> 00:07:03.293
+bounds that we see in the Master Method.
+Summarizing, the three cases of the master
+
+94
+00:07:03.293 --> 00:07:07.067
+method correspond to the three possible
+outcomes in the battle between
+
+95
+00:07:07.067 --> 00:07:11.321
+sub-problems proliferating and the work
+per sub-problem shrinking. One for a tie,
+
+96
+00:07:11.321 --> 00:07:15.149
+one for when sub-problems are
+proliferating faster, and one for when the
+
+97
+00:07:15.149 --> 00:07:19.268
+work shrinkage is happening faster. In the
+case where the rates are exactly the same,
+
+98
+00:07:19.268 --> 00:07:23.000
+and they cancel out, then the amount of
+work should be the same at every level of
+
+99
+00:07:23.000 --> 00:07:26.687
+the recursion tree. And, in this case, we
+can easily predict what the running time
+
+100
+00:07:26.687 --> 00:07:30.189
+should work out to be. In particular, we
+know there's a logarithmic number of
+
+101
+00:07:30.189 --> 00:07:33.829
+levels, the amount of work is the same at
+every level, and we certainly know how
+
+102
+00:07:33.829 --> 00:07:37.378
+much work is getting done at the root,
+right, because that's just the original
+
+103
+00:07:37.378 --> 00:07:41.249
+recurrence, which tells us that there's,
+acentotically, n to the d work done at the
+
+104
+00:07:41.249 --> 00:07:44.981
+root. So, with n to the d work for each of
+the log levels, we expect a running time
+
+105
+00:07:44.981 --> 00:07:49.881
+of n to the d times log n. As we just
+discussed, when the rate of. Work done per
+
+106
+00:07:49.881 --> 00:07:53.998
+subproblem is shrinking even faster than
+subproblems proliferate. Then we do less
+
+107
+00:07:53.998 --> 00:07:57.708
+and less work with each level of the
+recursion tree. So in particular, the
+
+108
+00:07:57.708 --> 00:08:01.621
+biggest amount of work, the worst level is
+at the root level. Now, the simplest
+
+109
+00:08:01.621 --> 00:08:05.534
+possible thing that might be true would be
+that actually, the root level just
+
+110
+00:08:05.534 --> 00:08:09.600
+dominates the overall running time of the
+algorithm, and the other levels really
+
+111
+00:08:09.600 --> 00:08:13.615
+don't matter up to a constant factor. So
+it's not obvious that's true, but if we
+
+112
+00:08:13.615 --> 00:08:17.782
+keep our fingers crossed and hope for the
+simplest possible outcome. With the root
+
+113
+00:08:17.782 --> 00:08:21.696
+has the most work, we might expect a
+running time that's just proportional to
+
+114
+00:08:21.696 --> 00:08:25.701
+the running time of the root. As we just
+discussed, we already know that that's n
+
+115
+00:08:25.701 --> 00:08:29.358
+to the d, cuz that's just the outermost
+call to the algorithm. By the same
+
+116
+00:08:29.358 --> 00:08:33.234
+reasoning, when this inequality is
+flipped, and [inaudible] proliferates so
+
+117
+00:08:33.234 --> 00:08:37.686
+rapidly that it's outpacing the same as we
+get for sub problem, the amount of work is
+
+118
+00:08:37.686 --> 00:08:41.929
+increasing the recursion level. And here,
+the worst case is gonna be at the leaves.
+
+119
+00:08:41.929 --> 00:08:46.434
+That's where the, that level's gonna have
+the most work compared to any other level.
+
+120
+00:08:46.434 --> 00:08:50.101
+And again, if you keep your fingers
+crossed and hope that the simplest
+
+121
+00:08:50.101 --> 00:08:54.224
+possible outcome is actually true, perhaps
+the leaves just dominate, and. Up to a
+
+122
+00:08:54.224 --> 00:08:58.316
+constant factor, they govern the running
+time of the algorithm. In this third case,
+
+123
+00:08:58.316 --> 00:09:02.256
+given that we do a constant amount of work
+for each of the leaves, since those
+
+124
+00:09:02.256 --> 00:09:06.399
+correspond to base cases, here we'd expect
+a running time in the simplest scenario,
+
+125
+00:09:06.399 --> 00:09:10.596
+proportional to the number of leaves in
+the recursion tree. So lets summarize what
+
+126
+00:09:10.596 --> 00:09:14.565
+we've learned in this video. We now
+understand that fundamentally there are
+
+127
+00:09:14.565 --> 00:09:18.957
+three different kinds of recursion trees.
+Those in which the work done per level is
+
+128
+00:09:18.957 --> 00:09:23.190
+the same in every level. Those in which
+the work is decreasing with the level in
+
+129
+00:09:23.190 --> 00:09:27.475
+which case the root is the lowest level.
+And those in which the amount of work is
+
+130
+00:09:27.475 --> 00:09:31.761
+increasing with the level where the leads
+are the lowest level. Further more it's
+
+131
+00:09:31.761 --> 00:09:36.047
+exactly the ratio between A the rate of
+sub problem proliferation and B to the D
+
+132
+00:09:36.047 --> 00:09:39.910
+the rate of work shrinkage sub problem
+That governs which of these three
+
+133
+00:09:39.910 --> 00:09:43.697
+recursion trees we're dealing with.
+Further more. Intuitively, we've now had
+
+134
+00:09:43.697 --> 00:09:47.632
+predictions about what kind of running
+time we expect to see in each of the three
+
+135
+00:09:47.632 --> 00:09:51.279
+cases. They're N to the D log in, that
+we're pretty confident about. There's a
+
+136
+00:09:51.279 --> 00:09:55.022
+hope that, in the second case, where the
+root is the worst level, that maybe the
+
+137
+00:09:55.022 --> 00:09:58.572
+running time is N to the D. And there's a
+hope in the third case where the
+
+138
+00:09:58.572 --> 00:10:02.363
+[inaudible] are the worse level, and we do
+constant time per leaf, per base case,
+
+139
+00:10:02.363 --> 00:10:06.010
+that it's gonna be proportional to the
+number of leaves. Let's now stand and
+
+140
+00:10:06.010 --> 00:10:09.705
+check this intuition against the formal
+statement of the master method, which
+
+141
+00:10:09.705 --> 00:10:13.448
+we'll prove more formally in the next
+video. So in the three cases, we see they
+
+142
+00:10:13.448 --> 00:10:17.919
+match up. At least two out of three with
+exactly [inaudible] lies. So in the first
+
+143
+00:10:17.919 --> 00:10:22.183
+case, we see the expected end of the D
+times log in. In the second case, where
+
+144
+00:10:22.183 --> 00:10:26.784
+the root is the worst level indeed, the
+simplest possible outcome of big O of N to
+
+145
+00:10:26.784 --> 00:10:30.767
+the D is the assertion. Now, the third
+case that remains a mystery to be
+
+146
+00:10:30.767 --> 00:10:35.480
+explained. Our intuition said this should
+hopefully be proportional to the number of
+
+147
+00:10:35.480 --> 00:10:40.136
+leaves. And instead, we've got this funny
+formula of big O of N in the log base B of
+
+148
+00:10:40.136 --> 00:10:44.625
+A. So in the next video, we'll demystify
+that connection, as well as supply formal
+
+149
+00:10:44.625 --> 00:10:46.140
+proof for these assertions.

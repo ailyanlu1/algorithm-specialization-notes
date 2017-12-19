@@ -1,0 +1,661 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.608
+In this video, we'll begin the proof of
+the master method. The master method,
+
+2
+00:00:04.608 --> 00:00:09.585
+you'll recall, is a generic solution to
+recurrences of the given form, recurrences
+
+3
+00:00:09.585 --> 00:00:14.563
+in which there's a recursive calls, each
+on a sub-problem of the same size, size n
+
+4
+00:00:14.563 --> 00:00:19.602
+over b, assuming that the original problem
+had size n. And, plus, there is big O of n
+
+5
+00:00:19.602 --> 00:00:24.210
+to the d work done by the algorithm
+outside of these a recursive calls. The
+
+6
+00:00:24.210 --> 00:00:28.880
+solution that the master method provides
+has three cases, depending on how a
+
+7
+00:00:28.880 --> 00:00:33.293
+compares to b to the d. Now. This proof
+will be the longest one we've seen so far
+
+8
+00:00:33.293 --> 00:00:37.341
+by a significant margin. It'll span this
+video as well as the next two. So let me
+
+9
+00:00:37.341 --> 00:00:41.093
+say a few words up front about what you
+might want to focus on. Overall I think
+
+10
+00:00:41.093 --> 00:00:44.986
+the proof is quite conceptual. There's a
+couple of spots where we're going to have
+
+11
+00:00:44.986 --> 00:00:48.548
+to do some computations. And the
+computations I think are worth seeing once
+
+12
+00:00:48.548 --> 00:00:52.157
+in your life. I don't know that they're
+worth really committing to long term
+
+13
+00:00:52.157 --> 00:00:55.576
+memory. What I do think is worth
+remembering in the long term however, is
+
+14
+00:00:55.576 --> 00:00:59.422
+the conceptual meaning of the three cases
+of the master method. In particular the
+
+15
+00:00:59.422 --> 00:01:03.221
+proof will follow a recursionary approach
+just like we used in the running time
+
+16
+00:01:03.221 --> 00:01:07.020
+analysis of the Mertshot algorithm. And it
+worth remembering what three types of
+
+17
+00:01:07.020 --> 00:01:10.928
+recursion trees the three cases Is that
+the master method corresponds to. If you
+
+18
+00:01:10.928 --> 00:01:14.412
+can remember that, there will be
+absolutely no need to memorize any of
+
+19
+00:01:14.412 --> 00:01:18.343
+these three running times, including the
+third, rather exotic looking one. Rather,
+
+20
+00:01:18.343 --> 00:01:22.374
+you'll be able to reverse engineer those
+running times just from your conceptual
+
+21
+00:01:22.374 --> 00:01:26.654
+understanding of what the three cases mean
+and how they correspond to recursion trees
+
+22
+00:01:26.654 --> 00:01:30.563
+of different type. So, one final comment
+before we embark on the proof. So, as
+
+23
+00:01:30.563 --> 00:01:34.265
+usual, I'm uninterested in formality in
+its own sake. The reason we use
+
+24
+00:01:34.265 --> 00:01:38.389
+mathematical analysis in this course, is
+because it provides an explanation of,
+
+25
+00:01:38.389 --> 00:01:42.619
+fundamentally, why things are the way they
+are. For example, why the master method
+
+26
+00:01:42.619 --> 00:01:46.480
+has three cases, and what those three
+cases mean. So, I'll be giving you an
+
+27
+00:01:46.480 --> 00:01:50.710
+essentially complete proof of the master
+method, in the sense that it has all of
+
+28
+00:01:50.710 --> 00:01:55.046
+the key ingredients. I will cut corners on
+occasion, where I don't think it hinders
+
+29
+00:01:55.046 --> 00:01:58.853
+understanding, where it's easy to fill in
+the details. So, it won't be 100 percent
+
+30
+00:01:58.853 --> 00:02:02.873
+rigorous, I won't dot every I and cross
+every t, but. There will be a complete
+
+31
+00:02:02.873 --> 00:02:07.216
+proof, on the conceptual level. That being
+said, let me begin with a couple of minor
+
+32
+00:02:07.216 --> 00:02:11.332
+assumptions I"m going to make, to make our
+lives a little easier. So first, we're
+
+33
+00:02:11.332 --> 00:02:15.592
+gonna assume that the recurrence has the
+following form. So, here, essentially, all
+
+34
+00:02:15.592 --> 00:02:18.952
+I've done is I've taken our previous
+assumption about the format of a
+
+35
+00:02:18.952 --> 00:02:22.696
+recurrence, and I've written out all of
+the constants. So, I'm assuming that the
+
+36
+00:02:22.696 --> 00:02:26.632
+base case kicks in when the input size is
+one, and I'm assuming that the number of
+
+37
+00:02:26.632 --> 00:02:30.569
+operations in the base case is at most c,
+and that, that constant c is the same one
+
+38
+00:02:30.569 --> 00:02:34.409
+that was hidden in the big O notation of
+the general case of the recurrence. The
+
+39
+00:02:34.409 --> 00:02:38.297
+constant c here isn't gonna matter in the
+analysis, it's just all gonna be a wash,
+
+40
+00:02:38.297 --> 00:02:41.993
+but to make, keep everything clear, I'm
+gonna write out all the constants that
+
+41
+00:02:41.993 --> 00:02:45.689
+were previously hidden in the big O
+notation. Another assumption I'm going to
+
+42
+00:02:45.689 --> 00:02:50.538
+make. Now goes to our murtured analysis,
+is that N is a power of B. The general
+
+43
+00:02:50.538 --> 00:02:54.649
+case would be basically the same, just a
+little more tedious. At the highest level,
+
+44
+00:02:54.649 --> 00:02:58.505
+the proof of the master method should
+strike you as very natural. Really, all
+
+45
+00:02:58.505 --> 00:03:02.362
+we're going to do is revisit the way that
+we analyze Merge Short. Recall our
+
+46
+00:03:02.362 --> 00:03:06.421
+recursion tree method worked great, and
+gave us this [inaudible] log [inaudible],
+
+47
+00:03:06.421 --> 00:03:10.329
+and the running time of Merge Short. So
+we're just gonna mimic that recursion
+
+48
+00:03:10.329 --> 00:03:14.413
+tree, and see how far we get. So let me
+remind you what a recursion tree is. At
+
+49
+00:03:14.413 --> 00:03:18.544
+the roots, at level zero, we have the
+outermost, the initial indication of the
+
+50
+00:03:18.544 --> 00:03:22.837
+recursive algorithm. At level one, we have
+the first batch of recursive calls. At
+
+51
+00:03:22.837 --> 00:03:26.968
+level two, we have the recursive calls
+made by that first batch of recursive
+
+52
+00:03:26.968 --> 00:03:31.262
+calls, and so on. All the way down to the
+leaves of the tree, which correspond to
+
+53
+00:03:31.262 --> 00:03:35.795
+the base cases, where there's no further
+recursion. Now, you might recall, from the
+
+54
+00:03:35.795 --> 00:03:40.818
+Merge Sort analysis that we identified a
+pattern that was crucial in analyzing the
+
+55
+00:03:40.818 --> 00:03:45.841
+running time. And that pattern that we had
+to understand was, at a given [inaudible]
+
+56
+00:03:45.841 --> 00:03:50.379
+J, at a given level J of this recursion
+tree. First of all, how many distinct
+
+57
+00:03:50.379 --> 00:03:55.342
+subproblems are there at level J? How many
+different level J [inaudible] are there?
+
+58
+00:03:55.342 --> 00:04:00.304
+And secondly, what is the input size that
+each of those level J subproblems has to
+
+59
+00:04:00.304 --> 00:04:04.781
+operate on? So think about that a little
+bit and give your answer in the following
+
+60
+00:04:04.781 --> 00:04:10.649
+quiz. So the correct answer is the second
+one. At level J at. Of this recursion
+
+61
+00:04:10.649 --> 00:04:14.645
+tree, there are A to, to the J
+sub-problems and each has an input of size
+
+62
+00:04:14.645 --> 00:04:19.085
+of N over B to the J. So first of all, why
+are there A to the J sub-problems? Well,
+
+63
+00:04:19.085 --> 00:04:23.137
+when J equals zero at the root, there's
+just the one problem, the original
+
+64
+00:04:23.137 --> 00:04:27.918
+indication of the recursive algorithm. And
+then each. Call to the algorithm makes a
+
+65
+00:04:27.918 --> 00:04:32.643
+further calls. For that reason the number
+of sub problems goes up by a factor of A
+
+66
+00:04:32.643 --> 00:04:37.080
+with each level leading to A to the J sub
+problems at level J. Similarly, B is
+
+67
+00:04:37.080 --> 00:04:41.921
+exactly the factor by which the input size
+shrinks once you makea recursive call. So
+
+68
+00:04:41.921 --> 00:04:46.589
+J levels into the recursion. The input
+size has been shrunk J times by a fctor of
+
+69
+00:04:46.589 --> 00:04:51.083
+B each time. So the input size at level J
+is N over B to the J. That's also the
+
+70
+00:04:51.083 --> 00:04:55.751
+reason why, if you look at the question
+statement, we've identified the numbers of
+
+71
+00:04:55.751 --> 00:05:00.863
+levels as being log of base B. Of N. Back
+in Merge Short, B was two. We [inaudible]
+
+72
+00:05:00.863 --> 00:05:05.870
+on half the array. So the leaves all
+resided at level log base two of N. In
+
+73
+00:05:05.870 --> 00:05:11.351
+general, if we're dividing by a factor B
+each time, then it takes a log based B of
+
+74
+00:05:11.351 --> 00:05:16.832
+N times before we get down the base cases
+of size of one. So the number of levels
+
+75
+00:05:16.832 --> 00:05:22.246
+overall, zero through log base B event.
+For a total of log based B event plus one
+
+76
+00:05:22.246 --> 00:05:28.525
+levels. Here then is what the recursion
+tree looks like. At level zero we have the
+
+77
+00:05:28.525 --> 00:05:34.933
+root corresponding to the outer most call.
+And the input size here is N. The original
+
+78
+00:05:34.933 --> 00:05:40.784
+problem. Children of a node correspond to
+the recursive calls. Because there are A.
+
+79
+00:05:40.784 --> 00:05:46.977
+Recursive calls by assumption, there are
+A. Children or A. Branches. Level one is
+
+80
+00:05:46.977 --> 00:05:54.590
+the first batch of precursor calls. Each
+of which operates on an input of size N
+
+81
+00:05:54.590 --> 00:06:00.344
+over B. That level log base B. Of N. We've
+cut the input size by a factor of B. This
+
+82
+00:06:00.344 --> 00:06:05.210
+many times, so we're down to one. So that
+triggers the base case. So now, the plan
+
+83
+00:06:05.210 --> 00:06:09.563
+is to simply mimic our previous analysis
+of Merge Sort. So let's recall how that
+
+84
+00:06:09.563 --> 00:06:13.862
+worked. What we did is we zoomed in, in a
+given level. And for a given level J, we
+
+85
+00:06:13.862 --> 00:06:18.379
+counted the total amount of work that was
+done at level J subproblems, not counting
+
+86
+00:06:18.379 --> 00:06:22.460
+work that was gonna be done later by
+recursive calls. Then, given a bound on
+
+87
+00:06:22.460 --> 00:06:26.704
+the amount of work at a given level J, we
+just summed up overall, the levels, to
+
+88
+00:06:26.704 --> 00:06:30.785
+capture all of the work done by all of
+the, recursive indications of the
+
+89
+00:06:30.785 --> 00:06:35.169
+algorithm. So inspired by our previous
+success let's zoom in on a given level J.,
+
+90
+00:06:35.169 --> 00:06:39.132
+and see how much work gets done, with
+level J. Sub problems. We're going to
+
+91
+00:06:39.132 --> 00:06:43.511
+compute this in exactly the way we did in
+merge sort. And we were just going to look
+
+92
+00:06:43.511 --> 00:06:47.630
+at the number of problems that are at
+level J and we're going to multiply that
+
+93
+00:06:47.630 --> 00:06:51.488
+by a bound on the work done per
+sub-problem. We just identified the number
+
+94
+00:06:51.488 --> 00:06:56.179
+of level J sub-problems as A to the J. To
+understand the amount of work done for
+
+95
+00:06:56.179 --> 00:07:01.211
+each level j sub-problem, let's do it in
+two parts. So, first of all, let's focus
+
+96
+00:07:01.211 --> 00:07:05.984
+on the size of the input for each level j
+sub-problem. That's what we just
+
+97
+00:07:05.984 --> 00:07:11.403
+identified in the previous quiz question.
+Since the input size is being decreased by
+
+98
+00:07:11.403 --> 00:07:16.500
+a factor b each time, the size of each
+level j sub-problem is n over b to the j.
+
+99
+00:07:16.500 --> 00:07:21.199
+[inaudible] Now we only care about the
+size of a level J sub problem in as much
+
+100
+00:07:21.199 --> 00:07:25.375
+it determines the amount of work the
+number of operations that we perform per
+
+101
+00:07:25.375 --> 00:07:29.871
+level J sub problem. And to understand the
+relationship between those two quantities
+
+102
+00:07:29.871 --> 00:07:34.153
+we just return to the re currents. The
+recurrent says how much work gets done in
+
+103
+00:07:34.153 --> 00:07:38.543
+the specific sub problem well there's a
+bunch of work done by recursive calls the
+
+104
+00:07:38.543 --> 00:07:42.825
+A recursive calls and we're not counting
+that we're just counting the work done
+
+105
+00:07:42.825 --> 00:07:47.268
+here at A level J and the recurrence also
+tells us how much is done outside of the
+
+106
+00:07:47.268 --> 00:07:51.390
+recurrent calls. Namely it's no more than
+the constant C times the input size.
+
+107
+00:07:51.390 --> 00:07:57.899
+Raised to the d power. So here the input
+size is N over B to the J, so that gets
+
+108
+00:07:57.899 --> 00:08:05.122
+multiplied by the constant C. And it gets
+raised to the D power. Okay. So C. Times
+
+109
+00:08:05.122 --> 00:08:11.311
+quanity N. Over B. To the J. That's the
+emphasized. Raised to the D. Power. Next,
+
+110
+00:08:11.311 --> 00:08:15.704
+I wanna simplify this expression a little
+bit. And I wanna separate out the terms
+
+111
+00:08:15.704 --> 00:08:19.934
+which depend on the level number J, and
+the terms which are independent of the
+
+112
+00:08:19.934 --> 00:08:24.490
+level number J. So if you look at it A and
+B are both functions of J, where the C and
+
+113
+00:08:24.490 --> 00:08:28.994
+end of the D terms are independent of J.
+So let's just separate those out. And you
+
+114
+00:08:28.994 --> 00:08:34.444
+will notice that we have now our grand
+entrance of the ratio between A and B to
+
+115
+00:08:34.444 --> 00:08:40.030
+the D. And foreshadowing a little, recall
+that the three cases of the master method
+
+116
+00:08:40.030 --> 00:08:45.820
+are governed by the relationship between A
+and B to the D. And this is the first time
+
+117
+00:08:45.820 --> 00:08:51.066
+in the analysis where we get a clue that
+the relative magnitude of those two
+
+118
+00:08:51.066 --> 00:08:56.038
+quantities might be important. So now that
+we've zoomed in on a particular label J
+
+119
+00:08:56.038 --> 00:09:00.487
+and done the necessary computation to
+figure out how much work is done just at
+
+120
+00:09:00.487 --> 00:09:04.936
+that level, let's sum over all of the
+levels so that we capture all of the work
+
+121
+00:09:04.936 --> 00:09:09.441
+done by the algorithms. So this is just
+gonna be the sum of the epression we saw
+
+122
+00:09:09.441 --> 00:09:14.002
+on the previous slide. Now since C into
+the D doesn't depend on J, I can yank that
+
+123
+00:09:14.002 --> 00:09:18.676
+out in front of the sum, and I'll sum the
+expression over all J. That results in the
+
+124
+00:09:18.676 --> 00:09:23.885
+following. So believe it or not, we have
+now reached an important milestone in the
+
+125
+00:09:23.885 --> 00:09:28.442
+proof of the master method. Specifically,
+the somewhat messy looking formula here,
+
+126
+00:09:28.442 --> 00:09:32.829
+which I'll put a green box around, is
+going to be crucial. And the rest of the
+
+127
+00:09:32.829 --> 00:09:37.159
+proof will be devoted to interpreting and
+understanding this expression, and
+
+128
+00:09:37.159 --> 00:09:41.888
+understanding how it leads to the three
+different running time bounds in the three
+
+129
+00:09:41.888 --> 00:09:46.345
+different cases. Now I realize that at the
+moment this expression's star probably
+
+130
+00:09:46.345 --> 00:09:50.655
+just looks like alphabet soup, probably
+just looks like a bunch of mathematical
+
+131
+00:09:50.655 --> 00:09:54.419
+gibberish. But actually interpreted
+correctly this has a very natural
+
+132
+00:09:54.419 --> 00:09:57.420
+interpretation. So we'll discuss that in
+the next video.

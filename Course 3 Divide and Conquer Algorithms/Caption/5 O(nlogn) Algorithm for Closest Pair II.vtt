@@ -1,0 +1,1256 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.974
+Alright. So the plan for this video is to
+prove the correctness of the divide and
+
+2
+00:00:03.974 --> 00:00:07.997
+conquer closest to pair algorithm that we
+discussed in the previous video. So just
+
+3
+00:00:07.997 --> 00:00:12.167
+to refresh your memory, how does the outer
+algorithm work? Well, we're given endpoints
+
+4
+00:00:12.167 --> 00:00:15.699
+in the plane. We begin by sorting them,
+first by x-coordinate and then by
+
+5
+00:00:15.699 --> 00:00:19.526
+y-coordinate. That takes n log in time.
+Then we enter the main recursive divide
+
+6
+00:00:19.526 --> 00:00:23.539
+and conquer part of the algorithm. So what
+do we do? We divide the point set into the
+
+7
+00:00:23.539 --> 00:00:27.621
+left half and the right half, Q and
+R, then we conquer. We recursively compute
+
+8
+00:00:27.621 --> 00:00:31.546
+the closest pair in the left half of the
+point set Q. We recursively compute the
+
+9
+00:00:31.546 --> 00:00:35.311
+closest pair in the right half of the
+point set R. There is a lucky case where
+
+10
+00:00:35.311 --> 00:00:39.199
+the closest pair on the entire point set
+lies either all on the left or all on the
+
+11
+00:00:39.199 --> 00:00:42.572
+right. In that case, the closest pair is
+handed to us on a silver platter,
+
+12
+00:00:42.572 --> 00:00:46.366
+by one of the two recursive calls. But there
+remains the unlucky case where the closest
+
+13
+00:00:46.366 --> 00:00:50.254
+pair is actually split with one point on
+the left and one point on the right. So to
+
+14
+00:00:50.254 --> 00:00:54.002
+get our N log N running time bound,
+analogous to Merge Short in our inversion
+
+15
+00:00:54.002 --> 00:00:57.562
+counting, we need to have a linear time
+implementation of a subroutine which
+
+16
+00:00:57.562 --> 00:01:01.122
+computes the best, the closest pair of
+points, which is split, one on the left
+
+17
+00:01:01.122 --> 00:01:04.729
+and one on the right. Well, actually, we
+don't need to do quite that. We need to
+
+18
+00:01:04.729 --> 00:01:08.870
+do something only a little bit weaker. We need
+a linear time algorithm, which whenever
+
+19
+00:01:08.870 --> 00:01:15.196
+the closest pair in the whole point set is
+in fact split, then computes that split
+
+20
+00:01:15.196 --> 00:01:19.527
+pair in linear time. So let me now
+remind you of how that subroutine works.
+
+21
+00:01:19.527 --> 00:01:23.397
+So it has two basic steps. So first,
+there's a filtering step. So it looks at,
+
+22
+00:01:23.551 --> 00:01:27.576
+first of all, a vertical strip, roughly
+down the middle of the point set. And it
+
+23
+00:01:27.576 --> 00:01:31.540
+looks at, only at points which fall into
+that vertical strip. That was a subset of
+
+24
+00:01:31.540 --> 00:01:34.783
+the points that we called S sub Y, 'cause
+we keep track of them sorted by Y
+
+25
+00:01:34.783 --> 00:01:38.711
+coordinate. And then we do essentially a
+linear scan through SY. So we go through
+
+26
+00:01:38.711 --> 00:01:42.601
+the points one at a time, and then, for
+each point, we look at only the almost
+
+27
+00:01:42.601 --> 00:01:47.749
+adjacent points. So for each index I, we
+look only at J's that are between one and
+
+28
+00:01:47.749 --> 00:01:52.122
+seven positions further to the right, than
+I. So among all such points, we
+
+29
+00:01:52.122 --> 00:01:56.266
+compare them, we look at their distances.
+We remember the best such pair of points.
+
+30
+00:01:56.266 --> 00:02:00.206
+And then that's what we return from the
+count split pair subroutine. So we've
+
+31
+00:02:00.206 --> 00:02:03.232
+already argued, in the previous video,
+that the overall running time of the
+
+32
+00:02:03.232 --> 00:02:06.408
+algorithm is N log N. And what remains to
+prove correctness. And we also argued, in
+
+33
+00:02:06.408 --> 00:02:11.126
+the previous video, that correctness boils
+down to the following correctness claim.
+
+34
+00:02:11.126 --> 00:02:16.066
+In the sense that, if we can prove this
+claim, then the entire algorithm is
+
+35
+00:02:16.066 --> 00:02:19.905
+correct. So this is what remains. Our
+residual work is to provide a proof of
+
+36
+00:02:19.905 --> 00:02:24.000
+the correctness claim. What does it say?
+It says consider any split pair that is
+
+37
+00:02:24.000 --> 00:02:28.198
+one point p from the left side Q, capital
+Q, and another point little q drawn from
+
+38
+00:02:28.198 --> 00:02:32.292
+the right side of the point set capital R.
+And fur, further suppose that it's an
+
+39
+00:02:32.292 --> 00:02:36.335
+interesting split pair meaning that the
+distance between them's at most delta.
+
+40
+00:02:36.335 --> 00:02:40.689
+Here delta is recall the parameter pass to
+the count split pair subroutine, which is
+
+41
+00:02:40.689 --> 00:02:44.494
+the smallest distance between a pair of
+points all on the left or all on the
+
+42
+00:02:44.494 --> 00:02:48.485
+right. And this is the only case we're
+interested in. There's two claims. First
+
+43
+00:02:48.485 --> 00:02:52.661
+of all, for p and q, both members of the
+split pair survive the filtering step.
+
+44
+00:02:52.661 --> 00:02:57.570
+They make it into the sorted list S sub Y, and
+second of all, they will be considered by
+
+45
+00:02:57.570 --> 00:03:01.328
+that double for loop, in the sense that
+the positions of p and q in this array, S
+
+46
+00:03:01.328 --> 00:03:07.001
+sub Y, differ by at most seven. So that's
+the story so far. Let's move on to the
+
+47
+00:03:07.001 --> 00:03:13.050
+proof. So let's start with part A which is
+the easy part relatively of the claim. So
+
+48
+00:03:13.050 --> 00:03:17.175
+remember what we start with, our
+assumptions. We have a point p, let's
+
+49
+00:03:17.175 --> 00:03:21.482
+write it out in terms of the X
+coordinates, X1 and Y1, which is from the
+
+50
+00:03:21.482 --> 00:03:26.900
+left half of the point set. And we have a
+point q, which we'll call X2Y2, which
+
+51
+00:03:26.900 --> 00:03:30.914
+comes from the right half of the point
+set. And furthermore, we're assuming that
+
+52
+00:03:30.914 --> 00:03:35.081
+these points are close to each other. And
+we're gonna use that hypothesis over and
+
+53
+00:03:35.081 --> 00:03:38.841
+over again. So the Euclidean distance
+between p and q is no more than this
+
+54
+00:03:38.841 --> 00:03:42.754
+parameter delta. So, first, something very
+simple, which is that if you have two
+
+55
+00:03:42.754 --> 00:03:46.565
+points that are close in Euclidean
+distance, then both of their coordinates
+
+56
+00:03:46.565 --> 00:03:50.681
+have to be close to each other, right? If
+you have two points, and they differ by a
+
+57
+00:03:50.681 --> 00:03:54.796
+lot in one coordinate, then the Euclidean
+distance is gonna be pretty big as well.
+
+58
+00:03:54.796 --> 00:03:59.182
+So, specifically. By our hypothesis, that p
+and q have Euclidean distance less than
+
+59
+00:03:59.182 --> 00:04:03.369
+delta, it must be that the difference
+between their coordinates in absolute
+
+60
+00:04:03.369 --> 00:04:08.002
+value is no more than delta, and as well,
+the difference between their y-coordinates
+
+61
+00:04:08.002 --> 00:04:12.132
+is at most delta. Okay, and this is easy
+to see if you'd just return to the
+
+62
+00:04:12.132 --> 00:04:16.263
+definition of Euclidean distance that we
+reviewed at the beginning of the
+
+63
+00:04:16.263 --> 00:04:20.340
+discussion of closest points. Okay? So if
+your distance is at most delta, then in
+
+64
+00:04:20.340 --> 00:04:24.860
+each coordinate, you differ by at most
+delta as well. Now, what does A say?
+
+65
+00:04:24.860 --> 00:04:29.763
+[sound]. So proof of A. So what does part A
+of the claim assert? It asserts that p
+
+66
+00:04:29.763 --> 00:04:34.728
+and q are both members of SY, are both
+members of that vertical strip. So another
+
+67
+00:04:34.728 --> 00:04:38.657
+way of saying that is that the X
+coordinates of p and q, that is, the
+
+68
+00:04:38.657 --> 00:04:43.500
+numbers X1 and X2 both are within delta of
+Xbar. Remember, Xbar was in some sense
+
+69
+00:04:43.500 --> 00:04:48.507
+the median X coordinate. So the X
+coordinate of the N over two'th leftmost
+
+70
+00:04:48.507 --> 00:04:52.856
+point. So we're gonna do a proof by
+picture, so consider, forget about the Y
+
+71
+00:04:52.856 --> 00:04:56.690
+coordinates, that's of irrelevant right
+now, and just focus on the X coordinates
+
+72
+00:04:56.690 --> 00:05:02.501
+of all of these points. So on the one hand
+we have X bar. This is the X coordinate of
+
+73
+00:05:02.501 --> 00:05:07.477
+the N over two'th point to the left. And then
+there are the X coordinates which define
+
+74
+00:05:07.477 --> 00:05:12.445
+the left and the right borders of that
+vertical strip. Namely Xbar-delta and
+
+75
+00:05:12.445 --> 00:05:17.323
+Xbar+delta. And then somewhere in here are
+X1 and Y1, the X coordinates of the points
+
+76
+00:05:17.323 --> 00:05:21.951
+we care about, p and q. So a simple
+observation, so because p comes from the
+
+77
+00:05:21.951 --> 00:05:26.830
+left half of the point set, and Xbar is
+the rightmost X coordinate of the left
+
+78
+00:05:26.830 --> 00:05:31.641
+half of the point set, the X coordinate is
+at most Xbar. Right? So all points of Q
+
+79
+00:05:31.641 --> 00:05:35.647
+have X coordinate, at most, Xbar, in
+particular, p does. Similarly, since Xbar
+
+80
+00:05:35.647 --> 00:05:40.256
+is the rightmost edge of the left half of
+the point set, everything in the right half
+
+81
+00:05:40.256 --> 00:05:44.316
+of the point set has X coordinate, at
+least Xbar. So in particular, little q
+
+82
+00:05:44.316 --> 00:05:49.059
+does as well. So what does this mean. So
+this means x1, wherever it is, has to be
+
+83
+00:05:49.059 --> 00:05:53.741
+at the left of x bar. X2 wherever it is
+has to be to the right of x bar. What
+
+84
+00:05:53.741 --> 00:05:58.600
+we're trying to prove is that they're wedged
+in between x bar minus delta and x bar
+
+85
+00:05:58.600 --> 00:06:02.980
+plus delta. And the reason why that's
+true is because their x coordinates
+
+86
+00:06:02.980 --> 00:06:07.463
+also differ by at most delta. Okay, so what
+you should imagine is. You can imagine x1
+
+87
+00:06:07.463 --> 00:06:11.921
+and x2 are sort of people tied by a
+rope at the waist. And this rope has
+
+88
+00:06:11.921 --> 00:06:16.158
+length delta. So wherever x1 and x2
+move, they're at most delta apart.
+
+89
+00:06:16.158 --> 00:06:20.374
+Furthermore x1, we just observed, can't
+move any farther to the right than Xbar.
+
+90
+00:06:20.374 --> 00:06:25.025
+So even if X1 moves as far to the right as
+it can, all the way to Xbar, X2, since
+
+91
+00:06:25.025 --> 00:06:29.385
+it's at most delta away, tied by the
+waist, can't extend beyond X bar+ delta. By
+
+92
+00:06:29.385 --> 00:06:33.579
+the same reasoning, X2 can't move any
+further to the left than Xbar, X1 being
+
+93
+00:06:33.579 --> 00:06:38.104
+tied to the waist to X2, can never drift
+further to the left than Xbar minus delta.
+
+94
+00:06:38.104 --> 00:06:42.519
+So that's the proof that X1 and X2 both
+lie within this region, and that defines
+
+95
+00:06:42.519 --> 00:06:47.140
+the vertical strip. So that's part A. If you
+have any split pair whose distance between
+
+96
+00:06:47.140 --> 00:06:52.134
+them is less than delta, they both have to
+wind up, in this vertical strip. And
+
+97
+00:06:52.134 --> 00:06:57.690
+therefore wind up in the filtered set, the
+proof set, S sub Y. So that's part A of
+
+98
+00:06:57.690 --> 00:07:02.718
+the claim. Let's now move to Part B.
+Recall what part B asserts. It says that
+
+99
+00:07:02.718 --> 00:07:07.170
+the points p and q, this split pair that
+are distance only delta apart. Not only do
+
+100
+00:07:07.170 --> 00:07:11.677
+they wind up in this sort of filtered set
+SY, but in fact, they are almost adjacent
+
+101
+00:07:11.677 --> 00:07:15.690
+in SY, in the sense that the indices in
+the array differ by, at most, seven
+
+102
+00:07:15.690 --> 00:07:19.474
+positions. And this is a part of the claim
+that is a little bit shocking. Really what
+
+103
+00:07:19.474 --> 00:07:23.081
+this says is that we're getting away with
+more or less a variant of our one
+
+104
+00:07:23.081 --> 00:07:27.300
+dimensional algorithm. Remember when we
+wanted to find the closest pair of points
+
+105
+00:07:27.300 --> 00:07:31.415
+on the line, all we had to do was sort
+them by their single coordinate and then
+
+106
+00:07:31.415 --> 00:07:35.538
+look at consecutive pairs and return the
+best of those consecutive pairs. Here what
+
+107
+00:07:35.538 --> 00:07:39.109
+we're saying is really, once we do a
+suitable filtering focus on points in this
+
+108
+00:07:39.109 --> 00:07:43.499
+vertical strip, then we just go through
+the points according to their Y
+
+109
+00:07:43.499 --> 00:07:47.103
+coordinate. And okay, we don't just look
+at adjacent pairs. We look at pairs within
+
+110
+00:07:47.103 --> 00:07:51.990
+seven positions, but still we basically do
+a linear sweep through the points in SY.
+
+111
+00:07:51.990 --> 00:07:56.434
+According to their Y coordinate and that's
+sufficient to identify the closest split
+
+112
+00:07:56.434 --> 00:08:00.917
+pair. So why on earth will this be true.
+So our workhorse in this argument will be
+
+113
+00:08:00.917 --> 00:08:05.059
+a picture which I am going to draw on
+next. So I'm going to draw eight boxes,
+
+114
+00:08:05.059 --> 00:08:09.406
+which have a height and width delta over
+two. So here, delta is the same parameter
+
+115
+00:08:09.406 --> 00:08:13.595
+that gets passed to the closest split
+pair subroutine. And it's also the same
+
+116
+00:08:13.595 --> 00:08:17.518
+delta which we're assuming p and q are
+closer to each other than, right? So
+
+117
+00:08:17.518 --> 00:08:21.335
+that's, remember, that's one of our
+hypotheses in this claim. The distance
+
+118
+00:08:21.335 --> 00:08:25.364
+between p and q is strictly less than
+delta. So we're gonna draw eight delta
+
+119
+00:08:25.364 --> 00:08:31.476
+over two boxes. And they're gonna be
+centered at x bar. So, this same center of
+
+120
+00:08:31.476 --> 00:08:37.862
+the vertical strip that defines S Y. And
+the bottom is going to be the smaller of the
+
+121
+00:08:37.862 --> 00:08:42.627
+Y-coordinates of the points p and q.
+So it might be p, it might be q. It
+
+122
+00:08:42.627 --> 00:08:47.995
+doesn't really matter. But the bottom
+is going to be the smaller of the two. So
+
+123
+00:08:47.995 --> 00:08:53.219
+the picture then looks as follows. So the
+center of these collections of eight
+
+124
+00:08:53.219 --> 00:09:01.125
+boxes, X bar, the bottom is the minimum of
+Y1, Y2. We're gonna have two rows and four
+
+125
+00:09:01.125 --> 00:09:07.158
+columns. And needless to say, we're
+drawing this picture just for the sake of
+
+126
+00:09:07.158 --> 00:09:10.726
+this correctness proof, right? This
+picture is just a thought experiment in
+
+127
+00:09:10.726 --> 00:09:14.402
+our head. We're just trying to understand
+why the algorithm works. The algorithm, of
+
+128
+00:09:14.402 --> 00:09:18.102
+course, does not draw these boxes. The
+subroutine, the, closest split pair
+
+129
+00:09:18.102 --> 00:09:22.007
+subroutine is just that pseudo code we saw
+in the previous video. This is just to
+
+130
+00:09:22.007 --> 00:09:25.527
+reason about the behavior of that
+subroutine. Now looking ahead, I'll make
+
+131
+00:09:25.527 --> 00:09:29.480
+this precise in two lemmas that are
+about to come up, what's going to be true
+
+132
+00:09:29.480 --> 00:09:33.987
+is the following. So, either p or q is on
+this bottom line, right? So we define the
+
+133
+00:09:33.987 --> 00:09:38.435
+bottom to be the lower Y coordinate of the
+two. So maybe, for example, q is the one
+
+134
+00:09:38.435 --> 00:09:42.766
+that has the smaller Y coordinate, in
+which case, is gonna be, somewhere, say,
+
+135
+00:09:42.766 --> 00:09:47.389
+down here. P, you remember, is from the
+left half of the point sets. So p is maybe
+
+136
+00:09:47.389 --> 00:09:51.078
+gonna be here or something. And we're
+gonna argue that both p and q have to be
+
+137
+00:09:51.078 --> 00:09:54.506
+in these boxes. Moreover, we're gonna
+argue that these boxes are sparsely
+
+138
+00:09:54.506 --> 00:10:00.940
+populated. Every one contains either zero
+or one point of the array S sub Y. So,
+
+139
+00:10:00.940 --> 00:10:04.738
+what we're gonna see is that there's at
+most eight points in this picture, two of
+
+140
+00:10:04.738 --> 00:10:08.113
+which are p and q, and therefore, if you
+look at these points sorted by Y
+
+141
+00:10:08.113 --> 00:10:11.817
+coordinate, it has to be that they're
+within seven of each other, the difference
+
+142
+00:10:11.817 --> 00:10:17.460
+of indices is no more than seven.
+So, we're gonna make those two statements
+
+143
+00:10:17.460 --> 00:10:23.835
+precise one at a time by the following two
+lemmas. Let's start with lemma one. Lemma
+
+144
+00:10:23.835 --> 00:10:28.412
+one is the easy one. And it states that
+all of the points of S sub Y, which show up
+
+145
+00:10:28.412 --> 00:10:33.102
+in between the Y coordinates of the points
+we care about p and q have to appear in
+
+146
+00:10:33.102 --> 00:10:38.952
+this picture, they have to lie in one of
+these eight boxes. So we're going to argue
+
+147
+00:10:38.952 --> 00:10:42.910
+this in two steps. First, we're going to
+argue that all such points have to have Y
+
+148
+00:10:42.910 --> 00:10:47.014
+coordinates within the relevant range of
+this picture between the minimum of Y1 and
+
+149
+00:10:47.014 --> 00:10:50.971
+Y2 and delta more than that, and secondly
+that they have to have X coordinates in
+
+150
+00:10:50.971 --> 00:10:57.525
+the range of this picture, namely between X
+bar minus delta and X bar plus delta. So
+
+151
+00:10:57.525 --> 00:11:01.247
+let's start with Y coordinates. So again,
+remember this key hypothesis we have,
+
+152
+00:11:01.247 --> 00:11:05.163
+okay. We're dealing with a split pair p-q
+that are close to each other. The distance
+
+153
+00:11:05.163 --> 00:11:08.934
+between X and Y is strictly less than
+delta. So the very first thing we did at
+
+154
+00:11:08.934 --> 00:11:12.801
+the beginning of this proof is we said
+well, if their Euclidean distance is less
+
+155
+00:11:12.801 --> 00:11:16.766
+than delta then they have to differ by at
+most delta in both of their coordinates,
+
+156
+00:11:16.766 --> 00:11:23.294
+in particular in their Y coordinate.
+Now remember whichever is lower of p and
+
+157
+00:11:23.294 --> 00:11:27.736
+q, whichever one has a smaller y
+coordinate is precisely at the bottom of
+
+158
+00:11:27.736 --> 00:11:32.785
+this diagram. For example, if q is the one
+with the smaller y coordinate, it might be
+
+159
+00:11:32.785 --> 00:11:37.732
+on the black line right here. So that
+means in particular x has y coordinate no
+
+160
+00:11:37.732 --> 00:11:41.973
+more than the top part of this diagram. No
+more than delta bigger than q. And of
+
+161
+00:11:41.973 --> 00:11:46.376
+course all points with Y coordinates in
+between them are equally well wedged into
+
+162
+00:11:46.376 --> 00:11:50.886
+this picture. So that's why all points of
+SY with a Y coordinate between those of p
+
+163
+00:11:50.886 --> 00:11:54.913
+and q have to be in the range of this
+picture, between the minimum of the two Y
+
+164
+00:11:54.913 --> 00:11:59.315
+coordinates and delta more than that. Now
+what about horizontally? What about the X
+
+165
+00:11:59.315 --> 00:12:05.438
+coordinates? Well this just follows from
+the definition of S sub Y. So remember,
+
+166
+00:12:05.438 --> 00:12:08.775
+S sub Y are the points that fall into this
+vertical strip. How did we define the
+
+167
+00:12:08.775 --> 00:12:12.486
+vertical strip? Well it had center Xbar,
+and then we fattened it by delta on both
+
+168
+00:12:12.486 --> 00:12:17.402
+sides. So just by definition, if you're an
+SY, you've gotta have X coordinates in the
+
+169
+00:12:17.402 --> 00:12:23.882
+range of this picture. X delta plus minus,
+sorry, xbar plus minus delta. So that
+
+170
+00:12:23.882 --> 00:12:27.607
+completes the proof of the lemma. So this is
+not. This is just a lemma. So I'll use a
+
+171
+00:12:27.607 --> 00:12:31.476
+lower case qed. Remember this is
+just a step toward proving the overall
+
+172
+00:12:31.476 --> 00:12:35.106
+correctness claim. But this is a good
+step. And again, the way you think about
+
+173
+00:12:35.106 --> 00:12:38.880
+this is it says we draw this boxes. We
+know that either p or q is at the bottom.
+
+174
+00:12:38.880 --> 00:12:43.144
+The other one is going to be on the other
+side of the black line x bar but will be
+
+175
+00:12:43.144 --> 00:12:47.356
+in some other box so perhaps maybe p is
+here and the lemma is saying that all the
+
+176
+00:12:47.356 --> 00:12:51.415
+relevant points of SY have to be somewhere
+in this picture. Now remember in our
+
+177
+00:12:51.415 --> 00:12:55.319
+double for loop we only search seven
+positions away, so the concern is that
+
+178
+00:12:55.319 --> 00:12:59.378
+this is a sorta super highly populated
+collection of eight boxes. That's the
+
+179
+00:12:59.378 --> 00:13:03.539
+concern, but that's not going to be the
+case and that's exactly what lemma two is
+
+180
+00:13:03.539 --> 00:13:07.694
+going to say. Not only do the points
+between p and q in Y coordinates show up
+
+181
+00:13:07.694 --> 00:13:11.965
+in this diagram, but there have to be very
+few. In particular, every box has to be
+
+182
+00:13:11.965 --> 00:13:18.810
+sparse, with population either zero or one.
+So, let's move on to lemma two. So formally
+
+183
+00:13:18.810 --> 00:13:24.776
+the claim is [sound], we have at most one
+point of the point set in each of these
+
+184
+00:13:24.776 --> 00:13:30.572
+eight boxes. And this is finally where we
+use, in a real way, the definition of
+
+185
+00:13:30.572 --> 00:13:35.697
+delta. This is where we finally get the
+payoff from our realization long ago, that
+
+186
+00:13:35.697 --> 00:13:40.379
+when defining the closest split pair
+subroutine, we only really need to be
+
+187
+00:13:40.379 --> 00:13:45.504
+correct in the unlucky case. In the case
+we're not handed the right answer by one
+
+188
+00:13:45.504 --> 00:13:50.629
+of our recursive calls. We're finally
+gonna use that fact in a fundamental way.
+
+189
+00:13:50.629 --> 00:13:56.756
+So we're gonna proceed by contradiction.
+So we're going to think about what happens
+
+190
+00:13:56.756 --> 00:14:01.159
+if there are two points in a single box
+and from that we'll be able to derive a
+
+191
+00:14:01.159 --> 00:14:08.202
+contradiction. So, call the points that
+wind up in the same box A and B. So, to
+
+192
+00:14:08.202 --> 00:14:16.168
+the contrary, suppose A and B lie in the
+same box. So, maybe this is A here, and
+
+193
+00:14:16.168 --> 00:14:23.627
+this is B here, at antipodal corners of
+this particular box. So from this
+
+194
+00:14:23.627 --> 00:14:31.125
+supposition, we have two consequences.
+First of all. I claim that A and B lie on
+
+195
+00:14:31.125 --> 00:14:36.057
+the same side of the point set. They're
+either both in the left side, Q or they're
+
+196
+00:14:36.057 --> 00:14:41.595
+both in the right side, R. So why is this
+true? Well it's because every box lies either
+
+197
+00:14:41.595 --> 00:14:46.116
+entirely on the left half of the point set
+or on the right half of the point
+
+198
+00:14:46.116 --> 00:14:51.375
+set. Recall how we define x bar. X bar is
+the x coordinate of the right most point
+
+199
+00:14:51.375 --> 00:14:56.693
+amongst the left half of the point set
+capital Q. So therefore points with x
+
+200
+00:14:56.693 --> 00:15:01.354
+coordinate at most x bar have to lie
+inside the left half Q. Points with x
+
+201
+00:15:01.354 --> 00:15:05.574
+coordinates at least x bar have to
+lie inside the right half of the point
+
+202
+00:15:05.574 --> 00:15:09.513
+set capital R. So that would be like in
+this example. A and b both lie in a box
+
+203
+00:15:09.513 --> 00:15:13.238
+which is to the right of x bar. So they
+both have to come in the right half
+
+204
+00:15:13.238 --> 00:15:17.490
+of the point set capital R. This is one
+place we are using that there are no ties
+
+205
+00:15:17.490 --> 00:15:21.375
+in X coordinate, so if there's a point
+with X, X coordinate or X bar, we can
+
+206
+00:15:21.375 --> 00:15:25.491
+count it as part of the left half. So
+every box, by virtue of being either to
+
+207
+00:15:25.491 --> 00:15:30.155
+the left of xbar or to the right of xbar,
+can only contain points from a common half
+
+208
+00:15:30.155 --> 00:15:34.064
+of the point set. So that's the first
+consequence of assuming that you have two
+
+209
+00:15:34.064 --> 00:15:37.468
+points in the same box. The second
+consequence is, because the boxes are
+
+210
+00:15:37.468 --> 00:15:43.904
+small, the points gotta be close. So, if A
+and B co-habitate a box, how far could
+
+211
+00:15:43.904 --> 00:15:47.651
+they be from each other? Well, the
+farthest they could be is like I've drawn
+
+212
+00:15:47.651 --> 00:15:50.667
+in the picture, with the points A and B.
+Where they're at opposite corners of a
+
+213
+00:15:50.667 --> 00:15:54.164
+common box. And then you bust out
+Pythagorean's Theorem, and what do you
+
+214
+00:15:54.164 --> 00:15:58.661
+get? You get that the distance between
+them is delta over two, the side of the
+
+215
+00:15:58.661 --> 00:16:03.790
+box times root two. And what's relevant
+for us is this is strictly less than
+
+216
+00:16:03.790 --> 00:16:10.300
+delta. Okay? But, now, here is where we
+use, finally, the definition of delta.
+
+217
+00:16:10.300 --> 00:16:14.983
+Consequences one and two in tandem,
+contradict how we define delta. Remember
+
+218
+00:16:14.983 --> 00:16:19.953
+what delta is. It's as close as two pair
+of, a pair of points can get if they both
+
+219
+00:16:19.953 --> 00:16:24.044
+lie on the left side of the point set, or
+if they both lie on the right side of the
+
+220
+00:16:24.044 --> 00:16:27.313
+point set. That is how we defined it. As
+small as a pair of points on a common half
+
+221
+00:16:27.313 --> 00:16:31.553
+can get to each other. But what have we
+just done? We've exhibited a pair A and B
+
+222
+00:16:31.553 --> 00:16:35.687
+that lie on the same half of the point
+set, and are strictly closer than delta.
+
+223
+00:16:35.687 --> 00:16:40.335
+So that contradicts the definition of
+delta. So that completes the proof of lemma
+
+224
+00:16:40.335 --> 00:16:44.196
+two. Let me just make sure we're all clear
+on why having proved lemma one and lemma two
+
+225
+00:16:44.196 --> 00:16:47.875
+we're done with the proof part B of the
+claim and therefore the entire claim
+
+226
+00:16:47.875 --> 00:16:51.556
+because we already proved
+part one, now a long time ago.
+
+227
+00:16:51.556 --> 00:16:56.558
+So let's interpret the 2 lemmas in
+the context of our picture that we had all
+
+228
+00:16:56.558 --> 00:17:00.227
+throughout. In terms of the eight boxes of
+side length delta over two by
+
+229
+00:17:00.227 --> 00:17:05.680
+delta over two. So again, whichever is the
+lower of p and q, and again let's just for
+
+230
+00:17:05.680 --> 00:17:10.340
+the sake of concreteness say it's q, is at
+the bottom of the picture. The other point
+
+231
+00:17:10.340 --> 00:17:15.053
+is on the other half of the line Xbar, and
+is in one of the other boxes. So, for
+
+232
+00:17:15.053 --> 00:17:20.323
+example, maybe p is right here. So lemma
+one says that every relevant point, every
+
+233
+00:17:20.323 --> 00:17:25.188
+point that survives the filtering and
+makes it into SY, by virtue of being in
+
+234
+00:17:25.188 --> 00:17:29.856
+the vertical strip, has to be in one of
+those boxes, okay? If it has Y coordinate
+
+235
+00:17:29.856 --> 00:17:36.102
+in between p and q. Lemma two says that
+you can only have one point in each of these boxes
+
+236
+00:17:36.102 --> 00:17:40.821
+from the point set, so that's gonna be at
+most eight total. [sound] So combining
+
+237
+00:17:40.821 --> 00:17:48.436
+them. Lemmas one and two imply, that there
+are almost eight points in this picture
+
+238
+00:17:48.436 --> 00:17:55.638
+and that includes p and q because they
+also occupy two of eight boxes. So in the
+
+239
+00:17:55.638 --> 00:18:00.390
+worst case, if this is as densely
+populated as could possibly be, given
+
+240
+00:18:00.390 --> 00:18:05.576
+lemmas one and two, every other box might
+have a point and perhaps every one of
+
+241
+00:18:05.576 --> 00:18:10.042
+those points has a Y coordinate between p
+and q. But this is as bad as it gets.
+
+242
+00:18:10.042 --> 00:18:14.655
+Any point of the strip with Y
+coordinate between p and q occupies a box.
+
+243
+00:18:14.655 --> 00:18:19.087
+So, at most, there are these six wedged in
+between them. What does this mean? This
+
+244
+00:18:19.087 --> 00:18:22.703
+means if from q you look seven
+positions ahead in the array, you are
+
+245
+00:18:22.703 --> 00:18:27.903
+guaranteed to find this point p. So a
+split pair with distance less than delta
+
+246
+00:18:27.903 --> 00:18:33.242
+is guaranteed to be identified by our
+double for loop. Looking seven positions
+
+247
+00:18:33.242 --> 00:18:39.288
+ahead in the sorted array SY is sufficient
+to identify, to look at every conceivably
+
+248
+00:18:39.288 --> 00:18:45.442
+interesting split pair. So that completes
+the assertion B of the correctness
+
+249
+00:18:45.442 --> 00:18:49.461
+claim and we're done. That
+establishes that this supremely clever
+
+250
+00:18:49.461 --> 00:18:54.672
+divide and conquer algorithm is indeed
+a correct O(nlog(n)) algorithm that computes the
+
+251
+00:18:54.672 --> 00:18:58.000
+closest pair of a set of n points in the
+plane.

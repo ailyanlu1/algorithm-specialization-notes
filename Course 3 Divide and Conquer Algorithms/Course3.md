@@ -4,7 +4,7 @@
 2. 矩阵乘法，利用Strassen提出的递归算法
 3. 在给定平面中找出最近点对，三个问题中最具挑战性的一个
 
-## O(nlogn) algorithm for counting inversions I/ 统计逆序对的O(nlogn)算法 I
+## Counting inversions I/ 统计逆序对I
 
 > update：2017/12/12
 
@@ -20,7 +20,7 @@
 
    ![](http://7xwggp.com1.z0.glb.clouddn.com/inversions_type.png)
 
-## O(nlogn) algorithm for counting inversions II/ 统计逆序对的O(nlogn)算法 II
+## Counting inversions II/ 统计逆序 II
 
 > update：2017/12/13
 
@@ -62,4 +62,66 @@
    关于后面的公式如何得到的，Strassen是如何想到这个方法的，以及它的时间复杂度分析，后续课程将给出！
 
 
+##  Closest pair I / 最近点对问题 I
 
+> update：2017/12/17
+
+这节课的视频讲解的是最近点对问题，要求找出给定平面上距离最近的两个点。这个问题是分治求解问题的经典算法之一，在其他应用领域也会经常遇到这个问题，比如计算机图形学、机器人等。
+
+首先是问题的形式化定义：给定一个平面内的若干个点，每个点由其横坐标x与纵坐标y的序列定义。两个点的距离是指欧氏距离(坐标差的平方和开根号)。最近点对问题就是要求找出一对点，使得它们的距离是所有点对中最小的。
+
+求解的前提假设：不存在ties，即所有端点的x坐标不同，y坐标也不同。没有这个前提假问题也能解决，这里只是为了方便算法的论述。
+
+沿袭前面的课程统计数组中的inversion求解过程：如果允许平方的运行时间，依旧可以利用暴力求解找出最近点对，即嵌套循环遍历所有不同的点对，计算各自的距离，最终找出最短的。但是，是否存在与counting inversion一样O(nlogn)的求解？在1-dimension的情况下，所有点在一条坐标轴上，可以先排序O(nlogn)，再遍历一遍找出最短的O(n)。
+
+2-dimension情况下O(nlogn)的high-level求解：
+
+1. Preprocessing：对输入点集按照x坐标排序得到点集$P_x$，再根据y坐标排序得到点集$P_y$
+2. 利用分治求解
+
+2-dimension情况下O(nlogn)的具体求解ClosestPair($P_x，P_y$)：
+
+1. 根据x坐标把原始点集划分成左右两部分，Q与R，再利用Preprocessing分别得到x与y轴有序的点集$Q_x，Q_y，R_x，R_y$
+2. 递归调用ClosestPair($Q_x，Q_y$)=$(p_1,q_1)$得到左半点集中的最近点对
+3. 递归调用ClosestPair($R_x，R_y$)=$(p_2，q_2)$得到右半点集中的最近点对
+4. $\delta=min(d(p_1,q_1)，d(p_2,q_2))$
+5. 调用CloestSplitPair($P_x，P_y，\delta$)得到最近点对($p_3，q_3$)，因为两个点可能各自位于Q与R两个点集中，这一步的运行时间是O(n)线性的
+6. 返回$min(d(p_1,q_1)，d(p_2,q_2)，d(p_3,q_3))$
+
+求解Split closest pair的subroutine要求：O(n)线性运行时间，始终是正确的无论最近点对是否是split closest pair，具体求解过程如下CloestSplitPair($P_x，P_y，\delta​$)：
+
+1. 过滤，修剪掉部分不需要的点，只考虑部分点集，而这部分点集位于一条位于整体点集中部的垂直的宽带中(令$\bar{x}=$原始点集左半部分的最大x坐标，这个操作是O(1)的，因为在Preprocessing中已经对左半点集按照x坐标进行了排序)
+
+2. 利用$\delta$来决定垂直宽带的宽度：$2\times \delta$，即以$\bar{x}$为中心先，左右两边各取$\delta$得宽度，如下图所示。这样就忽略到不在这个宽带中得点，接下来的操作只针对位于宽带中的部分点，这部分点的x坐标的上下界为[$\bar{x}-\delta，\bar{x}+\delta$]
+
+   ![](http://7xwggp.com1.z0.glb.clouddn.com/strip.png)
+
+3. 对宽带中的点集按照y坐标排序得到点集$S_y$，可以直接从$P_y$中按照上一步的要求进行提取，因此这一步的操作是O(n)的
+
+4. 遍历$S_y$中的点，找出距离小于$\delta$的最短点对，具体过程如下图所示。首先是初始化$best$与$best_pair$，分为用来记录最短点对的距离与最短点对本身；接着是嵌套循环遍历$S_y$，由于内层嵌套的迭代次数是常量7，因此内层的运行时间是O(1)，外层的运行时间是O(n)，总体的运行时间依旧是O(n)。**如果最终找出距离小于$\delta$的点对(p,q)，则p与q在$S_y$中至多相间7个点。**以上的证明在下个视频课程给出。
+
+   ![](http://7xwggp.com1.z0.glb.clouddn.com/iterate_sy.png)
+
+   ## Closest pair II / 最近点对问题 II
+
+   > update：2017/12/18
+
+   这节视频主要是证明上一节求解ClosestSplitPair中的结论：令$p\in Q, q\in R$是一对split pair，且$d(p,q)<\delta$，则有
+
+   1. p和q是$S_y$中的两个点
+   2. p与q在$S_y$中的位置最多间隔7个点
+
+   令p的坐标是$(x_1,y_1)$，q的坐标是$(x_2，y_2)$，p来自左半点集Q，q来自右半点集R，且$d(p,q)<\delta$，则有$|x_1-x_2|\leq \delta$，且$|y_1-y_2|\leq \delta$。
+
+   证明第一个结论，就是要证明$x_1,x_2\in [\bar{x}-\delta，\bar{x}+\delta]$。由于p来自左半点集Q，则必有$x_1\leq\bar{x}$，同样q来自右半点集R，则有$x_2\geq\delta$。由于这里与y轴坐标无关，可以借助1-dimension的坐标轴来证明这个。如下图所示，由于$|x_1-x_2|\leq\delta$，所以如果$x_1<\bar{x}-\delta$，则$x_2$肯定必须小于$\bar{x}$，这就矛盾了。同样，如果$x_2>\bar{x}-\delta$，则$x_1$肯定必须大于$\bar{x}$。因此，$x_1$和$x_2$肯定介于$\bar{x}-\delta$与$\bar{x}+\delta$之间。
+
+   ![](http://7xwggp.com1.z0.glb.clouddn.com/claim1.png)
+
+   证明第二个结论，关键是画出如下图所示的8个box，这些box的横坐标必定包含p和q两个点，介于$\bar{x}-\delta$与$\bar{x}+\delta$之间，box的bottom是p和q两个中较小的y坐标，$|y_1-y_2|\leq \delta$，因此单个盒子的高度是$\frac{1}{2}\delta$。在证明之前，先证明两个辅助定理。
+
+   ![](http://7xwggp.com1.z0.glb.clouddn.com/box.png)
+
+   - 辅助定理1：纵坐标位于p与q之间、且属于$S_y$的点必定存在于这8个box之中。首先关于$S_y$的定义，x坐标必须满足介于$\bar{x}-\delta$与$\bar{x}+\delta$之间；其次，p与q的y坐标之差绝对值是小于$\delta$的，这是upper bound。
+   - 辅助定理2：每个box中至多存在一个点。可以用反证法证明，假设a和b两个点存在于同一个盒子中，那个它们必定要么都来自Q，要么都来自R，且它们的距离$d(a,b)\leq \frac{\sqrt{2}}{2}\delta\leq\delta$，这就与原始条件(split pair分别来自Q与R且$\delta$本身已经是Q或者R中最短的距离)相矛盾。
+
+   结合以上两个辅助定理，可以推出包含p和q在内，这8个box中总共至多包含8个点。因此p与q至多相隔7个点。

@@ -1,0 +1,1152 @@
+WEBVTT
+
+1
+00:00:00.940 --> 00:00:04.360
+In this video, we'll put the master
+method to use by instantiating it for
+
+2
+00:00:04.360 --> 00:00:06.220
+six different examples.
+
+3
+00:00:06.220 --> 00:00:09.230
+But first,
+let's recall what the master method says.
+
+4
+00:00:09.230 --> 00:00:12.743
+So the master method takes as input
+recurrences of a particular format,
+
+5
+00:00:12.743 --> 00:00:15.370
+in particular recurrences that
+are parameterized by three
+
+6
+00:00:15.370 --> 00:00:18.580
+different constants, A, B and D.
+
+7
+00:00:18.580 --> 00:00:20.970
+A refers to the number of recursive calls,
+or
+
+8
+00:00:20.970 --> 00:00:23.360
+the number of subproblems that get solved.
+
+9
+00:00:23.360 --> 00:00:27.540
+B is the factor by which the subproblem
+size is smaller than the original
+
+10
+00:00:27.540 --> 00:00:28.750
+problem size.
+
+11
+00:00:28.750 --> 00:00:30.630
+And D is the exponent and
+
+12
+00:00:30.630 --> 00:00:34.100
+the running time of the work done
+outside of the recursive calls.
+
+13
+00:00:34.100 --> 00:00:35.665
+So the recurrence has the form,
+
+14
+00:00:35.665 --> 00:00:39.210
+T(n), the running time on the input
+of size n, is no more than A,
+
+15
+00:00:39.210 --> 00:00:43.100
+the number of subproblems, times the time
+required to solve each subproblem.
+
+16
+00:00:43.100 --> 00:00:47.350
+Which is T(n/b) because the input
+size of a subproblem is n/b.
+
+17
+00:00:47.350 --> 00:00:48.690
+Plus O(n to the d).
+
+18
+00:00:48.690 --> 00:00:51.590
+The work outside of the recursive calls.
+
+19
+00:00:51.590 --> 00:00:54.350
+There's also a base case
+which I haven't written down.
+
+20
+00:00:54.350 --> 00:00:57.850
+So once the problem size drops
+below a particular constant
+
+21
+00:00:57.850 --> 00:00:59.590
+then there should be no more recursion and
+
+22
+00:00:59.590 --> 00:01:03.530
+you can just solve the problem
+immediately that is in constant time.
+
+23
+00:01:03.530 --> 00:01:08.325
+Now given a recurrence in this permitted
+format, the running time is given by one
+
+24
+00:01:08.325 --> 00:01:11.923
+of three formulas depending on
+the relationship between a,
+
+25
+00:01:11.923 --> 00:01:15.466
+the number of recursive calls,
+and b raised to the d power.
+
+26
+00:01:15.466 --> 00:01:18.793
+Case one of the master method is when
+these two quantities are the same,
+
+27
+00:01:18.793 --> 00:01:19.462
+a = b to the d.
+
+28
+00:01:19.462 --> 00:01:23.224
+Then the running time is n to the d log n,
+no more than that.
+
+29
+00:01:23.224 --> 00:01:26.510
+In case 2, the number of recursive calls,
+a, is strictly smaller than b to the d.
+
+30
+00:01:26.510 --> 00:01:30.310
+Then we get a better running time
+upperbound of O(n to the d).
+
+31
+00:01:30.310 --> 00:01:33.790
+And when a is bigger than b to the d,
+we get this somewhat funky looking
+
+32
+00:01:33.790 --> 00:01:37.790
+running time of O(n raised to
+the log base b of a power).
+
+33
+00:01:37.790 --> 00:01:41.400
+We will understand where that
+formula comes from a little later.
+
+34
+00:01:41.400 --> 00:01:42.760
+So that's the master method.
+
+35
+00:01:42.760 --> 00:01:45.150
+It's a little hard to interpret
+the first time you see it.
+
+36
+00:01:45.150 --> 00:01:46.560
+So let's look at some concrete examples.
+
+37
+00:01:47.970 --> 00:01:50.530
+Let's begin with an algorithm that
+we already know the answer to,
+
+38
+00:01:50.530 --> 00:01:52.030
+we already know the running time.
+
+39
+00:01:52.030 --> 00:01:54.140
+Namely let's look at merge sort.
+
+40
+00:01:54.140 --> 00:01:57.260
+So again what's so great about the master
+method is all we have to do is identify
+
+41
+00:01:57.260 --> 00:02:00.630
+the values of the three relevant
+parameters A, B, and D, and we're done.
+
+42
+00:02:00.630 --> 00:02:02.630
+We just plug them in and
+we get the answer.
+
+43
+00:02:02.630 --> 00:02:05.480
+So a remembers the number
+of recursive calls.
+
+44
+00:02:05.480 --> 00:02:08.400
+So in merge sort,
+recall we get two recursive calls.
+
+45
+00:02:09.420 --> 00:02:13.450
+b is the factor by which the sub problem
+size is smaller than that in the original.
+
+46
+00:02:13.450 --> 00:02:14.980
+Well we recurse on half the array.
+
+47
+00:02:14.980 --> 00:02:18.470
+So the subproblem size is
+half that of the original.
+
+48
+00:02:18.470 --> 00:02:19.990
+So b = 2.
+
+49
+00:02:19.990 --> 00:02:24.840
+And recall that outside of the recursive
+calls, all merge sort does is merge.
+
+50
+00:02:24.840 --> 00:02:26.610
+And that's a linear time subroutine.
+
+51
+00:02:26.610 --> 00:02:31.520
+So the exponent D is 1, a reflection
+of the fact that it's linear time.
+
+52
+00:02:31.520 --> 00:02:34.470
+So remember the key trigger which
+determines which of the three cases is
+
+53
+00:02:34.470 --> 00:02:37.180
+the relationship between a and b to the d.
+
+54
+00:02:38.180 --> 00:02:41.084
+So a obviously is 2.
+
+55
+00:02:41.084 --> 00:02:46.154
+And b to the d = 2.
+
+56
+00:02:46.154 --> 00:02:50.110
+So this puts us in Case 1.
+
+57
+00:02:50.110 --> 00:02:54.733
+And remember in Case 1 we
+have that the running time is
+
+58
+00:02:54.733 --> 00:02:58.251
+bounded above by O(n to the d (logn).
+
+59
+00:02:58.251 --> 00:02:59.990
+In our case d = 1.
+
+60
+00:02:59.990 --> 00:03:02.840
+So this is just O(n log n).
+
+61
+00:03:02.840 --> 00:03:04.770
+Which, of course, we already knew.
+
+62
+00:03:04.770 --> 00:03:08.660
+But at least this is a sanity check,
+the master method is at least reconfirming
+
+63
+00:03:08.660 --> 00:03:12.290
+facts which we've already
+proven by direct means.
+
+64
+00:03:12.290 --> 00:03:13.810
+So let's look at a second example.
+
+65
+00:03:13.810 --> 00:03:17.880
+The second example is going to be for the
+binary search algorithm in a sorted array.
+
+66
+00:03:17.880 --> 00:03:21.430
+Now we haven't talked explicitly about
+binary search and I'm not planning to, so
+
+67
+00:03:21.430 --> 00:03:24.860
+if you don't know what binary search is,
+please read about it in a textbook or
+
+68
+00:03:24.860 --> 00:03:27.910
+just look it up on the web, and
+it'll be easy to find descriptions.
+
+69
+00:03:27.910 --> 00:03:28.490
+But the upshot it,
+
+70
+00:03:28.490 --> 00:03:31.640
+this is basically how you'd look
+up a phone number in a phone book.
+
+71
+00:03:31.640 --> 00:03:34.540
+Now I realize probably
+the youngest viewers of this video
+
+72
+00:03:34.540 --> 00:03:37.770
+haven't actually had the experience
+of using a physical telephone book.
+
+73
+00:03:37.770 --> 00:03:39.500
+But for the rest of you, as you know.
+
+74
+00:03:39.500 --> 00:03:42.120
+You don't actually start with the As and
+then go to the Bs, and
+
+75
+00:03:42.120 --> 00:03:44.790
+then go to the Cs if you're looking for
+a given name.
+
+76
+00:03:44.790 --> 00:03:47.940
+You more sensibly split the telephone
+book roughly in the middle and
+
+77
+00:03:47.940 --> 00:03:51.140
+depending if what you're looking for
+is early or later in the alphabet,
+
+78
+00:03:51.140 --> 00:03:54.500
+you effectively recurse on the relevant
+half of the telephone book.
+
+79
+00:03:54.500 --> 00:03:57.850
+So binary search is just exactly the same
+algorithm when you are looking for
+
+80
+00:03:57.850 --> 00:04:00.500
+a given element in
+a particular sorted array.
+
+81
+00:04:00.500 --> 00:04:02.970
+You start in the middle of the array,
+and then you recurse on the left or
+
+82
+00:04:02.970 --> 00:04:05.950
+the right half as appropriate depending
+on if the element you're looking for
+
+83
+00:04:05.950 --> 00:04:08.880
+is bigger or less than the middle element.
+
+84
+00:04:08.880 --> 00:04:12.080
+Now the master method applies
+equally well to binary search and
+
+85
+00:04:12.080 --> 00:04:13.790
+it tells us what its running time is.
+
+86
+00:04:13.790 --> 00:04:15.920
+So in the next quiz you'll
+go through that exercise.
+
+87
+00:04:18.650 --> 00:04:20.730
+So the correct answer is the first one.
+
+88
+00:04:20.730 --> 00:04:23.650
+To see why let's recall what a,
+b, and d mean.
+
+89
+00:04:23.650 --> 00:04:25.660
+a is the number of recursive calls.
+
+90
+00:04:25.660 --> 00:04:28.190
+Now in binary search you only
+make one recursive call.
+
+91
+00:04:28.190 --> 00:04:29.390
+This is unlike merge sort.
+
+92
+00:04:29.390 --> 00:04:32.070
+Remember you just compare the element
+you're looking for to the middle element.
+
+93
+00:04:32.070 --> 00:04:34.880
+If it's less than the middle element
+you recurse on the left half.
+
+94
+00:04:34.880 --> 00:04:37.330
+If it's bigger than the middle element,
+you recurse on the right half.
+
+95
+00:04:37.330 --> 00:04:42.600
+So in any case there's only one recursive
+call, so a is merely 1 in binary search.
+
+96
+00:04:42.600 --> 00:04:44.606
+Now in any case you recurse
+on half the array so
+
+97
+00:04:44.606 --> 00:04:49.720
+like in merge sort the value of b = 2,
+you recurse on a problem of half the size.
+
+98
+00:04:49.720 --> 00:04:52.970
+And outside of the recursive column,
+the only thing you do is one comparison.
+
+99
+00:04:52.970 --> 00:04:56.020
+You just determine whether the element
+you're looking for is bigger than or
+
+100
+00:04:56.020 --> 00:04:59.130
+less than the middle element of
+the array that you recursed on.
+
+101
+00:04:59.130 --> 00:05:02.920
+So that's constant time outside
+the recursive call giving us a value for
+
+102
+00:05:02.920 --> 00:05:04.780
+d of 0.
+
+103
+00:05:04.780 --> 00:05:09.260
+Just like merge sort, this is again
+Case 1 of the master method because we
+
+104
+00:05:09.260 --> 00:05:13.960
+have a = b to the d,
+both in this case are equal to one.
+
+105
+00:05:15.650 --> 00:05:18.175
+So this gives us a recurrence,
+
+106
+00:05:18.175 --> 00:05:22.748
+a solution to our recurrence
+of big O(n to the d log n).
+
+107
+00:05:22.748 --> 00:05:26.405
+Since d = 0 this is simply log n.
+
+108
+00:05:26.405 --> 00:05:29.579
+And again many of you probably already
+know that the running time of binary
+
+109
+00:05:29.579 --> 00:05:31.950
+search is log n or
+you can figure that out easily.
+
+110
+00:05:31.950 --> 00:05:34.960
+Again this is just using the master
+method as a sanity check
+
+111
+00:05:34.960 --> 00:05:38.340
+to reconfirm that it's giving
+us the answers that we expect.
+
+112
+00:05:38.340 --> 00:05:40.880
+Let's now move on to some harder examples,
+
+113
+00:05:40.880 --> 00:05:45.100
+beginning with the first recursive
+algorithm for integer multiplication.
+
+114
+00:05:45.100 --> 00:05:49.720
+Remember this is where we recurse on
+four different products of n over two
+
+115
+00:05:49.720 --> 00:05:54.860
+digit numbers and then re-combine them in
+the obvious way using adding by zero and
+
+116
+00:05:54.860 --> 00:05:58.320
+some linear time additions.
+
+117
+00:05:58.320 --> 00:06:01.310
+In the first integer multiplication
+algorithm, which, does not make use of
+
+118
+00:06:01.310 --> 00:06:05.630
+Gauss's Trick where we do the four
+different recursive calls in a naive way,
+
+119
+00:06:05.630 --> 00:06:09.540
+we have a,
+the number of recursive calls, = 4.
+
+120
+00:06:09.540 --> 00:06:13.310
+Now in each case, whenever we take
+a product of two smaller numbers,
+
+121
+00:06:13.310 --> 00:06:15.270
+the numbers have n over two digits so
+
+122
+00:06:15.270 --> 00:06:17.610
+that's half as many digits
+as we started with.
+
+123
+00:06:17.610 --> 00:06:21.229
+So just like in the previous two examples,
+b = 2.
+
+124
+00:06:21.229 --> 00:06:25.337
+The input size drops by
+a factor 2 when we recurse.
+
+125
+00:06:25.337 --> 00:06:27.541
+Now how much work do we do
+outside of the recursive call?
+
+126
+00:06:27.541 --> 00:06:30.550
+Well again all it is doing is
+additions and adding by zeros and
+
+127
+00:06:30.550 --> 00:06:32.147
+that can be done in linear time.
+
+128
+00:06:32.147 --> 00:06:36.462
+Linear time corresponds to
+a primer value of d = 1.
+
+129
+00:06:36.462 --> 00:06:39.557
+So next we determine which case
+of the master method we're in.
+
+130
+00:06:39.557 --> 00:06:46.020
+a = 4, b to the d = 2,
+which in this case is less than a.
+
+131
+00:06:47.070 --> 00:06:50.380
+So this corresponds to Case
+3 of the master method.
+
+132
+00:06:51.500 --> 00:06:53.650
+This is where we get
+the somewhat strange formula for
+
+133
+00:06:53.650 --> 00:06:56.010
+the running time of the recurrence.
+
+134
+00:06:56.010 --> 00:07:00.550
+T(n) = O(n to the log base b of a).
+
+135
+00:07:02.020 --> 00:07:07.160
+Which with our parameter values,
+is n to the log base 2(4).
+
+136
+00:07:07.160 --> 00:07:11.010
+Also known as O(n squared).
+
+137
+00:07:11.010 --> 00:07:13.680
+So let's compare this to
+the simple algorithm that
+
+138
+00:07:13.680 --> 00:07:15.450
+we all learned back in grade school.
+
+139
+00:07:15.450 --> 00:07:17.480
+Recall that the iterative algorithm for
+
+140
+00:07:17.480 --> 00:07:22.930
+multiplying two integers also takes
+an n squared number of operations.
+
+141
+00:07:22.930 --> 00:07:26.250
+So this was a clever idea to
+attack the problem recursively.
+
+142
+00:07:26.250 --> 00:07:29.460
+But at least in the absence of Gauss's
+Trick where you just naively compute each
+
+143
+00:07:29.460 --> 00:07:33.080
+of the four necessary products separately.
+
+144
+00:07:33.080 --> 00:07:36.250
+You do not get any improvement
+over the iterative algorithm that
+
+145
+00:07:36.250 --> 00:07:37.300
+you learned in grade school.
+
+146
+00:07:37.300 --> 00:07:40.220
+Either way,
+it's an n squared number of operations.
+
+147
+00:07:40.220 --> 00:07:42.490
+But what if we do make
+use of Gauss's Trick,
+
+148
+00:07:42.490 --> 00:07:44.705
+where we do only three recursive
+calls instead of four?
+
+149
+00:07:44.705 --> 00:07:47.970
+Surely the running time won't
+be any worse than n squared, and
+
+150
+00:07:47.970 --> 00:07:50.070
+hopefully it's going to be better.
+
+151
+00:07:50.070 --> 00:07:52.560
+So I'll let you work out
+the details on this next quiz.
+
+152
+00:07:53.930 --> 00:07:56.760
+So the correct answer to this
+quiz is the fourth option.
+
+153
+00:07:56.760 --> 00:07:59.910
+It's not hard to see what the relevant
+values of a, b, and d are.
+
+154
+00:07:59.910 --> 00:08:02.940
+Remember the whole point of Gauss's trick
+is to reduce the number of recursive
+
+155
+00:08:02.940 --> 00:08:06.890
+calls from four down to three so
+the value of a is going to be 3.
+
+156
+00:08:06.890 --> 00:08:10.300
+As usual we're recursing on a problem size
+which is half of that of the original.
+
+157
+00:08:10.300 --> 00:08:13.850
+In this case n over two digit numbers so
+b remains 2.
+
+158
+00:08:13.850 --> 00:08:16.527
+And just like in the more
+naive recursive algorithm,
+
+159
+00:08:16.527 --> 00:08:19.210
+we only do linear work outside
+of the recursive call.
+
+160
+00:08:19.210 --> 00:08:21.940
+So all that's needed to do some
+additions and patterns by 0.
+
+161
+00:08:21.940 --> 00:08:25.770
+So that puts this parameter values a,
+b, and d.
+
+162
+00:08:25.770 --> 00:08:29.440
+Then we have to figure out which
+case of the Master Method that is.
+
+163
+00:08:29.440 --> 00:08:33.820
+So we have a = 3, b raised to the d = 2.
+
+164
+00:08:33.820 --> 00:08:37.340
+So a has dropped by 1 relative
+to the more naive algorithm.
+
+165
+00:08:37.340 --> 00:08:39.280
+But we're still in Case
+3 of the Master Method.
+
+166
+00:08:39.280 --> 00:08:41.000
+a is still bigger that the b to the d.
+
+167
+00:08:41.000 --> 00:08:44.890
+So the running time is governed by
+that rather exotic looking formula.
+
+168
+00:08:44.890 --> 00:08:50.305
+Namely T(n) = O(n to the log base b),
+
+169
+00:08:50.305 --> 00:08:54.182
+which in our case is 2(a).
+
+170
+00:08:54.182 --> 00:08:58.038
+Which is now 3 instead of 4, okay?
+
+171
+00:08:58.038 --> 00:09:06.000
+So the master method just tells us
+the solution to this recurrence of 3.
+
+172
+00:09:06.000 --> 00:09:09.510
+So what is log of the,
+what is log base 2(3)?
+
+173
+00:09:09.510 --> 00:09:12.230
+Well plug it in your computer or
+your calculator, and
+
+174
+00:09:12.230 --> 00:09:13.980
+you'll find that it's roughly 1.59.
+
+175
+00:09:13.980 --> 00:09:19.750
+So we've got a running
+time of n to the 1.59.
+
+176
+00:09:19.750 --> 00:09:23.726
+Which is certainly better than n squared.
+
+177
+00:09:23.726 --> 00:09:26.775
+It's not as fast as n log n,
+not as fast as the merge sort recurrence,
+
+178
+00:09:26.775 --> 00:09:28.576
+which makes only two workers for calls.
+
+179
+00:09:28.576 --> 00:09:31.490
+But it's quite a bit
+better than quadratic.
+
+180
+00:09:31.490 --> 00:09:35.240
+So summarizing, you did in fact
+learn a suboptimal algorithm for
+
+181
+00:09:35.240 --> 00:09:37.800
+integer multiplication
+way back in grade school.
+
+182
+00:09:37.800 --> 00:09:41.260
+You can beat the iterative algorithm
+using a combination of recursion
+
+183
+00:09:41.260 --> 00:09:44.429
+plus Gauss's trick to save on
+the number of recursive calls.
+
+184
+00:09:45.750 --> 00:09:48.340
+Let's quickly move on to
+our final two examples.
+
+185
+00:09:48.340 --> 00:09:51.540
+Example number five is for those of you
+that watched the video on Strassen's
+
+186
+00:09:51.540 --> 00:09:52.810
+matrix multiplication algorithm.
+
+187
+00:09:54.060 --> 00:09:56.810
+So recall the salient properties
+of Strassen's algorithm.
+
+188
+00:09:56.810 --> 00:10:00.150
+The key idea is similar to Gauss's Trick
+for integer multiplication.
+
+189
+00:10:00.150 --> 00:10:03.740
+First you set up the problem recursively,
+one observes that the naive way to solve
+
+190
+00:10:03.740 --> 00:10:06.920
+a problem recursively would
+lead to eight subproblems.
+
+191
+00:10:06.920 --> 00:10:09.480
+But if you're clever about
+saving some computations,
+
+192
+00:10:09.480 --> 00:10:13.590
+you can get it down to just seven
+recursive calls, seven subproblems.
+
+193
+00:10:13.590 --> 00:10:16.900
+So a, in Strassen's argument,
+is equal to 7.
+
+194
+00:10:16.900 --> 00:10:21.970
+As usual, each subproblem size is
+half that of the original one.
+
+195
+00:10:21.970 --> 00:10:23.240
+So b = 2.
+
+196
+00:10:23.240 --> 00:10:27.070
+And the amount of work done
+outside of the recursive calls is
+
+197
+00:10:27.070 --> 00:10:28.710
+linear in the matrix size.
+
+198
+00:10:28.710 --> 00:10:31.670
+So quadratic in the end,
+quadratic in the dimension
+
+199
+00:10:31.670 --> 00:10:36.330
+because there's a quadratic number of
+entries in terms of the dimension.
+
+200
+00:10:36.330 --> 00:10:41.390
+So n squared work outside the recursive
+call is leaving you a value of d = 2.
+
+201
+00:10:41.390 --> 00:10:43.241
+So as far as which case of
+the master method we're in.
+
+202
+00:10:43.241 --> 00:10:45.619
+Well it's the same as in
+the last couple of examples.
+
+203
+00:10:45.619 --> 00:10:49.803
+a = 7,
+b to the d = 4 which is less than a.
+
+204
+00:10:49.803 --> 00:10:54.815
+So once again we're in Case 3 and
+now the running
+
+205
+00:10:54.815 --> 00:11:00.440
+time of Strassen's algorithm
+T(n) = O(n to the log
+
+206
+00:11:00.440 --> 00:11:06.204
+base) 2(7) which is more or
+less n to the 2.81.
+
+207
+00:11:06.204 --> 00:11:08.197
+And again this is a win.
+
+208
+00:11:08.197 --> 00:11:13.390
+Once we use the savings to get
+down to just 7 recursive calls.
+
+209
+00:11:13.390 --> 00:11:18.660
+This beats the naive federate algorithm,
+which recall would require cubic time.
+
+210
+00:11:18.660 --> 00:11:21.170
+So that's another win for
+clever divide and
+
+211
+00:11:21.170 --> 00:11:24.920
+conquer in matrix multiplication
+via Strassen's algorithm.
+
+212
+00:11:24.920 --> 00:11:27.440
+And once again, the master's method
+just by plugging in parameters,
+
+213
+00:11:27.440 --> 00:11:30.300
+tells us exactly what the right
+answer to this recurrence is.
+
+214
+00:11:31.570 --> 00:11:34.520
+So for the final example I feel
+a little guilty because I've shown
+
+215
+00:11:34.520 --> 00:11:37.490
+you five examples and
+none of the them have triggered Case 2.
+
+216
+00:11:37.490 --> 00:11:41.740
+We've had two in Case 1 in the master
+method and three now in Case 3.
+
+217
+00:11:41.740 --> 00:11:44.650
+So this will be a fictitious
+recurrence just to illustrate Case 2.
+
+218
+00:11:44.650 --> 00:11:48.679
+But there are examples of recurrences that
+come up where Case 2 is the relevant one.
+
+219
+00:11:49.680 --> 00:11:53.330
+So let's just look at
+the following recurrence.
+
+220
+00:11:53.330 --> 00:11:56.160
+So this recurrence is
+just like merge sort.
+
+221
+00:11:56.160 --> 00:11:56.930
+We recurse twice.
+
+222
+00:11:56.930 --> 00:11:59.740
+There's two recursive calls
+each on half the problem size.
+
+223
+00:11:59.740 --> 00:12:01.500
+The only difference is in
+this recurrence we're working
+
+224
+00:12:01.500 --> 00:12:02.870
+a little bit harder on the combined step.
+
+225
+00:12:02.870 --> 00:12:06.380
+Instead of linear time outside of the
+recursive calls we're doing a quadratic
+
+226
+00:12:08.940 --> 00:12:11.230
+amount of work.
+
+227
+00:12:11.230 --> 00:12:12.106
+Okay so a = 2.
+
+228
+00:12:13.470 --> 00:12:16.270
+b = 2 and d = 2.
+
+229
+00:12:16.270 --> 00:12:20.750
+So b to the d = 4, strictly bigger than a.
+
+230
+00:12:20.750 --> 00:12:24.740
+And that's exactly the trigger for Case 2.
+
+231
+00:12:24.740 --> 00:12:28.150
+Now recall what the running
+time is in Case 2.
+
+232
+00:12:28.150 --> 00:12:32.110
+It's simply n to the d, where d is
+the exponent in the combined step.
+
+233
+00:12:32.110 --> 00:12:36.800
+In our case, d is 2, so
+we get a running time of n squared.
+
+234
+00:12:36.800 --> 00:12:38.750
+And you might find this a little
+counter-intuitive, right?
+
+235
+00:12:38.750 --> 00:12:39.950
+Given that merge sort.
+
+236
+00:12:39.950 --> 00:12:44.320
+All we do with merge sort is change
+the combine step from linear to quadratic.
+
+237
+00:12:44.320 --> 00:12:46.110
+And merge sort has
+a running time of n log n.
+
+238
+00:12:46.110 --> 00:12:49.190
+You might have expected the running
+time here to be n squared log n.
+
+239
+00:12:49.190 --> 00:12:52.570
+But that would be an over estimate, so
+the master method gives us a tighter upper
+
+240
+00:12:52.570 --> 00:12:54.680
+bound, shows that it's
+only quadratic work.
+
+241
+00:12:54.680 --> 00:12:58.890
+So put differently, the running time
+of the entire algorithm is governed
+
+242
+00:12:58.890 --> 00:13:00.800
+by the work outside of
+the recursive calls.
+
+243
+00:13:00.800 --> 00:13:03.230
+Just in the outer most
+call to the algorithm,
+
+244
+00:13:03.230 --> 00:13:05.350
+just at the root of the recursion tree
