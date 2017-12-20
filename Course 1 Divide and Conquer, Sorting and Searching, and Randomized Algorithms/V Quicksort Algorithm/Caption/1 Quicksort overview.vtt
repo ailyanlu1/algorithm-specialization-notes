@@ -1,0 +1,766 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.764
+So now we come to one of my favorite
+sequence of lectures, where we going to
+
+2
+00:00:03.764 --> 00:00:07.384
+discuss the famous QuickSort algorithm.
+If you ask professional computer
+
+3
+00:00:07.384 --> 00:00:11.622
+scientists and professional programmers to
+draw up a list of their top five, top ten
+
+4
+00:00:11.622 --> 00:00:15.859
+favorite algorithms, I'll bet you'd see
+QuickSort on many of those, those peoples'
+
+5
+00:00:15.859 --> 00:00:19.844
+lists. So, why is that? After all, we've
+already discussed sorting. We already have
+
+6
+00:00:19.844 --> 00:00:23.476
+a quite good and practical sorting
+algorithm, mainly the Merge Sort
+
+7
+00:00:23.476 --> 00:00:27.411
+algorithm. Well, QuickSort, in addition to
+being very practical, it's competitive
+
+8
+00:00:27.411 --> 00:00:31.447
+with, and often superior to, Merge Sort.
+So, in addition to being very practical,
+
+9
+00:00:31.447 --> 00:00:35.684
+and used all the time in the real world,
+and in programming libraries, it's just a
+
+10
+00:00:35.684 --> 00:00:39.878
+extremely elegant algorithm. When you see
+the code, it's just so succinct. It's so
+
+11
+00:00:39.878 --> 00:00:43.782
+elegant, you just sorta wish you had come
+up with it yourself. Moreover, the
+
+12
+00:00:43.782 --> 00:00:47.633
+mathematical analysis which explains why
+QuickSort runs so fast, and that
+
+13
+00:00:47.633 --> 00:00:51.906
+mathematical analysis, we'll cover in
+detail, is very slick. So it's something
+
+14
+00:00:51.906 --> 00:00:55.998
+I can cover in just about half an hour or
+so. So more precisely what we'll prove
+
+15
+00:00:55.998 --> 00:01:00.124
+about the QuickSort algorithm is that a
+suitable randomized implementation runs in
+
+16
+00:01:00.124 --> 00:01:04.104
+time N log N on average. And I'll tell
+you exactly what I mean by on average,
+
+17
+00:01:04.256 --> 00:01:08.262
+later on in this sequence of lectures.
+And, moreover, the constants hidden in the
+
+18
+00:01:08.262 --> 00:01:12.370
+Big-Oh notation are extremely small. And,
+that'll be evident from the analysis that
+
+19
+00:01:12.370 --> 00:01:16.477
+we do. Finally, and this is one thing that
+differentiates QuickSort from the merge
+
+20
+00:01:16.477 --> 00:01:20.483
+sort algorithm, is it operates in place.
+That is, it needs very little additional
+
+21
+00:01:20.483 --> 00:01:24.641
+storage, beyond what's given in the input
+array, in order to accomplish the goal of
+
+22
+00:01:24.641 --> 00:01:28.850
+sorting. Essentially, what QuickSort does
+is just repeated swaps within the space of
+
+23
+00:01:28.850 --> 00:01:32.501
+the input array, until it finally
+concludes with a sorted version of the
+
+24
+00:01:32.501 --> 00:01:36.092
+given array. The final thing I want to
+mention on this first slide is that,
+
+25
+00:01:36.092 --> 00:01:39.819
+unlike most of the videos, this set of the
+videos will actually have an
+
+26
+00:01:39.819 --> 00:01:43.845
+accompanying set of lecture notes, which
+I've posted on, in PDF, from the course
+
+27
+00:01:43.845 --> 00:01:47.821
+website. Those are largely, redundant.
+They're optional, but if you want another
+
+28
+00:01:47.821 --> 00:01:51.797
+treatment of what I'm gonna discuss, a
+written treatment, I encourage you to look
+
+29
+00:01:51.797 --> 00:01:55.574
+at the lecture notes, on the course
+website. So, for the rest of this video,
+
+30
+00:01:55.574 --> 00:01:59.550
+I'm gonna give you an overview of the
+ingredients of QuickSort, and what we have
+
+31
+00:01:59.550 --> 00:02:03.526
+to discuss in more detail, and the rest of
+the lectures will give details of the
+
+32
+00:02:03.526 --> 00:02:08.875
+implementation, as well as the
+mathematical analysis. So let's begin by
+
+33
+00:02:08.875 --> 00:02:13.445
+recalling the sorting problem. This is
+exactly the same problem we discussed back
+
+34
+00:02:13.445 --> 00:02:17.677
+when we covered Merge Sort. So we're given
+as input an array of n numbers in
+
+35
+00:02:17.677 --> 00:02:32.635
+arbitrary order. So, for example, perhaps
+the input looks like this array here. And
+
+36
+00:02:32.635 --> 00:02:37.462
+then what do we gotta do? We just gotta
+output a version of these same numbers but
+
+37
+00:02:37.462 --> 00:02:44.596
+in increasing order. Like when we
+discussed Merge Sort, I'm gonna make a
+
+38
+00:02:44.596 --> 00:02:48.526
+simplifying assumption just to keep the
+lectures as simple as possible. Namely I'm
+
+39
+00:02:48.526 --> 00:02:52.216
+going to assume the input array has no
+duplicates. That is, all of the entries
+
+40
+00:02:52.216 --> 00:02:58.943
+are distinct. And like with the merge
+sort, I encourage you to think about how
+
+41
+00:02:58.943 --> 00:03:04.085
+you would alter the implementation of
+QuickSort so that it deals correctly with
+
+42
+00:03:04.085 --> 00:03:12.023
+ties, with duplicate entries. To discuss
+how QuickSort works at a high-level, I need
+
+43
+00:03:12.023 --> 00:03:16.888
+to introduce you to the key subroutine, and
+this is really the, key great idea in
+
+44
+00:03:16.888 --> 00:03:21.753
+QuickSort, which is to use a subroutine
+which partitions the array around a pivot
+
+45
+00:03:21.753 --> 00:03:30.018
+element. So what does this mean? Well,
+the first thing you gotta do is, you gotta
+
+46
+00:03:30.018 --> 00:03:37.779
+pick one element in your array to act as a
+pivot element. Now eventually we'll worry
+
+47
+00:03:37.779 --> 00:03:42.342
+quite a bit about exactly how we choose
+this magical pivot element. But for now
+
+48
+00:03:42.342 --> 00:03:47.309
+you can just think of it that we pluck out
+the very first element in the array to act
+
+49
+00:03:47.309 --> 00:03:54.349
+as the pivot. So, for example, in the
+input array that I mentioned on the
+
+50
+00:03:54.349 --> 00:04:01.750
+previous slide, we could just use "3" as
+the pivot element. After you've chosen a
+
+51
+00:04:01.750 --> 00:04:06.369
+pivot element, you then re-arrange the
+array, and re-arrange it so that every, all
+
+52
+00:04:06.369 --> 00:04:11.278
+the elements which come to the left of the
+pivot element are less than the pivot, and
+
+53
+00:04:11.278 --> 00:04:15.840
+all the elements which come after the
+pivot element are greater than the pivot.
+
+54
+00:04:16.740 --> 00:04:22.387
+So for example, given this input array,
+one legitimate way to rearrange it, so that
+
+55
+00:04:22.387 --> 00:04:30.220
+this holds, is the following. Perhaps in
+the first two entries, we have the 2 and
+
+56
+00:04:30.220 --> 00:04:35.890
+the 1. Then comes the pivot element. And
+then comes the elements 4 through 8
+
+57
+00:04:35.890 --> 00:04:42.882
+in some perhaps jingled order. So
+notice that the elements to the left of
+
+58
+00:04:42.882 --> 00:04:50.684
+the pivot, the 2 and the 1, are indeed
+less than the pivot, which is 3.
+
+59
+00:04:50.684 --> 00:04:54.436
+And the five elements to the right of the
+pivot, to the right of the 3, are
+
+60
+00:04:54.436 --> 00:05:00.689
+indeed all greater than 3. Notice in
+the Partition subroutine, we do not
+
+61
+00:05:00.689 --> 00:05:04.689
+insist that we get the relative order
+correct amongst those elements less than
+
+62
+00:05:04.689 --> 00:05:08.485
+the pivot, or amongst those elements
+bigger than the pivot. So, in some sense,
+
+63
+00:05:08.485 --> 00:05:12.636
+we're doing some kind of partial sorting.
+We're just bucketing the elements of the
+
+64
+00:05:12.636 --> 00:05:16.635
+array into one bucket, those less than
+the pivot, and then a second bucket, those
+
+65
+00:05:16.635 --> 00:05:20.736
+bigger than the pivot. And we don't care
+about, getting right the order amongst
+
+66
+00:05:20.736 --> 00:05:27.685
+each, within each of those two buckets.
+So, partitioning is certainly a more
+
+67
+00:05:27.685 --> 00:05:31.877
+modest goal than sorting, but it does make
+progress toward sorting. In particular,
+
+68
+00:05:31.877 --> 00:05:35.910
+the pivot element itself winds up in its
+rightful position. That is, the pivot
+
+69
+00:05:35.910 --> 00:05:40.311
+element winds up where it should be in the
+final sorted version of the array. You'll
+
+70
+00:05:40.311 --> 00:05:44.345
+notice in the example, we chose as the
+pivot the third largest element, and it
+
+71
+00:05:44.345 --> 00:05:48.169
+does, indeed, wind up in the third
+position of the array. So, more generally,
+
+72
+00:05:48.169 --> 00:05:52.308
+where should the pivot be in the final
+sorted version? Well, it should be to the
+
+73
+00:05:52.308 --> 00:05:56.447
+right of everything less than it. It
+should be to the left of everything bigger
+
+74
+00:05:56.447 --> 00:06:03.537
+than it. And that's exactly what
+partitioning does, by definition. So, why
+
+75
+00:06:03.537 --> 00:06:06.910
+is it such a good idea to have a
+partitioning subroutine? After all, we
+
+76
+00:06:06.910 --> 00:06:10.765
+don't really care about partitioning. What
+we want to do is sort. Well, the point is
+
+77
+00:06:10.765 --> 00:06:14.764
+that partitioning can be done quickly. It
+can be done in linear time. And it's a way
+
+78
+00:06:14.764 --> 00:06:18.812
+of making progress toward having a sorted
+version of an array. And it's gonna enable
+
+79
+00:06:18.812 --> 00:06:22.474
+a divide-and-conquer approach toward
+sorting the input array. So, in a little
+
+80
+00:06:22.474 --> 00:06:26.088
+bit more detail, let me tell you about two
+cool facts about the Partition
+
+81
+00:06:26.088 --> 00:06:29.943
+subroutine. I'm not gonna give you the
+code for partitioning here. I'm gonna give
+
+82
+00:06:29.943 --> 00:06:33.557
+it to you on the next video. But, here are
+the two salient properties of the
+
+83
+00:06:33.557 --> 00:06:41.447
+Partition subroutine, discussed in detail
+in the next video. So the first cool
+
+84
+00:06:41.447 --> 00:06:49.497
+fact is that it can be implemented in
+linear, that, is O(N) time, where N
+
+85
+00:06:49.497 --> 00:06:53.833
+is the size of the input array, and moreover,
+not just linear time but linear time
+
+86
+00:06:53.833 --> 00:06:58.012
+with essentially no extra overhead. So
+we're gonna get a linear time of mutation,
+
+87
+00:06:58.012 --> 00:07:02.243
+where all you do is repeated swaps. You do
+not allocate any additional memory. And
+
+88
+00:07:02.243 --> 00:07:09.491
+that's key to the practical performance of
+the QuickSort algorithm. [sound] Secondly,
+
+89
+00:07:09.491 --> 00:07:14.820
+it cuts down the problem size, so it
+enables the divide-and-conquer approach.
+
+90
+00:07:17.540 --> 00:07:21.916
+Namely, after we've partitioned an array
+around some pivot elements, all we have to
+
+91
+00:07:21.916 --> 00:07:25.727
+do is recursively sort the elements that
+lie on the left of the pivot. And
+
+92
+00:07:25.727 --> 00:07:30.000
+recursively sort the elements that lie on
+the right of the pivot. And then, we'll be
+
+93
+00:07:30.000 --> 00:07:34.120
+done. So, that leads us to the high-level
+description of the QuickSort algorithm.
+
+94
+00:07:35.720 --> 00:07:40.643
+Before I give the high-level description,
+I should mention that this, algorithm was
+
+95
+00:07:40.643 --> 00:07:45.335
+discovered by, Tony Hoare, roughly, 1961
+or so. This was at the very beginning of
+
+96
+00:07:45.335 --> 00:07:50.200
+Hoare's career. He was just about 26, 27
+years old. He went on to do a lot of other
+
+97
+00:07:50.200 --> 00:07:54.776
+contributions, and, eventually wound up
+winning the highest honor in computer
+
+98
+00:07:54.776 --> 00:07:59.584
+science, the ACM Turing Award, in 1980.
+And when you see this code, I'll bet you
+
+99
+00:07:59.584 --> 00:08:04.334
+feel like you wish you had come up with
+this yourself. It's hard not to be envious
+
+100
+00:08:04.334 --> 00:08:11.291
+of the inventor of this very elegant QuickSort
+algorithm. So, just like in Merge Sort,
+
+101
+00:08:11.293 --> 00:08:15.716
+this is gonna be a divide-and-conquer
+algorithm. So it takes an array of some
+
+102
+00:08:15.716 --> 00:08:20.311
+length N, and if it's an array of length
+N, it's already sorted, and that's the
+
+103
+00:08:20.311 --> 00:08:27.850
+base case and we can return. Otherwise
+we're gonna have two recursive calls. The
+
+104
+00:08:27.850 --> 00:08:32.052
+big difference from Merge Sort is that,
+whereas in Merge Sort, we first split the
+
+105
+00:08:32.052 --> 00:08:35.939
+array into pieces, recourse, and then
+combine the results, here, the recursive
+
+106
+00:08:35.939 --> 00:08:40.088
+calls come last. So, the first thing we're
+going to do is choose a pivot element,
+
+107
+00:08:40.088 --> 00:08:44.448
+then partition the array around that pivot
+element, and then do two recursive calls.
+
+108
+00:08:44.448 --> 00:08:51.175
+And then, we'll be done. There will be no
+combined step, no merge step. So in the
+
+109
+00:08:51.175 --> 00:08:54.861
+general case, the first thing you do is
+choose a pivot element. For the moment I'm
+
+110
+00:08:54.861 --> 00:08:58.412
+going to be loose, leave the ChoosePivot
+subroutine unimplemented. There's going to
+
+111
+00:08:58.412 --> 00:09:02.189
+be an interesting discussion about exactly
+how you should do this. For now, you just
+
+112
+00:09:02.189 --> 00:09:05.558
+do it in some way, that for somehow you
+come up with one pivot element. For
+
+113
+00:09:05.558 --> 00:09:12.504
+example, a naive way would be to just
+choose the first element. Then you invoke
+
+114
+00:09:12.504 --> 00:09:21.812
+the Partition subroutine that we'll discuss
+in the last couple slides. [sound]. So
+
+115
+00:09:21.812 --> 00:09:26.522
+recall that the results in a version of
+the array in which the pivot element p is
+
+116
+00:09:26.522 --> 00:09:31.061
+in its rightful position, everything to
+the left of p is less than p, everything
+
+117
+00:09:31.061 --> 00:09:35.771
+to the right of the pivot is bigger than
+the pivot, and then all you have to do to
+
+118
+00:09:35.771 --> 00:09:43.605
+finish up is recurse on both sides. So
+let's call the elements less than p the
+
+119
+00:09:43.605 --> 00:09:48.979
+first part of the partitioned array, and
+the elements greater than p the second
+
+120
+00:09:48.979 --> 00:09:57.311
+part of the recursive array.  And now
+we just call QuickSort again to
+
+121
+00:09:57.311 --> 00:10:04.417
+recursively sort the first part, and then
+the, recursively sort the second part. And
+
+122
+00:10:04.417 --> 00:10:08.423
+that is it. That is the entire QuickSort
+algorithm at the high-level. This is one
+
+123
+00:10:08.423 --> 00:10:12.577
+of the relatively rare recursive, divide-
+and-conquer algorithms that you're going
+
+124
+00:10:12.577 --> 00:10:16.434
+to see, where you literally do no work
+after solving the sub-problems. There is
+
+125
+00:10:16.434 --> 00:10:20.292
+no combine step, no merge step. Once
+you've partitioned, you just sort the two
+
+126
+00:10:20.292 --> 00:10:26.001
+sides and you're done. So that's the high-
+level description of the QuickSort
+
+127
+00:10:26.012 --> 00:10:29.803
+algorithm. Let me give you a quick tour of
+what the rest of the video's going to be
+
+128
+00:10:29.803 --> 00:10:33.594
+about. So first of all I owe you details
+on this Partition subroutine. I promise
+
+129
+00:10:33.594 --> 00:10:37.340
+you it can be implemented in linear time
+with no additional memory. So I'll show
+
+130
+00:10:37.340 --> 00:10:41.040
+you an implementation of that on the next
+video. We'll have a short video that
+
+131
+00:10:41.040 --> 00:10:44.723
+formally proves correctness of the
+QuickSort algorithm. I think most of you
+
+132
+00:10:44.723 --> 00:10:48.265
+will kinda see intuitively why it's
+correct. So, that's a video you can skip
+
+133
+00:10:48.265 --> 00:10:51.995
+if you'd want. But if you do want to see
+what a formal proof of correctness for a
+
+134
+00:10:51.995 --> 00:10:55.631
+divide-and-conquer algorithm looks like,
+you might want to check out that video.
+
+135
+00:10:55.631 --> 00:10:59.503
+Then, we'll be discussing exactly how the
+pivot is chosen. It turns out the running
+
+136
+00:10:59.503 --> 00:11:03.281
+time of QuickSort depends on what pivot
+you choose. So, we're gonna have to think
+
+137
+00:11:03.281 --> 00:11:06.681
+carefully about that. Then, we'll
+introduce randomized QuickSort, which is
+
+138
+00:11:06.681 --> 00:11:10.506
+where you choose a pivot element uniformly
+at random from the given array, hoping
+
+139
+00:11:10.506 --> 00:11:14.615
+that a random pivot is going to be pretty
+good, sufficiently often. And then we'll
+
+140
+00:11:14.615 --> 00:11:18.611
+give the mathematical analysis in three parts.
+We'll prove that the QuickSort algorithm runs in
+
+141
+00:11:18.611 --> 00:11:22.475
+N log N time, with small constants, on
+average, for a randomly chosen pivot. In
+
+142
+00:11:22.475 --> 00:11:26.634
+the first analysis video, I'll introduce a
+general decomposition principle of how you
+
+143
+00:11:26.634 --> 00:11:30.547
+take a complicated random variable, break
+it into indicator random variables, and
+
+144
+00:11:30.547 --> 00:11:34.070
+use linearity of expectation to get a
+relatively simple analysis. That's
+
+145
+00:11:34.070 --> 00:11:37.983
+something we'll use a couple more times in
+the course. For example, when we study
+
+146
+00:11:37.983 --> 00:11:42.093
+hashing. Then, we'll discuss sort of the
+key insight behind the QuickSort analysis,
+
+147
+00:11:42.093 --> 00:11:45.762
+which is about understanding the
+probability that a given pair of elements
+
+148
+00:11:45.762 --> 00:11:49.459
+gets compared at some point in the
+algorithm. That'll be the second part. And
+
+149
+00:11:49.459 --> 00:11:53.003
+then there's going to be some mathematical
+computations just to sort of tie
+
+150
+00:11:53.003 --> 00:11:56.874
+everything together and that will give us
+the bound the QuickSort running time.
+
+151
+00:11:56.874 --> 00:12:00.698
+Another video that's available is a review
+of some basic probability concepts for
+
+152
+00:12:00.698 --> 00:12:04.708
+those of you that are rusty, and they will be
+using in the analysis of QuickSort. Okay?
+
+153
+00:12:04.708 --> 00:12:07.460
+So that's it for the overview, let's move
+on to the details.
