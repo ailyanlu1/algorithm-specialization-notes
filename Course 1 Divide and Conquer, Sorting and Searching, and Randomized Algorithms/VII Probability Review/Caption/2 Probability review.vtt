@@ -1,0 +1,1055 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.423
+So welcome to part two of our probability
+review. This video assumes you've already
+
+2
+00:00:04.423 --> 00:00:08.846
+watched part one or at least are familiar
+with concepts covered in part one. Namely
+
+3
+00:00:08.846 --> 00:00:13.056
+sample spaces, events, random variables,
+expectation and linearity of expectation.
+
+4
+00:00:13.056 --> 00:00:17.426
+In this part of the review we're going to
+be covering just two topics. Conditional
+
+5
+00:00:17.426 --> 00:00:21.689
+probability and the closer related topic
+of independence. Both between events and
+
+6
+00:00:21.689 --> 00:00:25.952
+between random variables. I want to remind
+you that this is by no means the only
+
+7
+00:00:25.952 --> 00:00:30.376
+source you can or should use to learn this
+material. A couple of other sources free
+
+8
+00:00:30.376 --> 00:00:34.716
+that I recommend are lecture notes that
+you can find online by Eric. And also
+
+9
+00:00:34.716 --> 00:00:40.287
+there's a wiki book on discrete
+probability. So, conditional probability,
+
+10
+00:00:40.287 --> 00:00:43.705
+I hope you're not surprised to hear, is
+fundamental to understanding randomized
+
+11
+00:00:43.705 --> 00:00:47.252
+algorithms. That said, in the five weeks
+we have here, we'll probably only use it
+
+12
+00:00:47.252 --> 00:00:50.453
+once. And that's in analyzing the
+correctness of the random contraction
+
+13
+00:00:50.453 --> 00:00:54.086
+algorithm for computing the minimum cut of
+an undirected graph. So, just to make sure
+
+14
+00:00:54.086 --> 00:00:57.633
+we're all on the same page, here's some
+stuff you should have learned, from part
+
+15
+00:00:57.633 --> 00:01:00.835
+one of the probability review. You should
+know what a sample space is. This
+
+16
+00:01:00.835 --> 00:01:04.165
+represents all of the different outcomes
+of the random coin flips, all of the
+
+17
+00:01:04.165 --> 00:01:07.842
+different things that could happen. Often
+in randomized algorithm analysis, this is
+
+18
+00:01:07.842 --> 00:01:11.086
+just all of the possible random choices
+that the algorithm might make. Each
+
+19
+00:01:11.086 --> 00:01:14.669
+outcome has some known probability
+[inaudible]. By and, of course, the sum of
+
+20
+00:01:14.669 --> 00:01:19.207
+the probabilities equal one and remember
+that event is nothing more than a subset
+
+21
+00:01:19.207 --> 00:01:23.413
+of omega. Omega is everything that could
+possibly happen. S is some subset of
+
+22
+00:01:23.413 --> 00:01:27.619
+things that might happen and, of course,
+the probability of event is just the
+
+23
+00:01:27.619 --> 00:01:31.991
+probability of, of all the outcomes that
+the event contains. So, let's talk about
+
+24
+00:01:31.991 --> 00:01:38.784
+conditional probability. So one discusses
+the conditional probability of one event
+
+25
+00:01:38.784 --> 00:01:44.760
+given a second event. So, let X and Y
+denote two events, subsets of the same
+
+26
+00:01:44.760 --> 00:01:49.547
+sample space. You might want to think
+about these two events X and Y in terms of
+
+27
+00:01:49.547 --> 00:01:53.730
+an event diagram. So we could draw a box,
+representing everything that could
+
+28
+00:01:53.730 --> 00:01:58.192
+conceivably happen. So that's Omega. Then
+we can draw a blob corresponding to the
+
+29
+00:01:58.192 --> 00:02:02.543
+event X. So that's some stuff. Might or
+might not happen, who knows. And then the
+
+30
+00:02:02.543 --> 00:02:07.060
+other event Y is some other stuff which
+might or might not happen. And in general
+
+31
+00:02:07.060 --> 00:02:11.411
+these two events could be disjoint, that
+is they could have no intersection. Or
+
+32
+00:02:11.411 --> 00:02:15.637
+they might have a non-trivial
+intersection. X intersect Y. Similarly
+
+33
+00:02:15.637 --> 00:02:21.880
+they need not cover omega. It's possible
+that nothing X nor Y happens. So what's
+
+34
+00:02:21.880 --> 00:02:28.523
+we're looking to define is the probability
+of the event X given the even Y. So we
+
+35
+00:02:28.523 --> 00:02:37.630
+write probability of X bar Y, phrased X
+given Y. And the definition is, I think,
+
+36
+00:02:37.630 --> 00:02:41.987
+pretty intuitive. So given Y means we
+assume that something in Y happened.
+
+37
+00:02:41.987 --> 00:02:46.701
+Originally anything in omega could have
+happened. We didn't know what. Now we're
+
+38
+00:02:46.701 --> 00:02:51.476
+being told that whatever happened that
+lies somewhere in Y. So we zoom in on the
+
+39
+00:02:51.476 --> 00:02:55.713
+part of the picture that, in which
+contains Y. So that's gonna be our
+
+40
+00:02:55.713 --> 00:03:01.339
+denominator. So, our new world is the
+stuff in Y. That's what we know happened.
+
+41
+00:03:01.339 --> 00:03:07.629
+And now we're interested in the proportion
+of Y that is filled up with X. So, we're
+
+42
+00:03:07.629 --> 00:03:13.996
+interested in what fraction of Y's area is
+occupied by stuff in X. So X intersect Y,
+
+43
+00:03:13.996 --> 00:03:20.362
+divided by the probability of Y. That is
+by definition the conditional probability
+
+44
+00:03:20.362 --> 00:03:25.311
+of X given Y. Let?s turn to a quiz, using
+our familiar example of rolling two dice.
+
+45
+00:03:25.311 --> 00:03:29.714
+To make sure that the definition of
+conditional probability makes sense to
+
+46
+00:03:29.714 --> 00:03:35.107
+you. Okay, so the correct answer to this
+quiz is the third answer. So let's see why
+
+47
+00:03:35.107 --> 00:03:39.577
+that is. So what are the two events that
+we care about? We want to know the
+
+48
+00:03:39.577 --> 00:03:44.487
+probability of X given Y, where X is the
+event that at least one die is a one. And
+
+49
+00:03:44.487 --> 00:03:49.435
+Y is the events that the sum of the two
+dice is seven. Now, the easiest way to
+
+50
+00:03:49.435 --> 00:03:54.640
+explain this is let's zoom in, let's drill
+down on the Y. Let's figure out exactly
+
+51
+00:03:54.640 --> 00:03:59.780
+which outcomes Y comprises. So the sum of
+the two dice, being seven, we saw in the
+
+52
+00:03:59.780 --> 00:04:06.013
+first part of the review, there's exactly
+six outcomes which give rise to the sum
+
+53
+00:04:06.013 --> 00:04:15.200
+seven, namely the ordered pairs one, six.
+Two five, three four, four three, five
+
+54
+00:04:15.200 --> 00:04:23.135
+two, and six one. Now, remember that the
+probability. Of x given y is by definition
+
+55
+00:04:23.135 --> 00:04:28.688
+the probability of x intersect y divided
+by the probability of y. Now, what you
+
+56
+00:04:28.688 --> 00:04:34.525
+notice from this formula is we actually
+don't care about the probability of x per
+
+57
+00:04:34.525 --> 00:04:40.363
+se or even about the event x per se, just
+about x intersect y. So, let's just fig,
+
+58
+00:04:40.363 --> 00:04:46.058
+so, now we know why there has to be six
+outcomes. Which of those also belong to x?
+
+59
+00:04:46.058 --> 00:04:51.966
+Well, x is those where at least one die is
+one. So, x intersect y is just going to be
+
+60
+00:04:51.966 --> 00:04:56.661
+the one, six and the six, one. Now the
+probability of each of the 36 possible
+
+61
+00:04:56.661 --> 00:05:01.375
+outcomes is equally likely. So each one is
+one over 36. So since X intersects Y, has
+
+62
+00:05:01.375 --> 00:05:05.973
+only two outcomes. That's gonna give us
+two over 36 in the numerator. Since Y has
+
+63
+00:05:05.973 --> 00:05:10.342
+six outcomes, that gives us a six over 36
+in the denominator. When you cancel
+
+64
+00:05:10.342 --> 00:05:14.883
+everything out, you're left with a one
+third. So just applying the definition of
+
+65
+00:05:14.883 --> 00:05:19.482
+conditional probability to the correct
+definition of the two relevant events, we
+
+66
+00:05:19.482 --> 00:05:24.138
+find that indeed a third of the time is
+when you have a one condition on the sum
+
+67
+00:05:24.138 --> 00:05:32.574
+of the two being seven. Let's move on to
+the independence of two events. So. Again
+
+68
+00:05:32.574 --> 00:05:39.476
+we consider two events, x and y. By
+definition, the events are dependent if
+
+69
+00:05:39.476 --> 00:05:46.850
+and only if the following equation holds.
+The probability that both of them happen.
+
+70
+00:05:46.850 --> 00:05:53.523
+That is the probability of x intersect y
+is exactly equal to the probability that x
+
+71
+00:05:53.523 --> 00:05:59.403
+happens times the probability that y
+happens. So that's a simple innocuous
+
+72
+00:05:59.403 --> 00:06:05.839
+looking definition. Let me re phrase it in
+a way that it's even more intuitive. So
+
+73
+00:06:05.839 --> 00:06:11.534
+I'll you check this, it's just a some
+trivial algebra. This equation holds, for
+
+74
+00:06:11.534 --> 00:06:15.926
+the events X and Y, if and only if, this
+is just using the definition of
+
+75
+00:06:15.926 --> 00:06:21.185
+conditional probability we had on the last
+slide, if and only if the probability of X
+
+76
+00:06:21.185 --> 00:06:26.757
+given Y, Is exactly the same thing as the
+probability of x. So, intuitively, knowing
+
+77
+00:06:26.757 --> 00:06:32.113
+that y happens, gives you no information
+about the probability that x happens.
+
+78
+00:06:32.113 --> 00:06:37.399
+That's the sense in which x and y are
+independent. And, you should also check
+
+79
+00:06:37.399 --> 00:06:42.337
+that this holds if and only if, the
+probability of y, given x, equals the
+
+80
+00:06:42.337 --> 00:06:47.412
+probability of y. So, symmetrically,
+knowing that X has occurs gives you no
+
+81
+00:06:47.412 --> 00:06:52.347
+information, no new information about
+whether or not Y has occurred. The
+
+82
+00:06:52.347 --> 00:06:57.623
+probability of Y is unaffected by
+conditioning on X. So at this juncture I
+
+83
+00:06:57.623 --> 00:07:02.559
+feel compelled to issue a warning. Which
+is, you may feel like you have a good
+
+84
+00:07:02.559 --> 00:07:06.828
+grasp of independence. But, in all
+likelihood, you do not. For example I
+
+85
+00:07:06.828 --> 00:07:11.678
+rarely feel confident that I have a keen
+grasp on independence. Of course I use it
+
+86
+00:07:11.678 --> 00:07:16.646
+all the time in my own research and my own
+work, but it's a very subtle concept. Your
+
+87
+00:07:16.646 --> 00:07:21.615
+intuition about independence is very often
+wrong, even if you do this for a living. I
+
+88
+00:07:21.615 --> 00:07:26.228
+know of no other source that's created so
+many bugs in proofs by professional
+
+89
+00:07:26.228 --> 00:07:31.078
+mathematicians and professional computer
+science researchers as misunderstandings
+
+90
+00:07:31.078 --> 00:07:35.538
+of independence and using intuition
+instead of the formal definition. So, for
+
+91
+00:07:35.538 --> 00:07:40.082
+those of you without much practice with
+independence, here's my rule of thumb for
+
+92
+00:07:40.082 --> 00:07:44.571
+whether or not you treat random variables
+as independent. If things are independent
+
+93
+00:07:44.571 --> 00:07:48.682
+by construction, like, for example, you
+define it in your algorithm, so the two
+
+94
+00:07:48.682 --> 00:07:53.118
+different things are independent. Then you
+can proceed with the analysis under the
+
+95
+00:07:53.118 --> 00:07:57.499
+assumption that they're independent. If
+there's any doubt, if it's not obvious the
+
+96
+00:07:57.499 --> 00:08:01.610
+two things are independent, you might want
+to, as a rule of thumb, assume that
+
+97
+00:08:01.610 --> 00:08:05.988
+they're dependent until further notice. So
+the slide after next will give you a new
+
+98
+00:08:05.988 --> 00:08:09.804
+example showing you things which are
+independent and things which are not
+
+99
+00:08:09.804 --> 00:08:13.671
+independent. But before I do that I wanna
+talk about independence of random
+
+100
+00:08:13.671 --> 00:08:18.054
+variables rather than just independence of
+events. So you'll recall a random variable
+
+101
+00:08:18.054 --> 00:08:22.231
+is from the first video on probability
+review. It's just a real value function
+
+102
+00:08:22.231 --> 00:08:26.408
+from the sample space to the real numbers.
+So once you know what happens you have
+
+103
+00:08:26.408 --> 00:08:30.716
+some number. The random variable evaluates
+to some real number. Now, what does it
+
+104
+00:08:30.716 --> 00:08:34.934
+mean for two random variables to be
+independent? It means the events of the
+
+105
+00:08:34.934 --> 00:08:39.152
+two variables taking on any given pair of
+values are independent events. So
+
+106
+00:08:39.152 --> 00:08:43.595
+informally, knowing the value taken on by
+one of the random variables tells you
+
+107
+00:08:43.595 --> 00:08:48.095
+nothing about what value is taken on by
+the other random variable. Recalling the
+
+108
+00:08:48.095 --> 00:08:52.707
+definition of what it means for two events
+to be independent, this just means that,
+
+109
+00:08:52.876 --> 00:08:57.263
+the probability that A takes on value
+little a, B takes on value little b. The
+
+110
+00:08:57.263 --> 00:09:01.987
+probability that both of those happen is
+just the product of the probabilities that
+
+111
+00:09:01.987 --> 00:09:06.304
+each happens individually. So what's
+useful about independence of events is
+
+112
+00:09:06.304 --> 00:09:10.730
+that probabilities just multiply. What's
+useful about independence of random
+
+113
+00:09:10.730 --> 00:09:15.215
+variables is that expectations just
+multiply. So, we're going to get an analog
+
+114
+00:09:15.215 --> 00:09:20.108
+of linear expectation where we can take,
+we can interchange an expectation in the
+
+115
+00:09:20.108 --> 00:09:24.768
+product freely, but I want to emphasize
+this, this interchange of the expectation
+
+116
+00:09:24.768 --> 00:09:29.020
+of the product is valid only for
+independent random variables and not in
+
+117
+00:09:29.020 --> 00:09:33.505
+general, unlike linear expectations. And
+we'll see a non example. We'll see how
+
+118
+00:09:33.505 --> 00:09:37.805
+this fails on the next slide for non
+independent random variables. So, I'll
+
+119
+00:09:37.805 --> 00:09:42.415
+just state it for two random variables,
+but the same thing holds by induction for
+
+120
+00:09:42.415 --> 00:09:46.969
+any number of random variables. If two
+random variables are independent, then the
+
+121
+00:09:46.969 --> 00:09:52.108
+expectation of their product. Equals the
+product of their expectations. And again,
+
+122
+00:09:52.108 --> 00:09:56.677
+do not forget that we need a hypothesis.
+Remember, linearity of expectations did
+
+123
+00:09:56.677 --> 00:10:01.476
+not have a hypothesis for this statement
+about products. We do have a hypothesis of
+
+124
+00:10:01.476 --> 00:10:05.928
+them being independent. So why is this
+true? Well, it's just a straight forward
+
+125
+00:10:05.928 --> 00:10:10.554
+derivation where you follow your nose or
+write it out here for completeness, but,
+
+126
+00:10:10.554 --> 00:10:14.428
+but I really don't think it's that
+important. So you start with the
+
+127
+00:10:14.428 --> 00:10:19.459
+expectation of the product. This is just
+the average value of A times B, of course
+
+128
+00:10:19.459 --> 00:10:24.470
+weighted by the probability of, of any
+particular value. So the way we're gonna
+
+129
+00:10:24.470 --> 00:10:29.867
+group that sum is we're going to sum over
+all possible combinations of values, A and
+
+130
+00:10:29.867 --> 00:10:35.136
+B, that capital A and capital B might take
+on, so that's gonna give us a value of A
+
+131
+00:10:35.136 --> 00:10:40.009
+times B. Times the probability of that big
+A takes on the value of little a and
+
+132
+00:10:40.009 --> 00:10:45.167
+capital B takes on the value of little b.
+So that's just by definition where this is
+
+133
+00:10:45.167 --> 00:10:49.772
+the value of the random variable, capital
+A times capital B and this is the
+
+134
+00:10:49.772 --> 00:10:55.974
+probability that it takes on that value
+with the values A and B. Now because A and
+
+135
+00:10:55.974 --> 00:11:00.334
+B are independent, this probability
+factors into the product of the two
+
+136
+00:11:00.334 --> 00:11:05.000
+probabilities. This would not be true if
+they were not independent. It's true
+
+137
+00:11:05.000 --> 00:11:10.084
+because they're independent. So same sum
+where all possible joint values of all A
+
+138
+00:11:10.084 --> 00:11:15.289
+and B. You still have A times B. But now
+we have times the probability that A takes
+
+139
+00:11:15.289 --> 00:11:20.431
+on the value of A times the probability
+that B takes on the value of B. So now we
+
+140
+00:11:20.431 --> 00:11:25.636
+just need to regroup these terms. So let's
+first sum over A. Let's yank out all the
+
+141
+00:11:25.636 --> 00:11:30.715
+terms that depend on little a. Notice none
+of those depend on little b. So we can
+
+142
+00:11:30.715 --> 00:11:35.222
+yank it out in front of the sum over
+little b. So I have an A times the
+
+143
+00:11:35.222 --> 00:11:40.227
+probability that big A takes on the value
+of little a. And then the stuff that we
+
+144
+00:11:40.227 --> 00:11:45.134
+haven't yanked out is the sum over b, of b
+times, little b times the probability that
+
+145
+00:11:45.310 --> 00:11:50.204
+capital B takes on the value little b. And
+what's here inside the quantity? This is
+
+146
+00:11:50.204 --> 00:11:55.068
+just the definition of the expectation of
+b. And then what remains after we have
+
+147
+00:11:55.068 --> 00:11:59.992
+factored out the expectation of b? Just
+this other sum which is the definition of
+
+148
+00:11:59.992 --> 00:12:04.247
+the expectation of a. So, indeed four
+independents random variables, the
+
+149
+00:12:04.247 --> 00:12:09.354
+expected value of the product is equal to
+the product of the expectations. Let's now
+
+150
+00:12:09.354 --> 00:12:14.035
+wrap up by tying these concepts together
+in an example, a simple example that
+
+151
+00:12:14.035 --> 00:12:18.838
+nevertheless illustrates how it can be
+tricky to figure out what's independent
+
+152
+00:12:18.838 --> 00:12:23.127
+and what's not. So here's the set up.
+We're going to consider three random
+
+153
+00:12:23.127 --> 00:12:31.390
+variables. X1, X2 and X3. X1 and X2 we
+choose randomly, so they're equally likely
+
+154
+00:12:31.390 --> 00:12:36.746
+to be zero or one. But X3 is completely
+determined by X1 and X2. So it's gonna be
+
+155
+00:12:36.746 --> 00:12:41.902
+the XOR of X1 and X2. So XOR stands for
+exclusive or. So what that means is that
+
+156
+00:12:41.902 --> 00:12:47.057
+if both of the operands are zero, or if
+both of them are one, then the output is
+
+157
+00:12:47.057 --> 00:12:52.017
+zero. And if exactly one of them is one,
+exactly one of them is zero, then the
+
+158
+00:12:52.017 --> 00:12:57.369
+output is one. So it's like the logical or
+function, except that both of the inputs
+
+159
+00:12:57.369 --> 00:13:02.594
+are true, then you output false, okay? So
+that's exclusive or. Now this is a little
+
+160
+00:13:02.594 --> 00:13:07.570
+hand wavy, when we start talking about
+probabilities, if we want to be honest
+
+161
+00:13:07.570 --> 00:13:12.808
+about it, we should be explicit about the
+sample space. So what I mean by this, is
+
+162
+00:13:12.808 --> 00:13:18.112
+that X1 and X2 take on all values, they're
+equally likely. So we could have a zero,
+
+163
+00:13:18.112 --> 00:13:23.611
+zero or a one zero or a zero one or a one,
+one and in each of these four cases, X3 is
+
+164
+00:13:23.611 --> 00:13:28.849
+determined by the first two, as the X or,
+so you get a zero here, a one here, a one
+
+165
+00:13:28.849 --> 00:13:33.876
+here and a zero there. And each of these
+four outcomes is equally likely. So let me
+
+166
+00:13:33.876 --> 00:13:38.418
+now give you an example of two random
+variables, which are independent, and a
+
+167
+00:13:38.418 --> 00:13:42.960
+non example. I'll give you two random
+variables which are not independent. So
+
+168
+00:13:42.960 --> 00:13:47.682
+first, I claim that, if you think that X1
+and X3, then they're independent random
+
+169
+00:13:47.682 --> 00:13:53.400
+variables. I'll leave this for you to
+check [sound]. This may or may not seem
+
+170
+00:13:53.400 --> 00:13:59.184
+counter-intuitive to you. Remember X3 is
+derived in part from X1. Never the less,
+
+171
+00:13:59.184 --> 00:14:04.468
+X1 and X3, are indeed independent. And why
+is that true? Well, if you innumerate over
+
+172
+00:14:04.468 --> 00:14:09.488
+the four possible outcomes, you'll notice
+that all four possible two byte strings
+
+173
+00:14:09.488 --> 00:14:14.388
+occur as values for one and three. So here
+they're both zero, here they're both one,
+
+174
+00:14:14.388 --> 00:14:19.169
+here you have a zero and one, and here you
+have a one and zero. So you've got all
+
+175
+00:14:19.169 --> 00:14:23.949
+four of the combinations of probability
+one over four. So it's just as if X1 and
+
+176
+00:14:23.949 --> 00:14:28.610
+X3 were independent fair coin flips. So
+that's basically why the claim is true.
+
+177
+00:14:28.610 --> 00:14:32.831
+Now. That's a perhaps counterintuitive
+example of independent random variables.
+
+178
+00:14:32.831 --> 00:14:37.190
+Let me give you a perhaps counterintuitive
+example of dependent random variables.
+
+179
+00:14:37.190 --> 00:14:41.117
+Needless to say, this example just
+scratches the surface and you can find
+
+180
+00:14:41.117 --> 00:14:45.099
+much more devious examples of both
+independent and non-independents if you
+
+181
+00:14:45.099 --> 00:14:50.121
+look in, say, any good book on discrete
+probability. So now let?s consider the
+
+182
+00:14:50.121 --> 00:14:57.138
+random variable X1 product X3. And X two
+and the claim is these are not
+
+183
+00:14:57.138 --> 00:15:02.577
+independent. So this'll give you a formal
+proof for. The way I'm going to prove this
+
+184
+00:15:02.577 --> 00:15:06.963
+could be slightly sneaky. I'm not going to
+go back to the definition. I'm not gonna
+
+185
+00:15:06.963 --> 00:15:10.868
+contradict the consequence of the
+definition. So it's proved that they're
+
+186
+00:15:10.868 --> 00:15:15.201
+not independent all I need to do, is show
+that the product of the expectations is
+
+187
+00:15:15.201 --> 00:15:18.999
+not the same as the expectations to the
+products. Remember if they were
+
+188
+00:15:18.999 --> 00:15:22.636
+independent, then we would have that
+equality. [inaudible] Product of
+
+189
+00:15:22.636 --> 00:15:27.129
+expectations will equal the expectation to
+products. So if that's false than there's
+
+190
+00:15:27.129 --> 00:15:31.021
+no way these random variables are
+independent. So the expectation of the
+
+191
+00:15:31.021 --> 00:15:35.591
+product of these two random variables is
+just the expected value of the product of
+
+192
+00:15:35.591 --> 00:15:41.573
+all three. And then on the other side, we
+look at The product of the expected value
+
+193
+00:15:41.573 --> 00:15:47.824
+of X1 and X3. And the expected value of
+X2. So let's start with the expected value
+
+194
+00:15:47.824 --> 00:15:53.500
+of X2. That's pretty easy to see. That is
+zero half the time and that is one half
+
+195
+00:15:53.500 --> 00:15:58.821
+the time. So the expected value of X2 is
+going to be one-half. How about the
+
+196
+00:15:58.821 --> 00:16:04.285
+expected value of X1 and X3? Well, from
+the first claim, we know that X1 and X3
+
+197
+00:16:04.285 --> 00:16:09.322
+are independent random variables.
+Therefore, the expected value of their
+
+198
+00:16:09.322 --> 00:16:14.417
+product is just the product of their
+expectations. Equal this expectations
+
+199
+00:16:14.417 --> 00:16:19.445
+equal to the expected value of X1 times
+the expected value of X2, excuse me, of
+
+200
+00:16:19.445 --> 00:16:24.603
+X3. And again, X1 is equally likely to be
+zero or one. So its expected value is a
+
+201
+00:16:24.603 --> 00:16:29.760
+half. X3 is equally likely to be zero or
+one so its expected value is a half. So
+
+202
+00:16:29.760 --> 00:16:34.789
+the product of their expectations is
+one-fourth. So the right-hand side here is
+
+203
+00:16:34.789 --> 00:16:40.011
+one-eighth; one-half times one-fourth, so
+that's an eighth. What about the left-hand
+
+204
+00:16:40.011 --> 00:16:44.781
+side, the expected value of X1 times X3
+times X2? Well, let's go back to the
+
+205
+00:16:44.781 --> 00:16:49.977
+sample space. What is the value of the
+product in the first outcome? Zero. What
+
+206
+00:16:49.977 --> 00:16:55.424
+is the value of the product in the second
+outcome? Zero. Third outcome? Zero. Forth
+
+207
+00:16:55.424 --> 00:17:01.000
+outcome? Zero. The product of all three
+random variables is always zero with
+
+208
+00:17:01.000 --> 00:17:06.674
+probability one. Therefore, the expected
+value, of course, is gonna be zero. So
+
+209
+00:17:06.674 --> 00:17:12.726
+indeed, the expected value of the product
+of X1, X3 and X2 zero does not equal to
+
+210
+00:17:12.726 --> 00:17:18.097
+the product of the corresponding
+expectations. So this shows that X1, X3
+
+211
+00:17:18.097 --> 00:17:20.140
+and X2 are not independent.

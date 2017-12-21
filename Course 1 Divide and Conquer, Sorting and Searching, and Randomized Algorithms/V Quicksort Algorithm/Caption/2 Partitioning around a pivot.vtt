@@ -1,0 +1,1596 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.045
+The goal of this video is to provide more
+details about the implementation of the
+
+2
+00:00:04.045 --> 00:00:08.085
+QuickSort algorithm and, in particular,
+if you're ever going to drill down on the
+
+3
+00:00:08.085 --> 00:00:13.008
+key Partition subroutine, just let me
+remind you what the job of the Partition
+
+4
+00:00:13.008 --> 00:00:17.036
+subroutine is in the context of sorting an
+array. So recall that key idea in QuickSort
+
+5
+00:00:17.036 --> 00:00:21.021
+is to partition the input array around a
+pivot element. So this has two steps.
+
+6
+00:00:21.021 --> 00:00:25.046
+First, you somehow choose a pivot element,
+and in this video, we're not going to worry
+
+7
+00:00:25.046 --> 00:00:29.046
+about how you choose the pivot element.
+For concreteness, you might just want to
+
+8
+00:00:29.046 --> 00:00:33.045
+think about you pick the first element
+in the array to serve as
+
+9
+00:00:33.045 --> 00:00:37.050
+your pivot. So in this example array, the
+first element happens to be 3, so we
+
+10
+00:00:37.050 --> 00:00:41.045
+can choose 3 as the pivot element.
+Now, there's a key rearrangement step. So
+
+11
+00:00:41.045 --> 00:00:45.070
+you rearrange the array so that it has the
+following properties. Any entries
+
+12
+00:00:45.070 --> 00:00:49.075
+that are to the left of the pivot element
+should be less than the pivot element.
+
+13
+00:00:49.075 --> 00:00:53.014
+Whereas any entries, which are to the
+right of the pivot element, should be
+
+14
+00:00:53.014 --> 00:00:56.075
+greater than the pivot element. So, for
+example, in this, version of, the second
+
+15
+00:00:56.075 --> 00:01:00.024
+version of the array, we see to the left
+of the 3 is the 2 and the 1.
+
+16
+00:01:00.024 --> 00:01:04.000
+They're in reverse order, but that's okay.
+Both the 2 and the 1 are to the left
+
+17
+00:01:04.000 --> 00:01:07.071
+of the 3, and they're both less than 3.
+And the five elements to the right
+
+18
+00:01:07.071 --> 00:01:11.028
+of the 3, they're jumbled up, but
+they're all bigger than the pivot element.
+
+19
+00:01:11.028 --> 00:01:14.090
+So, this is a legitimate rearrangement
+that satisfies the partitioning property.
+
+20
+00:01:14.090 --> 00:01:18.043
+And, again, recall that this definitely
+makes partial progress toward having a
+
+21
+00:01:18.043 --> 00:01:21.096
+sorted array. The pivot element winds up
+in its rightful position. It winds up
+
+22
+00:01:21.096 --> 00:01:25.085
+where it's supposed to be in the final
+sorted array, to the right of everything
+
+23
+00:01:25.085 --> 00:01:30.006
+less than it, to the left of everything
+bigger than it. Moreover, we've correctly
+
+24
+00:01:30.006 --> 00:01:34.027
+bucketed the other N-1 elements to
+the left and to the right of the pivot
+
+25
+00:01:34.027 --> 00:01:38.069
+according to where they should wind up in
+the final sorted array. So that's the job,
+
+26
+00:01:38.069 --> 00:01:42.064
+that the Partition subroutine is
+responsible for. Now what's cool is we'll
+
+27
+00:01:42.064 --> 00:01:46.024
+be able to implement this Partition
+subroutine in linear time. Even better,
+
+28
+00:01:46.024 --> 00:01:50.004
+we'll be able to implement it so that all
+it does, really, is swaps in the array.
+
+29
+00:01:50.004 --> 00:01:53.056
+That is, it works in-place. It needs no
+additional, essentially constant
+
+30
+00:01:53.056 --> 00:01:57.056
+additional memory, to rearrange the array
+according to those properties. And then,
+
+31
+00:01:57.056 --> 00:02:01.065
+as we saw on the high-level description of
+the QuickSort algorithm, what partitioning
+
+32
+00:02:01.065 --> 00:02:05.036
+does is, it enables a divide-and-conquer
+approach. It reduces the problem size.
+
+33
+00:02:05.036 --> 00:02:09.036
+After you've partitioned the array around
+the pivot, all you gotta do is recurse on
+
+34
+00:02:09.036 --> 00:02:13.021
+the left side, recurse on the right side,
+and you're done. So, what I owe you is
+
+35
+00:02:13.021 --> 00:02:17.054
+this implementation. How do you actually
+satisfy the partitioning property, stuff
+
+36
+00:02:17.054 --> 00:02:21.076
+to the left of the pivot is smaller than
+it, stuff to the right of the pivot is
+
+37
+00:02:21.076 --> 00:02:25.092
+bigger than it, in linear time, and in-
+place. Well, first, let's observe that, if
+
+38
+00:02:25.092 --> 00:02:29.081
+we didn't care about the in-place
+requirement, if we were happy to just
+
+39
+00:02:29.081 --> 00:02:34.020
+allocate a second array and copy stuff
+over, it would actually be pretty easy to
+
+40
+00:02:34.020 --> 00:02:39.077
+implement a Partition subroutine in
+linear time. That is, using O(N) extra
+
+41
+00:02:39.077 --> 00:02:43.082
+memory, it's easy to partition around a
+pivot element in O(N) time. And as
+
+42
+00:02:43.082 --> 00:02:48.007
+usual, you know, probably I should be more precise
+and write theta of N, are used in cases that would
+
+43
+00:02:48.007 --> 00:02:52.027
+be the more accurate stronger statement,
+but I'm going to be sloppy and I'm just
+
+44
+00:02:52.027 --> 00:02:56.031
+going to write the weaker but still
+correct statement, using Big-Oh, okay? So
+
+45
+00:02:56.031 --> 00:03:00.046
+O(N) time using linear extra memory.
+So how would you do this? Well let
+
+46
+00:03:00.046 --> 00:03:04.056
+me just sort of illustrate by example. I
+think you'll get the idea. So let's go
+
+47
+00:03:04.056 --> 00:03:12.017
+back to our running example of an input
+array. Well, if we're allowed to use
+
+48
+00:03:12.017 --> 00:03:16.036
+linear extra space, we can just
+preallocate another array of length N.
+
+49
+00:03:18.018 --> 00:03:22.017
+Then we can just do a simple scan through
+the input array, bucketing elements
+
+50
+00:03:22.017 --> 00:03:25.096
+according to whether they are bigger than
+or less than the pivot. And, so for
+
+51
+00:03:25.096 --> 00:03:29.080
+example, we can fill in the additional
+array both from the left and the right,
+
+52
+00:03:29.080 --> 00:03:33.090
+using elements that are less than or
+bigger than the pivot respectively. So for
+
+53
+00:03:33.090 --> 00:03:37.089
+example we start with the 8, we know
+that the 8 is bigger than the pivot,
+
+54
+00:03:37.089 --> 00:03:41.093
+so you put that at the end of the output
+array. Then we get to the 2. The 2 is
+
+55
+00:03:41.093 --> 00:03:45.093
+less than the pivot, so that should go on
+the left hand side of the output array.
+
+56
+00:03:45.093 --> 00:03:50.075
+When you get to the 5, it should go on the
+right-hand side, and the 1 should go on
+
+57
+00:03:50.075 --> 00:03:57.009
+the left-hand side, and so on. When we
+complete our scan through the input array,
+
+58
+00:03:57.009 --> 00:04:01.017
+there'll be one hole left, and that's
+exactly where the pivot belongs, to the
+
+59
+00:04:01.017 --> 00:04:05.045
+right of everything less than it, to the
+left of everything bigger than it. So,
+
+60
+00:04:05.045 --> 00:04:09.068
+what's really interesting, then, is to
+have an implementation of Partition, which
+
+61
+00:04:09.068 --> 00:04:13.087
+is not merely linear time, but also uses
+essentially no additional space. It
+
+62
+00:04:13.087 --> 00:04:17.062
+doesn't re-sort to this cop-out of
+pre-allocating an extra array of
+
+63
+00:04:17.062 --> 00:04:21.063
+length N. So, let's turn to how that
+works. First, starting at a high-level,
+
+64
+00:04:21.063 --> 00:04:27.050
+then filling in the details. So I'm
+gonna describe the Partition subroutine
+
+65
+00:04:27.050 --> 00:04:33.095
+only for the case where the pivot is in
+fact the first element. But really this is
+
+66
+00:04:33.095 --> 00:04:38.005
+without loss of generality. If, instead,
+you want to use some pivot from the middle
+
+67
+00:04:38.005 --> 00:04:41.074
+of the array, you can just have a
+preprocessing step that swaps the first
+
+68
+00:04:41.074 --> 00:04:46.003
+element of the array with the given pivot,
+and then run the subroutine that I'm about
+
+69
+00:04:46.003 --> 00:04:50.012
+to describe, okay. So with constant time
+preprocessing, the case of a general pivot
+
+70
+00:04:50.012 --> 00:04:56.089
+reduces to the case of when the pivot is
+the first element. So here's the high-level
+
+71
+00:04:56.089 --> 00:05:01.021
+idea, and it's very cool. The idea is,
+we're gonna be able to able to get
+
+72
+00:05:01.021 --> 00:05:10.022
+away with just a single linear scan of the
+input array. So in any given moment in
+
+73
+00:05:10.022 --> 00:05:14.016
+this scan, there's just gonna be a single
+for-Loop, we'll be keeping track of both
+
+74
+00:05:14.016 --> 00:05:18.019
+the part of the array we've looked at so
+far, and the part that we haven't looked at
+
+75
+00:05:18.019 --> 00:05:21.079
+so far. So there's gonna be two groups,
+what we've seen, what we haven't seen.
+
+76
+00:05:21.079 --> 00:05:25.073
+Then within the group we've seen, we're
+gonna have definitely split further, according
+
+77
+00:05:25.073 --> 00:05:29.057
+to the elements that are less than the
+pivot and those that are bigger than the
+
+78
+00:05:29.057 --> 00:05:35.006
+pivot. So we're gonna leave the pivot
+element just hanging out in the first
+
+79
+00:05:35.006 --> 00:05:38.078
+element of the array until the very end of
+the algorithm, when we correct its
+
+80
+00:05:38.078 --> 00:05:44.030
+position with a swap. And at any given
+snapshot of this algorithm, we will have
+
+81
+00:05:44.030 --> 00:05:50.091
+some stuff that we've already looked at,
+and some stuff that we haven't yet looked
+
+82
+00:05:50.091 --> 00:05:56.060
+at in our linear scan. Of course, we have
+no idea what's up with the elements that
+
+83
+00:05:56.060 --> 00:06:00.038
+we haven't looked at yet, who knows
+what they are, and whether they're bigger
+
+84
+00:06:00.038 --> 00:06:03.097
+or less than the pivot. But, we're gonna
+implement the algorithm, so, among the
+
+85
+00:06:03.097 --> 00:06:07.051
+stuff that we've already seen, it will be
+partitioned, in the sense that all
+
+86
+00:06:07.051 --> 00:06:11.029
+elements less than the pivot come first,
+all elements bigger than the pivot come
+
+87
+00:06:11.029 --> 00:06:15.002
+last. And, as usual, we don't care about
+the relative order, amongst elements less
+
+88
+00:06:15.002 --> 00:06:20.016
+than the pivot, or amongst elements bigger
+than the pivot. So summarizing, we do a
+
+89
+00:06:20.016 --> 00:06:25.063
+single scan through the input array. And
+the trick will be to maintain the
+
+90
+00:06:25.063 --> 00:06:29.083
+following invariant throughout the linear
+scan. But basically, everything we have
+
+91
+00:06:29.083 --> 00:06:33.093
+looked at the input array is partitioned.
+Everything less than the pivot comes
+
+92
+00:06:33.093 --> 00:06:37.097
+before everything bigger than the pivot.
+And, we wanna maintain that invariant,
+
+93
+00:06:37.097 --> 00:06:41.081
+doing only constant work, and no
+additional storage, with each step of our
+
+94
+00:06:41.081 --> 00:06:47.081
+linear scan.
+So, here's what I'm gonna do next. I'm
+
+95
+00:06:47.081 --> 00:06:51.067
+gonna go through an example, and execute
+the Partition subroutine on a concrete
+
+96
+00:06:51.067 --> 00:06:55.044
+array, the same input array we've been
+using as an example, thus far. Now, maybe
+
+97
+00:06:55.044 --> 00:06:59.030
+it seems weird to give an example before
+I've actually given you the algorithm,
+
+98
+00:06:59.030 --> 00:07:03.027
+before I've given you the code. But, doing
+it this way, I think you'll see the gist
+
+99
+00:07:03.027 --> 00:07:06.099
+of what's going on in the example, and
+then when I present the code, it'll be
+
+100
+00:07:06.099 --> 00:07:10.085
+very clear what's going on. Whereas, if I
+presented the code first, it may seem a
+
+101
+00:07:10.085 --> 00:07:14.042
+little opaque when I first show you the
+algorithm. So, let's start with an
+
+102
+00:07:14.042 --> 00:07:21.016
+example. Throughout the example, we wanna
+keep in mind the high-level picture that
+
+103
+00:07:21.016 --> 00:07:25.079
+we discussed in the previous slide. The
+goal is that, at any time in the Partition
+
+104
+00:07:25.079 --> 00:07:30.018
+subroutine, we've got the pivot hanging
+out in the first entry. Then, we've got
+
+105
+00:07:30.018 --> 00:07:34.075
+stuff that we haven't looked at. So, of
+course, who knows whether
+
+106
+00:07:34.075 --> 00:07:39.015
+those elements are bigger than or less
+than the pivot? And then, for the stuff
+
+107
+00:07:39.015 --> 00:07:43.060
+we've looked at so far, everything less
+than the pivot comes before everything
+
+108
+00:07:43.060 --> 00:07:48.011
+bigger than the pivot. This is the picture
+we wanna retain, as we go through the
+
+109
+00:07:48.011 --> 00:07:53.014
+linear scan. As this high-level picture
+would suggest, there is two boundaries
+
+110
+00:07:53.014 --> 00:07:57.064
+that we're gonna need to keep track of
+throughout the algorithm. We're gonna need
+
+111
+00:07:57.064 --> 00:08:01.098
+to keep track of the boundary between what
+we've looked at so far, and what we
+
+112
+00:08:01.098 --> 00:08:06.059
+haven't looked at yet. So, that's going to
+be, we're going to use the index  "j" to keep
+
+113
+00:08:06.059 --> 00:08:10.098
+track of that boundary. And then, we also
+need a second boundary, for amongst the
+
+114
+00:08:10.098 --> 00:08:15.037
+stuff that we've seen, where is the split
+between those less than the pivot and
+
+115
+00:08:15.037 --> 00:08:19.048
+those bigger than the pivot. So, that's
+gonna be "i". So, let's use our running
+
+116
+00:08:19.048 --> 00:08:26.004
+example array. >> So stuff is pretty
+simple when we're starting out. We haven't
+
+117
+00:08:26.004 --> 00:08:32.008
+looked at anything. So all of this stuff
+is unpartitioned. And "i" and  "j" both point
+
+118
+00:08:32.008 --> 00:08:38.049
+to the boundary between the pivot and all
+the stuff that we haven't seen yet. Now to
+
+119
+00:08:38.049 --> 00:08:42.017
+get a running time reaches linear, we
+want to make sure that at each step we
+
+120
+00:08:42.017 --> 00:08:46.000
+advance  "j", we look at one new element.
+That way in a linear number of steps, we'll
+
+121
+00:08:46.000 --> 00:08:49.097
+have looked at everything, and hopefully
+we'll be done, and we'll have a partitioned
+
+122
+00:08:49.097 --> 00:08:55.035
+array. So, in the next step, we're going to
+advance  "j". So the region of the array
+
+123
+00:08:55.035 --> 00:08:59.054
+which is, which we haven't looked at,
+which is unpartitioned, is one smaller
+
+124
+00:08:59.054 --> 00:09:03.086
+than before. We've now looked at the
+8, the first element after the pivot.
+
+125
+00:09:04.094 --> 00:09:08.073
+Now the 8 itself is indeed a
+partitioned array. Everything less than
+
+126
+00:09:08.073 --> 00:09:13.000
+the pivot comes before, everything after
+the pivot turns out there's nothing less
+
+127
+00:09:13.000 --> 00:09:17.007
+than the pivot. So vacuously this is
+indeed partitioned. So  "j" records
+
+128
+00:09:17.007 --> 00:09:21.079
+delineates the boundary between what we've
+looked at and what we haven't looked at, "i"
+
+129
+00:09:21.079 --> 00:09:26.018
+delineates amongst the stuff we've looked
+at, where is the boundary between what's
+
+130
+00:09:26.018 --> 00:09:30.031
+bigger than and what's less than the
+pivot. So the 8 is bigger than the pivot,
+
+131
+00:09:30.031 --> 00:09:35.014
+so "i" should be right here. Okay, because we
+want "i" to be just to the left of all the
+
+132
+00:09:35.014 --> 00:09:39.098
+stuff bigger than the pivot. Now, what's
+gonna happen in the next iteration? This
+
+133
+00:09:39.098 --> 00:09:44.095
+is where things get interesting. Suppose
+we advance  "j" one further. Now the part of
+
+134
+00:09:44.095 --> 00:09:49.054
+the array that we've seen is an 8
+followed by a 2. Now an 8 and a 2
+
+135
+00:09:49.054 --> 00:09:53.023
+is not a partitioned subarray. Remember
+what it means to be a partitioned
+
+136
+00:09:53.023 --> 00:09:57.021
+subarray? All the stuff less
+than the pivot, all the stuff less than
+
+137
+00:09:57.021 --> 00:10:01.010
+3, should come before everything
+bigger than 3. So (8, 2) obviously
+
+138
+00:10:01.010 --> 00:10:05.023
+fails that property. 2 is less than the
+pivot, but it comes after the 8, which
+
+139
+00:10:05.023 --> 00:10:09.012
+is bigger than the pivot. So, to correct
+this, we're going to need to do a swap.
+
+140
+00:10:09.012 --> 00:10:15.060
+We're going to swap the 2 and the 8.
+That gives us the following version of the
+
+141
+00:10:15.060 --> 00:10:21.088
+original array. So now the stuff that we
+have not yet looked at is one smaller than
+
+142
+00:10:21.088 --> 00:10:28.084
+before. We've advanced  "j". So all other
+stuff is unpartitioned. Who knows what's
+
+143
+00:10:28.084 --> 00:10:34.001
+going on with that stuff?  "j" is one further
+entry to the right than it was before, and
+
+144
+00:10:34.001 --> 00:10:39.081
+at least after we have done this swap, we
+do indeed have a partitioned array. So
+
+145
+00:10:39.081 --> 00:10:43.098
+post-swap, the 2 and the 8, are
+indeed partitioned. Now remember, "I"
+
+146
+00:10:43.098 --> 00:10:48.062
+delineates the boundary between amongst
+what we've seen so far, the stuff less
+
+147
+00:10:48.062 --> 00:10:53.032
+than the pivot, less than 3 in this
+case, and that bigger than 3, so "I" is
+
+148
+00:10:53.032 --> 00:10:59.060
+going to be wedged in between the 2 and
+the 8. In the next iteration, our life
+
+149
+00:10:59.060 --> 00:11:04.076
+is pretty easy. So, in this case, in
+advancing  "j", we uncover an element which
+
+150
+00:11:04.076 --> 00:11:08.087
+is bigger than the pivot. So, this is what
+happened in the first iteration, when we
+
+151
+00:11:08.087 --> 00:11:12.098
+uncovered the 8. It's different than
+what happened in the last iteration when
+
+152
+00:11:12.098 --> 00:11:16.083
+we uncovered the 2. And so, this case,
+this third iteration is gonna be more
+
+153
+00:11:16.083 --> 00:11:20.088
+similar to the first iteration than the
+second iteration. In particular, we won't
+
+154
+00:11:20.088 --> 00:11:24.074
+need to swap. We won't need to advance "i".
+We just advance  "j", and we're done. So,
+
+155
+00:11:24.074 --> 00:11:30.024
+let's see why that's true. So, we've
+advanced  "j". We've done one more iteration.
+
+156
+00:11:30.024 --> 00:11:35.006
+So, now the stuff we haven't seen yet is
+only the last four elements. So, who knows
+
+157
+00:11:35.006 --> 00:11:40.010
+what's up with, the stuff we haven't seen
+yet? But if you look at the stuff we have
+
+158
+00:11:40.010 --> 00:11:44.050
+seen, the 2, the 8, and the 5,
+this is, in fact, partitioned, right? All
+
+159
+00:11:44.050 --> 00:11:48.089
+the numbers that are bigger than 3
+succeed, come after, all the numbers
+
+160
+00:11:48.089 --> 00:11:54.096
+smaller than three. So the "j",
+the boundary between what we've seen and
+
+161
+00:11:54.096 --> 00:11:58.094
+what we haven't is between the 5 and
+the 1; and the "i", the boundary between
+
+162
+00:11:58.094 --> 00:12:03.028
+the stuff less than the pivot and bigger
+than the pivot is between the 2 and the
+
+163
+00:12:03.028 --> 00:12:10.005
+8, just like it was before. Adding a
+5 to the end didn't change anything. So
+
+164
+00:12:10.005 --> 00:12:16.063
+let's wrap up this example in the next
+slide. So first, let's just remember where
+
+165
+00:12:16.063 --> 00:12:20.069
+we left off from the previous slide. So
+I'm just gonna redraw that same step after
+
+166
+00:12:20.069 --> 00:12:28.080
+three iterations of the algorithm. And
+notice, in the next generation, we're going
+
+167
+00:12:28.080 --> 00:12:33.046
+to, again, have to make some modifications
+to the array, if we want preserve our
+
+168
+00:12:33.046 --> 00:12:37.069
+variant. The reason is that when we
+advance  "j", when we scan this 1, now
+
+169
+00:12:37.069 --> 00:12:42.023
+again we're scanning in a new element
+which is less than the pivot, and what
+
+170
+00:12:42.023 --> 00:12:46.050
+that means is that, the partitioned
+region, or the region that we've looked at
+
+171
+00:12:46.050 --> 00:12:50.036
+so far, will not be partitioned. We'll
+have 2851. Remember we need everything
+
+172
+00:12:50.036 --> 00:12:54.022
+less than 3 to precede everything
+bigger than 3, and this 1
+
+173
+00:12:54.022 --> 00:12:58.038
+at end is not going to cut it. So we're
+going to have to make a swap. Now what are
+
+174
+00:12:58.038 --> 00:13:05.077
+we going to swap? We're going to swap the
+1 and the 8. So, why do we swap the
+
+175
+00:13:05.077 --> 00:13:10.033
+1 and the 8? Well, clearly, we have
+to swap the 1 with something. And, what
+
+176
+00:13:10.033 --> 00:13:14.078
+makes sense? What makes sense is the
+left-most array entry, which is currently
+
+177
+00:13:14.078 --> 00:13:19.000
+bigger than the pivot. And, that's exactly
+the 8. Okay, that's the first,
+
+178
+00:13:19.000 --> 00:13:23.074
+left-most entry bigger than 3, so if
+we swap the 1 with it, then the 1 will
+
+179
+00:13:23.074 --> 00:13:29.092
+become the right-most entry smaller than
+3. So after the swap, we're gonna have
+
+180
+00:13:29.092 --> 00:13:36.037
+the following array. The stuff we haven't
+seen is the 4, the 7, and the 6.
+
+181
+00:13:37.087 --> 00:13:44.048
+So the  "j" will be between the 8 and the
+4. The stuff we have seen is the 2,
+
+182
+00:13:44.048 --> 00:13:49.057
+1, 5, and 8. And notice, that
+this is indeed partitioned. All the
+
+183
+00:13:49.057 --> 00:13:53.033
+elements, which are less than 3, the
+2 and the 1, precede all of the
+
+184
+00:13:53.033 --> 00:13:57.003
+entries, which are bigger than 3, the
+5 and the 8. "i", remember, is
+
+185
+00:13:57.003 --> 00:14:00.094
+supposed to split, be the boundary
+between those less than 3 and those
+
+186
+00:14:00.094 --> 00:14:04.094
+bigger than 3. So, that's gonna lie
+between the 1 and the 5. That is one
+
+187
+00:14:04.094 --> 00:14:11.017
+further to the right than it was in the
+previous iteration. Okay, so the, because
+
+188
+00:14:11.017 --> 00:14:15.050
+the rest of the unseen elements, the 4,
+the 7, and the 6, are all bigger
+
+189
+00:14:15.050 --> 00:14:20.000
+than the pivot, the last three iterations
+are easy. No further swaps are necessary.
+
+190
+00:14:20.000 --> 00:14:24.073
+No increments to "i" are necessary.  "j" is just
+going to get incremented until we fall off
+
+191
+00:14:24.073 --> 00:14:29.017
+the array. And then, fast forwarding, the
+Partition subroutine, or this main linear
+
+192
+00:14:29.017 --> 00:14:35.047
+scan, will terminate with the following
+situation. So at this point, all of the
+
+193
+00:14:35.047 --> 00:14:40.047
+elements have been seen, all the elements
+are partitioned.  "j" in effect has fallen
+
+194
+00:14:40.047 --> 00:14:45.041
+off the end of the array, and "i", the boundary
+between those less than and bigger than
+
+195
+00:14:45.041 --> 00:14:50.085
+the pivot, still lies between the 1 and
+the 5. Now, we're not quite done,
+
+196
+00:14:50.085 --> 00:14:54.080
+because the pivot element 3 is not in
+the correct place. Remember, what we're
+
+197
+00:14:54.080 --> 00:14:58.067
+aiming for is an array where everything
+less than the pivot is to the left of it,
+
+198
+00:14:58.067 --> 00:15:02.062
+and everything bigger than the pivot is to
+the right. But right now, the pivot still
+
+199
+00:15:02.062 --> 00:15:06.053
+is hanging out in the first element. So,
+we just have to swap that into the correct
+
+200
+00:15:06.053 --> 00:15:10.020
+place. Where's the correct place? Well,
+it's going to be the right-most element,
+
+201
+00:15:10.020 --> 00:15:16.051
+which is smaller than the pivot. So, in
+this case, the 1. So the subroutine will
+
+202
+00:15:16.051 --> 00:15:20.099
+terminate with the following array,
+12358476. And, indeed, as desired,
+
+203
+00:15:20.099 --> 00:15:26.056
+everything to the left of the pivot
+is less than the pivot, and everything to
+
+204
+00:15:26.056 --> 00:15:31.099
+the right of the pivot is bigger than the
+pivot. The 1 and 2 happen to be in
+
+205
+00:15:31.099 --> 00:15:37.008
+sorted order, but that was just sorta an
+accident. And the 4, 5, 6 and
+
+206
+00:15:37.008 --> 00:15:44.087
+7 and 8, you'll notice, are jumbled
+up. They're not in sorted order. So
+
+207
+00:15:44.087 --> 00:15:49.044
+hopefully from this example you have a
+gist of how the Partition subroutine is
+
+208
+00:15:49.044 --> 00:15:53.084
+going to work in general. But, just to
+make sure the details are clear, let me
+
+209
+00:15:53.084 --> 00:16:01.005
+now describe the pseudocode for the
+Partition subroutine. So the way I'm going
+
+210
+00:16:01.005 --> 00:16:05.051
+to denote it is, there's going to be an
+input array A. But rather than being told
+
+211
+00:16:05.051 --> 00:16:09.081
+some explicit link, what's going to be
+passed to the subroutine are two array
+
+212
+00:16:09.081 --> 00:16:13.077
+indices. The leftmost index, which
+delineates this part of the separator
+
+213
+00:16:13.077 --> 00:16:20.017
+you're supposed to work on, and the
+rightmost index. The reason I'm writing it
+
+214
+00:16:20.017 --> 00:16:24.078
+this way is because Partition is going to
+be called recursively from within a QuickSort
+
+215
+00:16:24.078 --> 00:16:28.097
+algorithm. So any point in QuickSort,
+we're going to be recursing on some
+
+216
+00:16:28.097 --> 00:16:33.021
+subset, contiguous subset of the original
+input array. "l(el)" and "r" meant to denote
+
+217
+00:16:33.021 --> 00:16:39.070
+what the left boundary and the right
+boundary of that subarray are. So, let's
+
+218
+00:16:39.070 --> 00:16:44.001
+not lose sight of the high-level picture
+of the invariant that the algorithm is
+
+219
+00:16:44.001 --> 00:16:48.015
+meant to maintain. So, as we discussed,
+we're assuming the pivot element is the
+
+220
+00:16:48.015 --> 00:16:52.030
+first element, although that's really
+without loss of generality. At any given
+
+221
+00:16:52.030 --> 00:16:56.050
+time, there's gonna be stuff we haven't
+seen yet. Who knows what's up with that?
+
+222
+00:16:56.050 --> 00:17:00.091
+And, amongst the stuff we've seen, we're
+gonna maintain the invariant that all the
+
+223
+00:17:00.091 --> 00:17:05.049
+stuff less than the pivot comes before all
+the stuff bigger than the pivot. And  "j" and
+
+224
+00:17:05.049 --> 00:17:09.069
+I denote the boundaries, between the seen
+and the unseen, and between the small
+
+225
+00:17:09.069 --> 00:17:15.012
+elements and the large elements,
+respectively. So back to the pseudocode,
+
+226
+00:17:15.012 --> 00:17:20.041
+we initialize the pivot to be the first
+entry in the array. And again remember, l
+
+227
+00:17:20.041 --> 00:17:26.091
+denotes the leftmost index that we're
+responsible for looking at. Initial value
+
+228
+00:17:26.091 --> 00:17:32.021
+of "i", should be just to the right of the
+pivot so that's gonna be el+1.
+
+229
+00:17:32.021 --> 00:17:40.015
+That's also the initial value of  "j", which
+will be assigned in the main for-Loop. So this
+
+230
+00:17:40.015 --> 00:17:46.074
+for-Loop with "j", taking on all values from
+el+1 to the rightmost index "r",
+
+231
+00:17:46.074 --> 00:17:55.001
+denotes the linear scan through the input array. And,
+what we saw in the example is that there
+
+232
+00:17:55.001 --> 00:17:58.062
+were two cases, depending on, for the
+newly seen element, whether it's bigger
+
+233
+00:17:58.062 --> 00:18:02.050
+than the pivot, or less than the pivot.
+The easy case is when it's bigger than the
+
+234
+00:18:02.050 --> 00:18:06.025
+pivot. Then we essentially don't have to
+do anything. Remember, we didn't do any
+
+235
+00:18:06.025 --> 00:18:10.009
+swaps, we didn't change "i", the boundary
+didn't change. It was when the new element
+
+236
+00:18:10.009 --> 00:18:16.076
+was less than the pivot that we had to do
+some work. So, we're gonna check that, is
+
+237
+00:18:16.076 --> 00:18:26.086
+the newly seen element, A[j], less than "p".
+And if it's not, we actually don't have to do
+
+238
+00:18:26.086 --> 00:18:35.040
+anything. So let me just put as a
+comment. If the new element is bigger than
+
+239
+00:18:35.040 --> 00:18:40.095
+the pivot, we do nothing. Of course at the
+end of the for-Loop, the value of  "j" will
+
+240
+00:18:40.095 --> 00:18:44.084
+get in command so that's the only thing
+that changes from iteration to iteration,
+
+241
+00:18:44.084 --> 00:18:48.073
+when we're sucking up new elements that
+happen to be bigger than "p". So what do we
+
+242
+00:18:48.073 --> 00:18:52.063
+do in the example, when we suck up our new
+element less than p? Well we have to do
+
+243
+00:18:52.063 --> 00:19:01.000
+two things. So, in the event that the
+newly seen element is less than "p", I'll
+
+244
+00:19:01.000 --> 00:19:06.024
+circle that here in pink. We need to do a
+rearrangement, so we, again, have a
+
+245
+00:19:06.024 --> 00:19:11.084
+partitioned, sub-array amongst those
+elements we've seen so far. And, the best
+
+246
+00:19:11.084 --> 00:19:17.079
+way to do that is to swap this new element
+with the left-most element that's bigger
+
+247
+00:19:17.079 --> 00:19:24.031
+than the pivot. And because we have an
+index "i", which is keeping track of the
+
+248
+00:19:24.031 --> 00:19:28.079
+boundary between the elements less than
+the pivot and bigger than the pivot, we can
+
+249
+00:19:28.079 --> 00:19:33.022
+immediately access the leftmost element
+bigger than the pivot.
+
+250
+00:19:33.022 --> 00:19:39.023
+That's just the "i"th
+entry in the array. Now I am
+
+251
+00:19:39.023 --> 00:19:43.098
+doing something a little sneaky here,
+I should be honest about. Which is there is
+
+252
+00:19:43.098 --> 00:19:48.056
+the case where you haven't yet seen any
+elements bigger than the pivot, and then
+
+253
+00:19:48.056 --> 00:19:52.087
+you don't actually have a leftmost
+element bigger than the pivot to swap
+
+254
+00:19:52.087 --> 00:19:56.082
+with. Turns out this code still works,
+I'll let you verify that, but it does do
+
+255
+00:19:56.082 --> 00:20:01.002
+some redundant swaps. Really, you don't
+need to do any swaps until you first see
+
+256
+00:20:01.002 --> 00:20:04.088
+some elements bigger than the pivot, and
+then see some elements less than the
+
+257
+00:20:04.088 --> 00:20:08.036
+pivot. So, you can imagine a different
+limitation of this, where you
+
+258
+00:20:08.036 --> 00:20:11.080
+actually keep track of whether or not
+that's happened to avoid the redundant
+
+259
+00:20:11.080 --> 00:20:14.097
+swaps. I'm just gonna give you the
+simple pseudocode. And again, for
+
+260
+00:20:14.097 --> 00:20:18.063
+intuition, you wanna think about the case
+just like, in the picture here in blue,
+
+261
+00:20:18.063 --> 00:20:22.011
+where we've already seen some elements
+that are bigger than the pivot, and the
+
+262
+00:20:22.011 --> 00:20:25.077
+next newly seen element is less than the
+pivot. That's really sort of the key case
+
+263
+00:20:25.077 --> 00:20:31.048
+here. Now the other thing we have to do
+after one of these swaps is, now the
+
+264
+00:20:31.048 --> 00:20:35.060
+boundary, between where the array elements
+less than the pivot and
+
+265
+00:20:35.060 --> 00:20:39.073
+those bigger than the pivot, has moved.
+It's moved one to the right, so
+
+266
+00:20:39.073 --> 00:20:45.029
+we have to increment "i". So, that's the
+main linear scan. Once this concludes,  "j"
+
+267
+00:20:45.029 --> 00:20:49.093
+will have fallen off the end of the array.
+And, everything that we've seen the final
+
+268
+00:20:50.009 --> 00:20:54.025
+elements, except for the pivot, will be
+arranged so that those less than "p" are
+
+269
+00:20:54.025 --> 00:20:58.067
+first, those bigger than "p" will be last.
+The final thing we have to do is just swap
+
+270
+00:20:58.067 --> 00:21:03.009
+the pivot into its rightful position. And,
+recall for that, we just swap it with the
+
+271
+00:21:03.009 --> 00:21:10.027
+right-most element less than it. So, that
+is it. That is the Partition subroutine.
+
+272
+00:21:10.027 --> 00:21:14.055
+There's a number of variants of partition.
+This is certainly not the unique
+
+273
+00:21:14.055 --> 00:21:18.093
+implementation. If you look on the web, or
+if you look in certain textbooks, you'll
+
+274
+00:21:18.093 --> 00:21:23.021
+find some other implementations as well as
+discussion of the various merits. But, I
+
+275
+00:21:23.021 --> 00:21:27.018
+hope this gives you, I mean, this is a
+canonical implementation, and I hope it
+
+276
+00:21:27.018 --> 00:21:31.025
+gives you a clear picture of how you
+rearrange the array using in-place swaps
+
+277
+00:21:31.025 --> 00:21:35.042
+to get the desired property, that all the
+stuff before the pivot comes first, all
+
+278
+00:21:35.042 --> 00:21:41.048
+the stuff after the pivot comes last.
+Let me just add a few details about why
+
+279
+00:21:41.048 --> 00:21:46.069
+this pseudocode I just gave you does,
+indeed, have the properties required. The
+
+280
+00:21:46.069 --> 00:21:52.016
+running time is O(N), really theta of N,
+but again, I'll be sloppy and write
+
+281
+00:21:52.016 --> 00:21:57.030
+O(N). Where N is the number of array
+elements that we have to look at. So, N is
+
+282
+00:21:57.030 --> 00:22:02.037
+r-el+1, which is the length of
+the sub-array that this Partition
+
+283
+00:22:02.037 --> 00:22:08.002
+subroutine is invoked upon. And why is
+this true? Well if you just go inspect the
+
+284
+00:22:08.002 --> 00:22:12.024
+pseudocode, you can just count it up
+naively and you'll find that this is true.
+
+285
+00:22:12.024 --> 00:22:16.066
+We just do a linear scan through the array
+and all we do is basically a comparison
+
+286
+00:22:16.066 --> 00:22:22.064
+and possibly a swap and an increment for
+each array entry that we see. Also, if you
+
+287
+00:22:22.064 --> 00:22:27.006
+inspect the code, it is evident that it
+works in-place. We do not allocate some
+
+288
+00:22:27.006 --> 00:22:31.026
+second copy of an array to populate, like
+we did in the naive Partition
+
+289
+00:22:31.026 --> 00:22:36.083
+subroutine. All we do is repeated swaps.
+Correctness of the subroutine follows by
+
+290
+00:22:36.083 --> 00:22:41.060
+induction, so in particular the best way
+to argue it is by invariant. So I'll state
+
+291
+00:22:41.060 --> 00:22:45.092
+the invariant here, but mostly leave it
+for you to check that indeed, every
+
+292
+00:22:45.092 --> 00:22:51.071
+iteration of the for-Loop maintains this
+invariant. So first of all, all of the
+
+293
+00:22:51.071 --> 00:22:56.072
+stuff to the right of the pivot element,
+to the right of the leftmost entry and up
+
+294
+00:22:56.072 --> 00:23:01.002
+to the index "i", is indeed less than the
+pivot element, as suggested by the
+
+295
+00:23:01.002 --> 00:23:07.027
+picture. And also suggested by the
+picture, everything beginning with the "i"th
+
+296
+00:23:07.027 --> 00:23:13.018
+entry, leading just up before the "j"th entry,
+is bigger than the pivot. And I'll
+
+297
+00:23:13.018 --> 00:23:17.068
+leave it as a good exercise for you to
+check that this holds by induction.
+
+298
+00:23:18.064 --> 00:23:23.013
+The invariant holds initially,
+when both "i" and  "j" are equal to el+1,
+
+299
+00:23:23.013 --> 00:23:27.002
+because both of these sets are vacuous, okay?
+So, there are no such elements, so they're
+
+300
+00:23:27.002 --> 00:23:30.072
+trivially satisfied these properties. And
+then, every time we advance  "j", well, in
+
+301
+00:23:30.072 --> 00:23:34.037
+one case it's very easy, where the new
+element is bigger than the pivot. It's
+
+302
+00:23:34.037 --> 00:23:38.012
+clear that, if the invariant held before,
+it also holds at, at the next iteration.
+
+303
+00:23:38.012 --> 00:23:42.001
+And then, if you think about it carefully,
+this swap in this increment of "i" that we
+
+304
+00:23:42.001 --> 00:23:46.012
+do, in the case where the new element is
+less than the pivot. After the swap, once
+
+305
+00:23:46.012 --> 00:23:50.099
+the fold is complete, again if this
+invariant was true at the beginning of it,
+
+306
+00:23:50.099 --> 00:23:55.080
+it's also true at the end. So what good is
+that? Well, by this claim, at the
+
+307
+00:23:55.080 --> 00:24:00.068
+conclusion of the linear scan at which
+point "j" has fallen off the end of the
+
+308
+00:24:00.068 --> 00:24:06.048
+array, the array must look like this. At
+the end of the for-Loop, the question
+
+309
+00:24:06.048 --> 00:24:10.052
+mark part of the array has vanished, so
+everything other than the pivot has been
+
+310
+00:24:10.052 --> 00:24:14.071
+organized so that all this stuff less than
+the pivot comes before everything after
+
+311
+00:24:14.071 --> 00:24:18.054
+the pivot, and that means once you do the
+final swap, once you swap the pivot
+
+312
+00:24:18.054 --> 00:24:22.053
+element from its first and left most
+entry, with the right most entry less than
+
+313
+00:24:22.053 --> 00:24:26.046
+the pivot, you're done. Okay? You've got
+the desired property that everything to
+
+314
+00:24:26.046 --> 00:24:30.045
+the left of the pivot is less than, and
+everything to the right of the pivot is
+
+315
+00:24:30.045 --> 00:24:35.099
+bigger than. So now that given a pivot
+element we understand how to very quickly
+
+316
+00:24:35.099 --> 00:24:40.031
+rearrange the array so that it's
+partitioned around that pivot element,
+
+317
+00:24:40.031 --> 00:24:45.012
+let's move on to understanding how that
+pivot element should be chosen and how,
+
+318
+00:24:45.012 --> 00:24:49.081
+given suitable choices of that pivot
+element, we can implement the QuickSort
+
+319
+00:24:49.081 --> 00:24:54.050
+algorithm, to run very quickly, in
+particular, on average in O(N) log time.

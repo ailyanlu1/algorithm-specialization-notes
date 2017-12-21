@@ -1,0 +1,605 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.636
+I just got the number of divide and
+conquer algorithms and, so far, I've been
+
+2
+00:00:03.636 --> 00:00:07.464
+short shrift to proofs of correctness.
+This has been a conscience decision on my
+
+3
+00:00:07.464 --> 00:00:11.291
+part. Coming up with the right divide and
+conquer algorithm for a problem can
+
+4
+00:00:11.291 --> 00:00:15.310
+definitely be difficult, but once you have
+that eureka moment and you figure out the
+
+5
+00:00:15.310 --> 00:00:19.090
+right algorithm you tend to, also, have a
+good understanding of why it's correct,
+
+6
+00:00:19.090 --> 00:00:22.726
+why it actually solves the problem on
+every possible input. Similarly when I
+
+7
+00:00:22.726 --> 00:00:26.028
+present to you a divide and conquer
+algorithm like, say, merge sort or
+
+8
+00:00:26.028 --> 00:00:29.903
+quicksort, I expect that many of you have
+a good and accurate intuition about why
+
+9
+00:00:29.903 --> 00:00:33.548
+the algorithm is correct. In contrast the
+running time of these developed
+
+10
+00:00:33.548 --> 00:00:37.360
+[inaudible] algorithms is often highly
+non-obvious. So, correctness proofs for
+
+11
+00:00:37.360 --> 00:00:41.132
+divide-and-conquer algorithms tend to
+simply formalize the intuition that you
+
+12
+00:00:41.132 --> 00:00:44.997
+have via a proof by induction. That's why
+I haven't been spending much time on them.
+
+13
+00:00:44.997 --> 00:00:48.816
+But nevertheless, I do feel like I owe you
+at least one rigorous correctness proof
+
+14
+00:00:48.816 --> 00:00:52.542
+for a divide-and-conquer algorithm, and we
+may as well do it for quicksort. So in
+
+15
+00:00:52.542 --> 00:00:56.314
+this optional video, we'll briefly review
+proofs by induction, and then we'll show
+
+16
+00:00:56.314 --> 00:01:00.272
+how such a proof can be used to rigorously
+establish the correctness of quicksort.
+
+17
+00:01:00.272 --> 00:01:03.997
+The correctness proofs for most of the
+other divide-and-conquer algorithms that
+
+18
+00:01:03.997 --> 00:01:10.741
+we discuss can be formalized in a similar
+way. So let's begin by reviewing the
+
+19
+00:01:10.741 --> 00:01:15.868
+format for proofs by induction. So, the
+canonical proofs by induction and the kind
+
+20
+00:01:15.868 --> 00:01:21.246
+that we'll be using here, is when you want
+to establish an assertion for all of the
+
+21
+00:01:21.246 --> 00:01:25.934
+positive integers in. So now it's some
+assertion which is parameterized by n,
+
+22
+00:01:25.934 --> 00:01:30.520
+where n is a positive integer. I know this
+is a little abstract, so let me just be
+
+23
+00:01:30.520 --> 00:01:40.446
+concrete about the assertion that we
+actually care about for quicksort. So for
+
+24
+00:01:40.446 --> 00:01:45.941
+us, the assertion P(n) is the statement
+that cor, quicksort is always correct on
+
+25
+00:01:45.941 --> 00:01:56.726
+inputs of length n, arrays that have n
+elements. So an induction proof has two
+
+26
+00:01:56.726 --> 00:02:10.993
+parts. The first part is a base case and
+the second part is an inductive step. For
+
+27
+00:02:10.993 --> 00:02:15.157
+the base case you have to get started so
+you show that at the very least your
+
+28
+00:02:15.157 --> 00:02:23.673
+assertion is true when n equals one. This
+is often a trivial matter and that'll be
+
+29
+00:02:23.673 --> 00:02:28.769
+the case when we establish the correctness
+of quick sort. Just on our rays with only
+
+30
+00:02:28.769 --> 00:02:33.161
+one element. So, the non-trivial part of a
+proof by induction is usually the
+
+31
+00:02:33.161 --> 00:02:40.508
+inductive step. And in the inductive step,
+you look at a value of n not covered by
+
+32
+00:02:40.508 --> 00:02:45.084
+the base case, so a value of n bigger than
+one. And you show that if the assertion
+
+33
+00:02:45.084 --> 00:02:49.095
+holds for all smaller values, small
+integers, then it also holds for the
+
+34
+00:02:49.095 --> 00:02:57.847
+integer n. That is, you show that for
+every positive integer N that's two or
+
+35
+00:02:57.847 --> 00:03:03.475
+greater, you assume that P of K holds for
+all K strictly less than N. And under that
+
+36
+00:03:03.475 --> 00:03:09.104
+assumption, which is called the inductive
+hypothesis. Under the assumption that P of
+
+37
+00:03:09.104 --> 00:03:14.460
+K holds for all K strictly less than N,
+you then establish that P of N holds as
+
+38
+00:03:14.460 --> 00:03:23.021
+well. So if you manage to complete both of
+these steps, if you prove both the base
+
+39
+00:03:23.021 --> 00:03:26.936
+case that P(1) holds, you argue that
+directly, and then also you argue that
+
+40
+00:03:26.936 --> 00:03:30.904
+assuming the inductive hypothesis, that
+the assertion holds for all smaller
+
+41
+00:03:30.904 --> 00:03:35.223
+integers, it also holds for an arbitrary
+integer n. Then you're done. Then in fact
+
+42
+00:03:35.223 --> 00:03:39.908
+you have proven that the assertion P then
+holds for every single positive integer N.
+
+43
+00:03:39.908 --> 00:03:44.258
+Right? So for any given N that you care
+about, the way you can derive that from
+
+44
+00:03:44.258 --> 00:03:48.664
+one and two is you just start from the
+base case, P of one holds. Then you apply
+
+45
+00:03:48.664 --> 00:03:53.071
+the inductive step N minus one times. And
+boom, you've got it. So you know that P
+
+46
+00:03:53.071 --> 00:03:57.086
+holds for the integer N that you care
+about as well. And that's true for
+
+47
+00:03:57.086 --> 00:04:05.912
+arbitrarily large values of N. So those
+are proofs by induction in general. Now
+
+48
+00:04:05.912 --> 00:04:10.673
+let's instantiate this proof format, this
+type of proof for establishing the
+
+49
+00:04:10.673 --> 00:04:19.788
+correctness of quicksort. So let me write
+again what is the assertion we care about.
+
+50
+00:04:19.788 --> 00:04:23.994
+Our definition of P(n) is gonna be that
+quicksort is always correct on arrays of
+
+51
+00:04:23.994 --> 00:04:31.866
+length n. And of course what we want to
+prove is that quicksort is correct no
+
+52
+00:04:31.866 --> 00:04:35.796
+matter what size array that you give it,
+that is, we want to prove that P(n) holds
+
+53
+00:04:35.796 --> 00:04:39.827
+for every single n at least one. So this
+is right in the wheelhouse of proofs by
+
+54
+00:04:39.827 --> 00:04:47.273
+induction. ?Kay, so that's how we're going
+to establish it. Now depending on the
+
+55
+00:04:47.273 --> 00:04:50.821
+order in which you're watching the videos,
+you may or may not have seen our
+
+56
+00:04:50.821 --> 00:04:54.559
+discussion about how you actually choose
+the pivot, recall that the first thing
+
+57
+00:04:54.559 --> 00:04:58.486
+Quick Sort does is choose a pivot, then it
+partitions the array around the pivot. So,
+
+58
+00:04:58.486 --> 00:05:02.412
+we're going establish the correctness of
+Quick Sort, no matter how the choose pivot
+
+59
+00:05:02.412 --> 00:05:06.055
+sub-routine gets implemented. Okay, so now
+matter how you choose pivots, you'll
+
+60
+00:05:06.055 --> 00:05:09.745
+always have correctness. As we, as we'll
+see in a different video, the choice of
+
+61
+00:05:09.745 --> 00:05:13.625
+pivot definitely has an influence on the
+running of Quick Sort, the correctness of
+
+62
+00:05:13.625 --> 00:05:21.531
+Quick Sort, there's no matter how you
+choose the pivot. So it's perceived by a
+
+63
+00:05:21.531 --> 00:05:28.689
+proof by induction. So for the base case
+when n equals one, this is a fairly
+
+64
+00:05:28.689 --> 00:05:33.047
+trivial statement. Right? So, then we're
+just talking about inputs that have only
+
+65
+00:05:33.047 --> 00:05:37.240
+one element. Every such array is already
+sorted. Quicksorts, in the bai, when n
+
+66
+00:05:37.240 --> 00:05:41.764
+equals one just returns the input array.
+It doesn't do anything, and that is indeed
+
+67
+00:05:41.764 --> 00:05:49.641
+the sort of array that it returns. So, by
+the rather trivial argument we had
+
+68
+00:05:49.641 --> 00:05:54.909
+directly proven that p of one holds. We've
+proven the rather unimpressive statement
+
+69
+00:05:54.909 --> 00:05:59.795
+that quicksort always correctly sorts one
+element arrays. Okay? No big deal. So,
+
+70
+00:05:59.795 --> 00:06:08.613
+let's move on to the inductive step. So in
+the inductive step we have to fix an
+
+71
+00:06:08.613 --> 00:06:13.617
+arbitrary value of N that's at least two.
+A value of N not covered by the base case.
+
+72
+00:06:13.617 --> 00:06:18.259
+So let's fix some value of N, that leaves
+two. Now what are we trying to prove?
+
+73
+00:06:18.259 --> 00:06:23.202
+We're trying to prove that Quick Sort
+always correctly sorts every input array
+
+74
+00:06:23.202 --> 00:06:30.872
+of length N. So we also have to fix an
+arbitrary such input. So let's make sure
+
+75
+00:06:30.872 --> 00:06:35.412
+we're all clear on what it is we need to
+show, what do you show in an inductive
+
+76
+00:06:35.412 --> 00:06:49.076
+step. Assuming that PFK holds. For all
+smaller values, all smaller integers, then
+
+77
+00:06:49.076 --> 00:07:00.654
+P of N holds as well. And remember this is
+the inductive hypothesis. So in the
+
+78
+00:07:00.654 --> 00:07:05.425
+context of quicksort, we're assuming that
+quicksort never makes a mistake on any
+
+79
+00:07:05.425 --> 00:07:09.794
+input array that has length strictly
+smaller than n. And now we just have to
+
+80
+00:07:09.794 --> 00:07:17.341
+show it never makes a mistake on array,
+input arrays that have size exactly n. So
+
+81
+00:07:17.341 --> 00:07:21.548
+this is the point in the proof where we
+actually delve into how Quick Sort is
+
+82
+00:07:21.548 --> 00:07:25.701
+implemented to argue correctness. So
+recall what the first step of Quick Sort
+
+83
+00:07:25.701 --> 00:07:29.745
+is, it picks some pivot arbitrarily, we
+don't know how, we don't care how. And
+
+84
+00:07:29.745 --> 00:07:35.506
+then it partitions the array around this
+pivot element p. Now as we argued in the
+
+85
+00:07:35.506 --> 00:07:40.186
+video where we discussed the partition sub
+routine, at the conclusion of that sub
+
+86
+00:07:40.186 --> 00:07:44.634
+routine, the array has been rearranged
+into the following format. The pipit is
+
+87
+00:07:44.634 --> 00:07:49.141
+wherever it is, everything to the left of
+the pipit is less than the pipit, and
+
+88
+00:07:49.141 --> 00:07:53.474
+everything bigger than the pipit is
+greater than the pipit. Alright, this is
+
+89
+00:07:53.474 --> 00:07:58.211
+where how things stand at the conclusion
+of the partitioning sub routine. So let's
+
+90
+00:07:58.211 --> 00:08:02.949
+call this stuff less than the pipit the
+first part of the partition array, and the
+
+91
+00:08:02.949 --> 00:08:09.827
+stuff bigger than the pipit, the second
+part of the partition array. And recall
+
+92
+00:08:09.827 --> 00:08:14.102
+our observation from the overview video
+that the pivot winds up in its correct
+
+93
+00:08:14.102 --> 00:08:18.484
+position. Right, where would the pivot be?
+Where is any element suppose to be in the
+
+94
+00:08:18.484 --> 00:08:22.759
+final sorted array? What's suppose to be
+to the right of everything less than it,
+
+95
+00:08:22.759 --> 00:08:26.767
+and to the left of everything bigger than
+it? And that's exactly where this
+
+96
+00:08:26.767 --> 00:08:34.083
+partitioning subroutine deposits the pivot
+element peak. So now to imply the
+
+97
+00:08:34.083 --> 00:08:38.464
+inductive hypothesis, which you'll recall
+is a hypothesis about how quick sort
+
+98
+00:08:38.464 --> 00:08:43.238
+operates on smaller sub arrays. Let's call
+the length of the first part in the second
+
+99
+00:08:43.238 --> 00:08:50.009
+part of the partition [inaudible] K1 and
+K2 respectively. Now, crucially, both k1
+
+100
+00:08:50.009 --> 00:08:55.552
+and k2 are strictly less than n. Both of
+these two parts have lengths strictly less
+
+101
+00:08:55.552 --> 00:09:00.829
+than that of the given input array a.
+That's because the pivot in particular is
+
+102
+00:09:00.829 --> 00:09:06.038
+excluded from both of those two parts. So,
+their gonna have, at most n minus one
+
+103
+00:09:06.038 --> 00:09:12.002
+[inaudible]. That means that we can apply
+the inductive hypothesis, which says that
+
+104
+00:09:12.002 --> 00:09:16.179
+the quicksort never makes a mistake on an
+array that has size strictly less than n.
+
+105
+00:09:16.179 --> 00:09:20.306
+That implies that our two recursive calls
+to quickstart, the one to the first part
+
+106
+00:09:20.306 --> 00:09:24.534
+and the one to the second part don't make
+mistakes. They're guaranteed to sort those
+
+107
+00:09:24.534 --> 00:09:31.610
+sub arrays correctly by the inductive
+hypothesis. And to be very precise, what
+
+108
+00:09:31.610 --> 00:09:37.450
+we're using to argue that the [inaudible]
+are correct, are P of K1 and P of K2. Or P
+
+109
+00:09:37.450 --> 00:09:43.008
+is the assertion that [inaudible] is
+always correct on a [inaudible]. K1 and
+
+110
+00:09:43.008 --> 00:09:48.798
+K2. And we know that both of these
+statements are true because k1 and k2 are
+
+111
+00:09:48.798 --> 00:09:53.230
+less th, are both less than n and because
+of the inductive hypothesis. So what's the
+
+112
+00:09:53.230 --> 00:10:00.436
+upshot? The upshot is, quicksort's gonna
+be correct. And so the first recursive
+
+113
+00:10:00.436 --> 00:10:04.045
+call puts all of the elements that are
+less than the pivot in the correct
+
+114
+00:10:04.045 --> 00:10:07.848
+relative order. Next comes the pivot,
+which is bigger than all of that stuff in
+
+115
+00:10:07.848 --> 00:10:11.847
+the first part and less than all the stuff
+in the second part, and then the second
+
+116
+00:10:11.847 --> 00:10:16.138
+recursive call correctly orders all of the
+elements in the second part. So with those
+
+117
+00:10:16.138 --> 00:10:20.039
+three things pasted together, we have a
+sorted version of the input array and
+
+118
+00:10:20.039 --> 00:10:24.261
+since this array was an arbitrary one, of
+link N. That establishes the assertion P
+
+119
+00:10:24.261 --> 00:10:28.596
+of N and since n was arbitrary, that
+establishes the inductive and completes
+
+120
+00:10:28.596 --> 00:10:33.443
+the proof of correctness of quick sort for
+an arbitrary method of choosing the pivot
+
+121
+00:10:33.443 --> 00:10:36.900
+element. [sound]
