@@ -1,0 +1,525 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.646
+So we're almost at the finish line of our
+analysis of quick sort. Let me remind you
+
+2
+00:00:04.646 --> 00:00:09.181
+what we're proving. We're proving that for
+the randomized implementation of quick
+
+3
+00:00:09.181 --> 00:00:13.604
+sort where we always choose the pivot
+element to partition around uniformly at
+
+4
+00:00:13.604 --> 00:00:17.523
+random, we're showing that for every
+array, every input of length N, the
+
+5
+00:00:17.523 --> 00:00:21.553
+average running time of quick sort over
+the random choices of pivots is
+
+6
+00:00:21.553 --> 00:00:26.032
+[inaudible] of N log N. So we've done a
+lot of work in the last couple of videos.
+
+7
+00:00:26.032 --> 00:00:33.757
+Let me just remind you about the stories
+so far. In the first video what we did is
+
+8
+00:00:33.757 --> 00:00:37.902
+we identified the relevant random variable
+that we cared about, capital C, the number
+
+9
+00:00:37.902 --> 00:00:41.998
+of comparisons that Quicksort makes among
+the pairs of elements in the input array.
+
+10
+00:00:41.998 --> 00:00:45.453
+Then we applied the decomposition
+approach. We expressed capital C, the
+
+11
+00:00:45.453 --> 00:00:49.400
+overall number of comparisons, as a sum of
+indicator or 0-1 random variables. For
+
+12
+00:00:49.400 --> 00:00:53.397
+each of those variables XIJ, just counted
+the number of comparisons involving the
+
+13
+00:00:53.397 --> 00:00:57.493
+Ith smallest and Jth smallest entries in
+the array, and that's gonna be either zero
+
+14
+00:00:57.493 --> 00:01:01.095
+or one. Then we applied linearity of
+expectation to realize, all we really
+
+15
+00:01:01.095 --> 00:01:05.043
+needed to understand was the comparison
+probabilities for different pairs of
+
+16
+00:01:05.043 --> 00:01:08.830
+elements. [inaudible]. Second video we
+nailed what that comparison probability
+
+17
+00:01:08.830 --> 00:01:12.759
+is, specifically, for the I smallest and
+the J smallest elements in the array, the
+
+18
+00:01:12.759 --> 00:01:16.786
+probability that quick sort compares them
+when you always make random [inaudible]
+
+19
+00:01:16.786 --> 00:01:21.982
+choices is exactly. Two divided by the
+quantity J minus I. Plus one. So putting
+
+20
+00:01:21.982 --> 00:01:26.692
+that all together, yields the following
+expression, governing the average number
+
+21
+00:01:26.692 --> 00:01:33.665
+of comparisons made by quick sort. One
+thing I want you to appreciate is, is in
+
+22
+00:01:33.665 --> 00:01:38.235
+the last couple of videos, we've been sort
+of amazingly exact as algorithmic analysis
+
+23
+00:01:38.235 --> 00:01:41.945
+goes. Specifically we've done nothing
+sloppy whatsoever. We've done no
+
+24
+00:01:41.945 --> 00:01:46.300
+estimates. The number of comparisons that
+quick store makes on average is exactly
+
+25
+00:01:46.300 --> 00:01:50.655
+this double sum. Now surely we'll do some
+inequalities to make our lives a little
+
+26
+00:01:50.655 --> 00:01:54.580
+bit easier. But up to this point
+everything has been completely exact. And
+
+27
+00:01:54.580 --> 00:01:58.828
+this will actually see why there's small
+constants in the, in the, in quick sort.
+
+28
+00:01:58.828 --> 00:02:05.136
+It's basically going to be this factor
+two. Now the next question to ask is, what
+
+29
+00:02:05.136 --> 00:02:08.928
+are we shooting for? Remember the theorem
+we want to prove is that the expected
+
+30
+00:02:08.928 --> 00:02:12.672
+number of comparisons really the expected
+run time is all of N log N, so we're
+
+31
+00:02:12.672 --> 00:02:16.368
+already done. Well not quite we're gonna
+have to be a little bit clever, so if
+
+32
+00:02:16.368 --> 00:02:20.304
+we're looking at this double sum, and we
+ask how big are the sum ends and how many
+
+33
+00:02:20.304 --> 00:02:24.288
+terms are there? Well the biggest sum ends
+we're ever going to see are when I and J
+
+34
+00:02:24.288 --> 00:02:28.080
+are right next to each other when J is one
+bigger than I, and in that case this
+
+35
+00:02:28.080 --> 00:02:31.824
+fraction is gonna be one half. So the
+terms can be as big as one half, how many
+
+36
+00:02:31.824 --> 00:02:36.664
+terms are there? Well there's a quadratic
+number of terms. So it would be very easy
+
+37
+00:02:36.664 --> 00:02:40.995
+to derive an upper bound that's quadratic
+in N, but that's not what we want. We want
+
+38
+00:02:40.995 --> 00:02:45.013
+one that's N log N. So to drive that,
+we're gonna have to be a little bit more
+
+39
+00:02:45.013 --> 00:02:49.292
+clever about how we evaluate this sum. So,
+the idea is, what we're going to do, is to
+
+40
+00:02:49.292 --> 00:02:53.362
+think about a fixed value of I in this
+outermost sum. And then we're gonna ask,
+
+41
+00:02:53.362 --> 00:03:00.740
+how big could the inner sum be? So let's
+fix some value of I, the value of the
+
+42
+00:03:00.740 --> 00:03:07.992
+index in the outer sum. And then let's
+look at the inner sum, where J ranges from
+
+43
+00:03:07.992 --> 00:03:13.340
+I plus one up to N, and the value of the
+sum end is one over the quantity J minus I
+
+44
+00:03:13.340 --> 00:03:18.369
+plus one. So how big can this be? Well,
+let's first understand what the terms
+
+45
+00:03:18.369 --> 00:03:23.272
+actually are. So J starts at I plus one
+and then it ascends to N. And as J gets
+
+46
+00:03:23.272 --> 00:03:28.427
+bigger the denominator gets bigger. So the
+sum ends get smaller. So the biggest sum
+
+47
+00:03:28.427 --> 00:03:33.394
+end is gonna be the very first one. And J
+is as small as possible. Namely I plus
+
+48
+00:03:33.394 --> 00:03:38.423
+one. When J is I plus one the sum end is
+one half. Then J gets incremented in the
+
+49
+00:03:38.423 --> 00:03:43.327
+sum. And so that's, we're gonna pick up a
+one third term followed by one fourth
+
+50
+00:03:43.327 --> 00:03:47.856
+term, and so on. So there's gonna be, for
+every inner sum is gonna have a this form,
+
+51
+00:03:47.856 --> 00:03:52.014
+one-half plus one-half equals one-fourth.
+And then it's gonna sort of run out at
+
+52
+00:03:52.014 --> 00:03:56.069
+some point, when J equals N. And the
+biggest term we're ever going to see is
+
+53
+00:03:56.069 --> 00:04:01.078
+gonna be a one over N, in the case where I
+equals one. So. Let's make our lives
+
+54
+00:04:01.078 --> 00:04:07.839
+easier by taking this expression we
+started with. Star, and instead of having
+
+55
+00:04:07.839 --> 00:04:14.945
+a double sum, let's just upper bound this
+with a single sum. So what are the
+
+56
+00:04:14.945 --> 00:04:21.008
+ingredients of a single sum? Well, there's
+this two, can't forget the two. Then
+
+57
+00:04:21.008 --> 00:04:26.727
+there's N choices for I, actually, there's
+N minus one choices for I, but let's just
+
+58
+00:04:26.727 --> 00:04:34.486
+be sloppy and say N choices. So that gives
+us a factor N. And then how big can an
+
+59
+00:04:34.486 --> 00:04:38.432
+inner sum be? Well, inner sum is just a
+bunch of these terms, one-half plus
+
+60
+00:04:38.432 --> 00:04:42.587
+one-third and so on. The biggest of those
+inner sums is the one occurring when I
+
+61
+00:04:42.587 --> 00:04:46.689
+equals one, at W, at which point the last
+term is one over N. So, we're gonna just
+
+62
+00:04:46.689 --> 00:04:50.740
+do a change of variable and express the
+inner [inaudible], upper bound on each
+
+63
+00:04:50.740 --> 00:04:56.214
+inner sum as the sum from K equal two to N
+of one over K. So that's looking more
+
+64
+00:04:56.214 --> 00:05:01.757
+manageable just having the single sum
+involving this index K, and life's gonna
+
+65
+00:05:01.757 --> 00:05:07.299
+get really good when we prove the next
+claim, which is that this sum cannot be
+
+66
+00:05:07.299 --> 00:05:13.198
+very big, it's only logarithmic in N, even
+though there's a linear number of sum N's,
+
+67
+00:05:13.198 --> 00:05:19.131
+the overall value of the sum is only
+logarithmic. That, of course, is gonna
+
+68
+00:05:19.131 --> 00:05:24.012
+complete the proof, 'cause that'll give us
+an overall bound of two times N times the
+
+69
+00:05:24.012 --> 00:05:28.776
+natural log on N. So it's an N login bound
+with really quite reasonable constants.
+
+70
+00:05:28.776 --> 00:05:33.422
+So, why is this true? Why is this sum only
+logarithmically large? Well, let's do a
+
+71
+00:05:33.422 --> 00:05:42.787
+proof by a picture. I'm going to write
+this sum. In a geometric fashion. So on
+
+72
+00:05:42.787 --> 00:05:47.500
+the X axis, let me mark off points
+corresponding to the positive integers.
+
+73
+00:05:47.880 --> 00:05:55.036
+And on the Y axis, let me mark off points
+corresponding to fractions of the form,
+
+74
+00:05:55.036 --> 00:06:02.959
+one over K. And what I?m gonna do is gonna
+draw a bunch of rectangles. Of decreasing
+
+75
+00:06:02.959 --> 00:06:07.876
+area, specifically they all have with one,
+and the heights are gonna be like one over
+
+76
+00:06:07.876 --> 00:06:12.618
+K. So the area of this guy's one, the area
+of this guy's one half, the area of this
+
+77
+00:06:12.618 --> 00:06:19.636
+guy's one third, and so on. And now I'm
+going to overlay on this picture the graph
+
+78
+00:06:19.636 --> 00:06:25.099
+of the function, the continuous function,
+F of X equals one over X. So notice that
+
+79
+00:06:25.099 --> 00:06:30.904
+is going to go through these three points.
+It's gonna kiss all of these rectangles on
+
+80
+00:06:30.904 --> 00:06:37.371
+their upper right corners. Now what is it
+we're trying to prove? The claim we're
+
+81
+00:06:37.371 --> 00:06:42.620
+trying to prove is that this sum, one half
+plus one third and so on, is upper bounded
+
+82
+00:06:42.620 --> 00:06:46.931
+by something, so the sum can be just
+thought of as the areas in these
+
+83
+00:06:46.931 --> 00:06:51.868
+rectangles, the one half, the one third
+and so on, and we're going to upper bound
+
+84
+00:06:51.868 --> 00:06:56.867
+it by the area under the blue curve, if
+you notice the area under the blue curve
+
+85
+00:06:56.867 --> 00:07:02.115
+is at least as big as the sum of the areas
+of the rectangles because the curve hits
+
+86
+00:07:02.115 --> 00:07:08.412
+each of these rectangles in its north east
+corner. So putting that into mathematics,
+
+87
+00:07:08.412 --> 00:07:14.504
+the sum from K equal two to N of one over
+K. Is met in above by the integral. And
+
+88
+00:07:14.504 --> 00:07:20.747
+we'll start the area of the curve at one.
+And then we need it to go all the way up
+
+89
+00:07:20.747 --> 00:07:26.839
+to N. Of the function one over X. The X,
+so that's the area under the curve. And if
+
+90
+00:07:26.839 --> 00:07:33.235
+you remember a little bit of calculus the
+integral of one over X is the natural log
+
+91
+00:07:33.235 --> 00:07:40.251
+of X. So this equals the natural log of X.
+Evaluated at one. Also known as login
+
+92
+00:07:40.251 --> 00:07:49.786
+minus log one. And of course log one would
+be zero, so that gives us our login. So
+
+93
+00:07:49.786 --> 00:07:58.504
+that completes the proof of the claim.
+That indeed, the sum of these one over K's
+
+94
+00:07:58.504 --> 00:08:04.684
+is bounded above by the natural log of N,
+and that in fact completes the proof of
+
+95
+00:08:04.684 --> 00:08:12.791
+the theorem. You've got to be the expected
+number of comparisons, at most two N times
+
+96
+00:08:12.791 --> 00:08:17.790
+this sum, which is at most log N. And
+altogether, we find that the expected
+
+97
+00:08:17.790 --> 00:08:22.490
+number of comparisons that quick sort
+makes on an arbitrary input of length N.
+
+98
+00:08:22.490 --> 00:08:26.994
+Is two times N times the natural log of N.
+So that would be big o of N, log N, with
+
+99
+00:08:26.994 --> 00:08:31.611
+quite reasonable constants. Now, this is
+just the number of comparisons, but as we
+
+100
+00:08:31.611 --> 00:08:36.060
+observed earlier, the running time of
+Quicksort on average is not much more than
+
+101
+00:08:36.060 --> 00:08:40.398
+that, the running time is dominated by the
+number of comparisons that it makes.
+
+102
+00:08:40.398 --> 00:08:44.347
+Moreover, as we discussed when we were
+talking about the details of the
+
+103
+00:08:44.347 --> 00:08:48.518
+implementation, it works in place,
+essentially no extra storage is necessary.
+
+104
+00:08:48.518 --> 00:08:52.633
+So that is a complete and mathematically
+rigorous explanation of just why
+
+105
+00:08:52.633 --> 00:08:55.500
+Quicksort. Is so quick.
